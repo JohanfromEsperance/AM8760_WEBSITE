@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Right Sized Organisation - FTE & Seasonal Uplift</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scroll on body */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            padding-top: 5px; /* Padding to avoid button interference */
+            background-color: lightgrey; /* Matching the block color */
+            border: 2px solid lightgrey;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            cursor: move;
+        }
+        .content {
+            padding: 10px;
+            overflow: auto;
+            height: calc(100% - 5px);
+            background-color: lightgrey;
+        }
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 10px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #ffcccb;
+            border: 1px solid #000;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .prev-btn {
+            left: 10px;
+        }
+        .next-btn {
+            right: 80px;
+        }
+    </style>
+    <script>
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        function closePopup() {
+            const popup = document.querySelector('.container');
+            document.body.removeChild(popup);
+        }
+
+        function onMouseDown(e) {
+            isDragging = true;
+            offsetX = e.clientX - parseInt(window.getComputedStyle(popup).left);
+            offsetY = e.clientY - parseInt(window.getComputedStyle(popup).top);
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }
+
+        function onMouseMove(e) {
+            if (isDragging) {
+                popup.style.left = e.clientX - offsetX + 'px';
+                popup.style.top = e.clientY - offsetY + 'px';
+            }
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        window.onload = function() {
+            const popup = document.querySelector('.container');
+            popup.addEventListener('mousedown', onMouseDown);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h3>Right Sized Organisation - FTE & Seasonal Uplift Details</h3>
+            <p><strong>Who:</strong> Human resources, operations managers</p>
+            <p><strong>What:</strong> Ensuring the organization has the right number of full-time equivalents (FTEs) and seasonal staff</p>
+            <p><strong>When:</strong> Continuously, with periodic reviews</p>
+            <p><strong>Where:</strong> Human resources and operations departments</p>
+            <p><strong>With:</strong> Workforce planning tools, CMMS</p>
+            <p><strong>How:</strong> By analyzing workload and adjusting staff levels accordingly</p>
+            <p><strong>Why:</strong> To ensure the organization has the right staffing levels to meet operational demands</p>
+            <p><strong>Quality Check:</strong></p>
+            <ul>
+                <li>Right person (HR, managers)</li>
+                <li>Right time (continuously)</li>
+                <li>Right place (HR, operations)</li>
+                <li>Right equipment (planning tools, CMMS)</li>
+                <li>Right process (analyzing, adjusting)</li>
+                <li>Right work (right staffing)</li>
+                <li>Right reason (meet demands)</li>
+            </ul>
+            <p><strong>Expanded Activities:</strong></p>
+            <ul>
+                <li>Analyze workload and staffing needs based on operational data.</li>
+                <li>Adjust staffing levels to ensure the organization has the right number of FTEs and seasonal staff.</li>
+                <li>Use CMMS to track and manage staff activities.</li>
+                <li>Review and update workforce plans based on changing operational needs.</li>
+            </ul>
+            <p><strong>Research and Benchmarking:</strong></p>
+            <ul>
+                <li><strong>Best Practices:</strong> Follow guidelines from the Society for Human Resource Management (SHRM) for workforce planning.</li>
+                <li><strong>Case Studies:</strong> Review workforce planning practices from other ports to identify effective strategies.</li>
+                <li><strong>Benchmark Data:</strong> Compare your staffing levels and workforce planning practices with industry standards to ensure efficiency.</li>
+            </ul>
+            <p><strong>Narrative:</strong> This block involves ensuring the organization has the right number of full-time equivalents (FTEs) and seasonal staff to meet operational demands. This includes analyzing workload, adjusting staffing levels, and managing staff activities to ensure efficiency.</p>
+        </div>
+    </div>
+</body>
+</html>

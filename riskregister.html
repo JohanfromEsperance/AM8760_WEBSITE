@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risk Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scroll on body */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            padding-top: 5px; /* Padding to avoid button interference */
+            background-color: lightgrey; /* Matching the block color */
+            border: 2px solid lightgrey;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            cursor: move;
+        }
+        .content {
+            padding: 10px;
+            overflow: auto;
+            height: calc(100% - 5px);
+            background-color: lightgrey;
+        }
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 10px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #ffcccb;
+            border: 1px solid #000;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .prev-btn {
+            left: 10px;
+        }
+        .next-btn {
+            right: 80px;
+        }
+    </style>
+    <script>
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        function closePopup() {
+            const popup = document.querySelector('.container');
+            document.body.removeChild(popup);
+        }
+
+        function onMouseDown(e) {
+            isDragging = true;
+            offsetX = e.clientX - parseInt(window.getComputedStyle(popup).left);
+            offsetY = e.clientY - parseInt(window.getComputedStyle(popup).top);
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }
+
+        function onMouseMove(e) {
+            if (isDragging) {
+                popup.style.left = e.clientX - offsetX + 'px';
+                popup.style.top = e.clientY - offsetY + 'px';
+            }
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        window.onload = function() {
+            const popup = document.querySelector('.container');
+            popup.addEventListener('mousedown', onMouseDown);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h3>Risk Register Details</h3>
+            <p><strong>Who:</strong> Risk managers, safety engineers</p>
+            <p><strong>What:</strong> A register that identifies and assesses risks associated with port assets</p>
+            <p><strong>When:</strong> Continuously, with regular updates</p>
+            <p><strong>Where:</strong> Risk management system</p>
+            <p><strong>With:</strong> Risk assessment tools, databases</p>
+            <p><strong>How:</strong> By identifying, assessing, and documenting risks and mitigation measures</p>
+            <p><strong>Why:</strong> To proactively manage risks and ensure asset safety</p>
+            <p><strong>Quality Check:</strong></p>
+            <ul>
+                <li>Right person (risk managers, engineers)</li>
+                <li>Right time (continuously, updates)</li>
+                <li>Right place (risk management system)</li>
+                <li>Right equipment (assessment tools, databases)</li>
+                <li>Right process (identifying, assessing, documenting)</li>
+                <li>Right work (managing risks)</li>
+                <li>Right reason (ensure safety)</li>
+            </ul>
+            <p><strong>Expanded Activities:</strong></p>
+            <ul>
+                <li>Identify potential risks associated with port assets.</li>
+                <li>Assess the likelihood and impact of each risk.</li>
+                <li>Document risks and develop mitigation plans.</li>
+                <li>Regularly update the risk register to reflect new risks or changes in existing risks.</li>
+            </ul>
+            <p><strong>Research and Benchmarking:</strong></p>
+            <ul>
+                <li><strong>Best Practices:</strong> Follow guidelines from the Risk Management Society (RIMS) for creating risk registers.</li>
+                <li><strong>Case Studies:</strong> Review risk registers from other ports to understand common risks and mitigation strategies.</li>
+                <li><strong>Benchmark Data:</strong> Compare your risk register with industry standards to ensure comprehensive risk management.</li>
+            </ul>
+            <p><strong>Narrative:</strong> This block involves creating and maintaining a risk register that identifies and assesses risks associated with port assets. It includes documenting potential risks, assessing their impact, and implementing mitigation measures to proactively manage risks and ensure the safety of the assets.</p>
+        </div>
+    </div>
+</body>
+</html>

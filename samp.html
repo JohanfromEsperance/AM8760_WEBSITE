@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMP (Strategic Asset Management Plan)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scroll on body */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            padding-top: 5px; /* Padding to avoid button interference */
+            background-color: lightgrey; /* Matching the block color */
+            border: 2px solid lightgrey;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            cursor: move;
+        }
+        .content {
+            padding: 10px;
+            overflow: auto;
+            height: calc(100% - 5px);
+            background-color: lightgrey;
+        }
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 10px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #ffcccb;
+            border: 1px solid #000;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .prev-btn {
+            left: 10px;
+        }
+        .next-btn {
+            right: 80px;
+        }
+    </style>
+    <script>
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        function closePopup() {
+            const popup = document.querySelector('.container');
+            document.body.removeChild(popup);
+        }
+
+        function onMouseDown(e) {
+            isDragging = true;
+            offsetX = e.clientX - parseInt(window.getComputedStyle(popup).left);
+            offsetY = e.clientY - parseInt(window.getComputedStyle(popup).top);
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }
+
+        function onMouseMove(e) {
+            if (isDragging) {
+                popup.style.left = e.clientX - offsetX + 'px';
+                popup.style.top = e.clientY - offsetY + 'px';
+            }
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        window.onload = function() {
+            const popup = document.querySelector('.container');
+            popup.addEventListener('mousedown', onMouseDown);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h3>SAMP (Strategic Asset Management Plan) Details</h3>
+            <p><strong>Who:</strong> Asset managers, strategic planners</p>
+            <p><strong>What:</strong> Development of a long-term plan for managing port assets</p>
+            <p><strong>When:</strong> During strategic planning and periodic reviews</p>
+            <p><strong>Where:</strong> Asset management and planning departments</p>
+            <p><strong>With:</strong> Strategic planning tools, asset data</p>
+            <p><strong>How:</strong> By developing and implementing a comprehensive asset management plan</p>
+            <p><strong>Why:</strong> To ensure long-term sustainability and performance of port assets</p>
+            <p><strong>Quality Check:</strong></p>
+            <ul>
+                <li>Right person (managers, planners)</li>
+                <li>Right time (planning, reviews)</li>
+                <li>Right place (management, planning departments)</li>
+                <li>Right equipment (tools, data)</li>
+                <li>Right process (developing, implementing)</li>
+                <li>Right work (comprehensive plan)</li>
+                <li>Right reason (sustainability and performance)</li>
+            </ul>
+            <p><strong>Expanded Activities:</strong></p>
+            <ul>
+                <li>Develop a long-term strategic plan for managing port assets.</li>
+                <li>Align asset management strategies with organizational goals and objectives.</li>
+                <li>Implement the plan and monitor progress regularly.</li>
+                <li>Review and update the plan based on changing operational needs and performance data.</li>
+            </ul>
+            <p><strong>Research and Benchmarking:</strong></p>
+            <ul>
+                <li><strong>Best Practices:</strong> Follow guidelines from the Institute of Asset Management (IAM) for strategic asset management planning.</li>
+                <li><strong>Case Studies:</strong> Review strategic asset management plans from other ports to identify effective strategies.</li>
+                <li><strong>Benchmark Data:</strong> Compare your strategic plan with industry standards to ensure alignment with best practices.</li>
+            </ul>
+            <p><strong>Narrative:</strong> This block involves developing and implementing a Strategic Asset Management Plan (SAMP) to ensure the long-term sustainability and performance of port assets. This includes aligning asset management strategies with organizational goals and regularly reviewing and updating the plan based on operational needs.</p>
+            <h3>Strategic Asset Management Plan (SAMP) Template</h3>
+<h4>1. <strong>Executive Summary</strong></h4>
+<ul>
+<li><strong>What</strong>: A concise summary of the SAMP's objectives and its scope.</li>
+<li><strong>Why</strong>: Explanation of how the SAMP aligns with the broader strategic goals of the organization.</li>
+<li><strong>How</strong>: Brief overview of the methods used to achieve these goals.</li>
+</ul>
+<h4>2. <strong>Organizational Context</strong></h4>
+<ul>
+<li><strong>What</strong>: Detailed description of the organization, its strategic objectives, and the assets included under the SAMP.</li>
+<li><strong>Who</strong>: Identification of stakeholders affected by or having an influence on the asset management system.</li>
+<li><strong>Why</strong>: Explanation of the organizational motivations for prioritizing certain asset management practices.</li>
+<li><strong>Which</strong>: Legal, regulatory, and contractual obligations impacting asset management.</li>
+</ul>
+<h4>3. <strong>Scope of Asset Management</strong></h4>
+<ul>
+<li><strong>What</strong>: Assets and activities covered by the SAMP.</li>
+<li><strong>Where</strong>: Geographical and operational boundaries related to asset management.</li>
+<li><strong>How</strong>: Methods to manage assets across different locations and departments.</li>
+</ul>
+<h4>4. <strong>Leadership and Commitment</strong></h4>
+<ul>
+<li><strong>Who</strong>: Roles and responsibilities of top management and key asset management personnel.</li>
+<li><strong>What</strong>: Expectations and commitments of leadership towards asset management.</li>
+<li><strong>How</strong>: Mechanisms for leadership to demonstrate commitment and ensure resources.</li>
+</ul>
+<h4>5. <strong>Planning</strong></h4>
+<ul>
+<li><strong>What</strong>: Specific asset management objectives.</li>
+<li><strong>How</strong>: Strategies and actions planned to meet these objectives.</li>
+<li><strong>When</strong>: Timeframes for achieving specific goals.</li>
+<li><strong>Which</strong>: Risks that could impact the achievement of objectives and the strategies for their management.</li>
+</ul>
+<h4>6. <strong>Support</strong></h4>
+<ul>
+<li><strong>Who</strong>: Identification of necessary competencies and responsible personnel.</li>
+<li><strong>What</strong>: Training programs and information systems needed.</li>
+<li><strong>How</strong>: Methods for developing skills and implementing supportive technologies.</li>
+<li><strong>Right tools</strong>: Ensure the appropriate tools and technologies are in place.</li>
+</ul>
+<h4>7. <strong>Operation</strong></h4>
+<ul>
+<li><strong>What</strong>: Detailed asset management activities and operational processes.</li>
+<li><strong>How</strong>: Procedures for managing changes and handling outsourcing or contractor management.</li>
+<li><strong>Where</strong>: Operational locations affected by these processes.</li>
+</ul>
+<h4>8. <strong>Performance Evaluation</strong></h4>
+<ul>
+<li><strong>What</strong>: Metrics and standards for measuring asset management performance.</li>
+<li><strong>When</strong>: Frequency of evaluations and audits.</li>
+<li><strong>How</strong>: Techniques and tools used for monitoring and analysis.</li>
+<li><strong>Right time &amp; Right information</strong>: Timeliness and accuracy of information for decision-making.</li>
+</ul>
+<h4>9. <strong>Improvement</strong></h4>
+<ul>
+<li><strong>What</strong>: Processes for addressing nonconformity and taking corrective actions.</li>
+<li><strong>How</strong>: Strategies for continual improvement and incorporating lessons learned.</li>
+<li><strong>Why</strong>: Importance of improvement for maintaining and enhancing asset management capabilities.</li>
+</ul>
+<h4>10. <strong>Communication and Stakeholder Engagement</strong></h4>
+<ul>
+<li><strong>Who</strong>: Stakeholders involved or affected by asset management.</li>
+<li><strong>What</strong>: Information that needs to be communicated.</li>
+<li><strong>How</strong>: Channels and methods for effective communication.</li>
+<li><strong>When</strong>: Timelines for regular updates and feedback mechanisms.</li>
+</ul>
+<h4>11. <strong>Cost and Resource Allocation</strong> (applying 7Rs specifically)</h4>
+<ul>
+<li><strong>Right amount &amp; Right cost</strong>: Ensuring that resources are used efficiently and costs are controlled.</li>
+<li><strong>Right place</strong>: Allocation of resources where they are most needed to achieve asset management objectives.</li>
+</ul>
+<p>This detailed SAMP template can help in creating a plan that not only meets ISO 55001 compliance but also integrates deep strategic insights into asset management practices within your organization.</p>
+        
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scroll on body */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            padding-top: 5px; /* Padding to avoid button interference */
+            background-color: lightgrey; /* Matching the block color */
+            border: 2px solid lightgrey;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            cursor: move;
+        }
+        .content {
+            padding: 10px;
+            overflow: auto;
+            height: calc(100% - 5px);
+            background-color: lightgrey;
+        }
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 10px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #ffcccb;
+            border: 1px solid #000;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .prev-btn {
+            left: 10px;
+        }
+        .next-btn {
+            right: 80px;
+        }
+    </style>
+    <script>
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        function closePopup() {
+            const popup = document.querySelector('.container');
+            document.body.removeChild(popup);
+        }
+
+        function onMouseDown(e) {
+            isDragging = true;
+            offsetX = e.clientX - parseInt(window.getComputedStyle(popup).left);
+            offsetY = e.clientY - parseInt(window.getComputedStyle(popup).top);
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }
+
+        function onMouseMove(e) {
+            if (isDragging) {
+                popup.style.left = e.clientX - offsetX + 'px';
+                popup.style.top = e.clientY - offsetY + 'px';
+            }
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        window.onload = function() {
+            const popup = document.querySelector('.container');
+            popup.addEventListener('mousedown', onMouseDown);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h3>Service Management Details</h3>
+            <p><strong>Who:</strong> Service managers, procurement officers</p>
+            <p><strong>What:</strong> Management of services required for asset maintenance and operations</p>
+            <p><strong>When:</strong> Continuously, with periodic reviews</p>
+            <p><strong>Where:</strong> Service management and procurement departments</p>
+            <p><strong>With:</strong> Service contracts, CMMS</p>
+            <p><strong>How:</strong> By procuring and managing service contracts and providers</p>
+            <p><strong>Why:</strong> To ensure the availability of necessary services for maintenance and operations</p>
+            <p><strong>Quality Check:</strong></p>
+            <ul>
+                <li>Right person (service managers, procurement)</li>
+                <li>Right time (continuously)</li>
+                <li>Right place (service management, procurement)</li>
+                <li>Right equipment (contracts, CMMS)</li>
+                <li>Right process (procuring, managing)</li>
+                <li>Right work (availability)</li>
+                <li>Right reason (ensure services)</li>
+            </ul>
+            <p><strong>Expanded Activities:</strong></p>
+            <ul>
+                <li>Procure and manage service contracts for maintenance and operations.</li>
+                <li>Use CMMS to track service usage and performance.</li>
+                <li>Ensure compliance with service agreements and standards.</li>
+                <li>Review and adjust service contracts based on operational needs.</li>
+            </ul>
+            <p><strong>Research and Benchmarking:</strong></p>
+            <ul>
+                <li><strong>Best Practices:</strong> Follow guidelines from the Institute for Supply Management (ISM) for service procurement.</li>
+                <li><strong>Case Studies:</strong> Review service management practices from other ports to identify effective strategies.</li>
+                <li><strong>Benchmark Data:</strong> Compare your service management practices with industry standards to ensure availability.</li>
+            </ul>
+            <p><strong>Narrative:</strong> This block involves managing services required for asset maintenance and operations. This includes procuring and managing service contracts to ensure the availability of necessary services for maintenance tasks.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AM8760 - Asset Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color:#e7e7e7;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            height: 11%;
+            width: 100%;
+            text-align: center;
+            background-color: #ffffff;
+            padding: 0 0;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .logo {
+            height: 100%;
+            width: 10%;
+            position: absolute;
+            top: 0;
+        }
+        .left-logo {
+            left: 0;
+        }
+        .right-logo {
+            right: 0;
+        }
+        nav {
+            background-color: #f2f2f2;
+            overflow: hidden;
+            width: 100%;
+            display: flex;
+            text-align: center;
+            justify-content: normal;
+            box-sizing: border-box;
+        }
+        nav a {
+            display: block;
+            color: 	#e1e1e1;
+            text-align: left;
+            padding: 14px 16px;
+            text-decoration: none;
+            flex: 1;
+        }
+        nav a:hover {
+            background-color: 	#aeafb6;
+            color: black;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            flex-wrap: nowrap;
+            height: 60vh;
+            box-sizing: border-box;
+        }
+        .sidebar-left, .sidebar-right {
+            width: 15%;
+            background-color: 	#e1e1e1;
+            padding: 1px;
+            box-sizing: border-box;
+            color: #e1e1e1;
+            font-size: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .sidebar-left a, .sidebar-right a {
+            padding: 5px;
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            text-align: left;
+
+        }
+        .sidebar-left a:hover, .sidebar-right a:hover {
+            background-color: 	#aeafb6;
+        }
+        .main-content {
+            width: 70%;
+            padding: 30px;
+            box-sizing: border-box;
+            background-color: #e7e7e7;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 20%;
+            top: 10px;
+            width: 60%;
+            max-height: 100vh;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .popup h2 {
+            margin-top: 0;
+        }
+        .popup .close {
+            display: block;
+            text-align: right;
+            margin-top: -10px;
+            margin-right: -10px;
+        }
+        .popup .close a {
+            color: 	#aeafb6;
+            text-decoration: none;
+            font-size: 24px;
+        }
+        .footer {
+            background-color: #ffffff; /* Background color */
+            padding: 1px;
+            text-align: center;
+        }
+
+    .footer-content {
+        display: flex;
+        justify-content: space-between; /* Default: Aligns images left, center, right */
+        align-items: center;
+        padding-bottom: 1px;
+        gap: 2px; /* Space between images */
+    }
+
+    /* Responsive adjustments for smaller screens */
+    @media (max-width: 250px) { footer-content {flex-direction: column; /* Stack images on smaller screens */justify-content: center;align-items: center; gap: 1px;}}
+
+    .footer-img {
+        width: 50px; /* Adjust image size */
+        height: auto;
+    }
+
+    .footer-line {
+        border: none;
+        border-top: 2px solid black; /* Bottom line */
+        margin: 1px auto;
+        width: 80%;
+    }
+
+    .footer-text {
+        font-size: 0.5rem;
+        color: black;
+        text-align: center;
+    }
+    .responsive-text {font-size: clamp(0.5rem, 1.0vw, 1.5rem); /* Auto-scales based on screen size */color: black;}
+
+        .responsive-link {background-color: rgb(186, 184, 189);color: black;font-size: clamp(0.5rem, 1.0vw, 1.0rem); /* Auto-scales based on screen size */}
+
+        .main-content table {
+            width: 100%; /* Ensures the table takes full width of the container */
+            table-layout: auto; /* Allows columns to automatically adjust their size */
+        }
+
+        .main-content th, .main-content td {
+            text-align: left;
+            padding: 1px; /* Adjust padding as needed */
+            font-size: calc(0.5vw + 0.2vh + 0.2vmin); /* Responsively adjusts font size based on the viewport size */
+            white-space: normal; /* Allows text to wrap within the cell */
+            overflow-wrap: break-word; /* Ensures words break to prevent overflow */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="EXSTO COMBINED.png" class="logo left-logo" alt="Left Logo">
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Port of ExSTO - AM8760 - Asset Management Training Simulation</h2>
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Welcome to The Port of ExSTO</h2>
+        <img src="logo with xSTO.png" class="logo right-logo" alt="Right Logo">
+    </header>
+    <nav>
+        <a href="MAINPAGE.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Home</a>
+        <a href="AM8760_Board_Game.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">AM8760 Board Game</a>
+        <a href="vision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Vision & Asset Management Plan</a>
+        <a href="key_performance_indicators.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Key Performance Indicators</a>
+        <a href="financial_report.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Financial Report</a>
+        <a href="stateoftheasset.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">State of the Asset Table</a>
+        <a href="risk.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">5x5 Risk Table</a>
+        <a href="capital_investment_decision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Capital Investment Decision Making</a>
+        <a href="indexblocks.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Help Matrix</a>
+        <a href="training.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Training</a>
+        <a href="knowledge_test.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">GFMAM Knowledge Test</a>
+        <a href="knowledge_test_ISO.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">IOS55000 Knowledge Test</a>
+    </nav>
+    
+    <style>
+        .responsive-text {font-size: clamp(0.5rem, 1.0vw, 1.5rem); /* Auto-scales based on screen size */color: black;}
+    </style>
+
+    <style>
+        .responsive-link {
+            background-color: rgb(186, 184, 189);color: black;font-size: clamp(0.5rem, 1.0vw, 1.0rem); /* Auto-scales based on screen size */}
+    </style>
+
+    <div class="container">
+        <div class="sidebar-left">
+            <h2 class="responsive-text">Asset Class Management Plans</h2>
+            <a href="bulk_material_handling_main.html" class="responsive-link">1.0 Bulk Material Handling</a>
+            <a href="storage_sheds_main.html"  class="responsive-link">2.0 Storage Sheds</strong></a>
+            <a href="rail_infrastructure_main.html"  class="responsive-link"> 3.0 Rail Infrastructure</strong></a>
+            <a href="ship_loader_unloader_main.html"  class="responsive-link">4.0 Ship Loader/Unloader</strong></a>
+            <a href="dust_suppression_main.html"  class="responsive-link">5.0 Dust Suppression Systems</strong></a>
+            <a href="weighbridges_main.html"  class="responsive-link">6.0 Weighbridges</strong></a>
+            <a href="security_systems_main.html"  class="responsive-link">7.0 Security Systems</strong></a>
+            <a href="spare.html"  class="responsive-link"> 8.0 SAMP</strong></a>
+            <a href="wharves_main.html"  class="responsive-link">9.0 Wharves, Berths and Jetties</strong></a>
+            <a href="breakwaters_main.html"  class="responsive-link">10.0 Breakwaters</strong></a>
+            <a href="navigational_aids_main.html"  class="responsive-link">11.0 Navigational Aids</strong></a>
+            <a href="channels_main.html"  class="responsive-link">12.0 Channels</strong></a>
+            <a href="ict_tangible_main.html"  class="responsive-link"> 13.0 ICT Tangible Assets</strong></a>
+            <a href="ict_intangible_main.html"  class="responsive-link">14.0 ICT Intangible Assets</strong></a>
+            <a href="hr_main.html"  class="responsive-link"> 15.0 Human Resources Management</strong></a>
+            <a href="power_main.html"  class="responsive-link"> 16.0 Power</strong></a>
+            <a href="utilities_main.html"class="responsive-link">17.0 Utilities</strong></a>
+        </div>
+        <div class="main-content">
+            <p><strong>OEM Manual: Power System</strong></p>
+            <p><strong>Introduction</strong></p>
+            <p>Welcome to the Original Equipment Manufacturer (OEM) manual for the Power System. This manual provides detailed information on the installation, operation, maintenance, and safety guidelines for your power system. Adhering to these instructions will ensure optimal performance and longevity of your equipment.</p>
+            <p><strong>Specifications</strong></p>
+            <ul>
+            <li><strong>Model:</strong> PS-7500 Power System</li>
+            <li><strong>Capacity:</strong> 750 kW</li>
+            <li><strong>Voltage:</strong> 400V, 50Hz</li>
+            <li><strong>Components:</strong> Generation System, Transmission System, Distribution Panels, Backup Generators</li>
+            </ul>
+            <p><strong>Installation</strong></p>
+            <ol>
+            <li><strong>Site Preparation:</strong> Ensure the installation site is level and clear of debris.</li>
+            <li><strong>Foundation:</strong> Construct a reinforced concrete foundation as per the specified dimensions.</li>
+            <li><strong>Assembly:</strong> Assemble the power system components according to the provided blueprints.</li>
+            <li><strong>Alignment:</strong> Ensure all components are correctly aligned to prevent operational issues.</li>
+            <li><strong>Electrical Connections:</strong> Connect the system to the power grid and backup generators using the provided wiring diagrams.</li>
+            <li><strong>Commissioning:</strong> Conduct a trial run to ensure the system is functioning correctly.</li>
+            </ol>
+            <p><strong>Operation</strong></p>
+            <ul>
+            <li><strong>Startup:</strong> Activate the power system using the main control panel.</li>
+            <li><strong>Monitoring:</strong> Continuously monitor the system for any irregularities, including voltage fluctuations and unusual noises.</li>
+            <li><strong>Shutdown:</strong> Follow the standard shutdown procedure to avoid damage.</li>
+            </ul>
+            <p><strong>Maintenance Activities</strong></p>
+            <ul>
+            <li><strong>Generator Maintenance:</strong> Annually inspect and service the generator, including lubrication and checking electrical connections.</li>
+            <li><strong>Transmission Line Inspection:</strong> Quarterly check all transmission lines for wear and potential issues.</li>
+            <li><strong>Transformer Maintenance:</strong> Annually inspect and maintain transformers to ensure optimal performance.</li>
+            <li><strong>Backup Generator Testing:</strong> Monthly test of backup generators to ensure they are operational in case of an emergency.</li>
+            <li><strong>Panel Inspection:</strong> Quarterly inspect distribution panels for signs of wear or damage.</li>
+            </ul>
+            <p><strong>Safety Guidelines</strong></p>
+            <ul>
+            <li><strong>Training:</strong> Ensure all operators are trained in the proper use of the power system.</li>
+            <li><strong>Lockout/Tagout:</strong> Follow lockout/tagout procedures during maintenance.</li>
+            <li><strong>PPE:</strong> Always wear appropriate personal protective equipment.</li>
+            <li><strong>Emergency Stops:</strong> Familiarize operators with the location and operation of emergency stop buttons.</li>
+            </ul>
+            <p><strong>Benchmark Data</strong></p>
+            <ul>
+            <li><strong>Generator Efficiency:</strong> Typically, generators in similar applications maintain an efficiency of above 95% for the first 10 years with proper maintenance.</li>
+            <li><strong>Transmission Line Wear:</strong> Transmission lines show a wear rate of 1% per year.</li>
+            <li><strong>Downtime:</strong> Regular maintenance reduces unplanned downtime by 25%.</li>
+            </ul>
+            <p><strong>Contact Information</strong></p>
+            <p>For further assistance, please contact our customer service department at:</p>
+            <ul>
+            <li><strong>Phone:</strong> +1-800-123-4570</li>
+            <li><strong>Email:</strong> support@powersystems.com</li>
+            <li><strong>Website:</strong> <a href="http://www.powersystems.com">www.powersystems.com</a></li>
+            </ul>
+            <p><strong>OEM Manual: Generation System</strong></p>
+            <p><strong>Introduction</strong></p>
+            <p>Welcome to the Original Equipment Manufacturer (OEM) manual for the Generation System. This manual provides detailed instructions on the installation, operation, and maintenance of your generation system to ensure optimal performance and longevity.</p>
+            <p><strong>Specifications</strong></p>
+            <ul>
+            <li><strong>Model:</strong> GS-1000 Generation System</li>
+            <li><strong>Capacity:</strong> 1000 kW</li>
+            <li><strong>Voltage:</strong> 400V, 50Hz</li>
+            </ul>
+            <p><strong>Installation</strong></p>
+            <ol>
+            <li><strong>Site Preparation:</strong> Ensure the installation area is clear of obstacles and debris.</li>
+            <li><strong>Foundation:</strong> Build a stable concrete foundation as specified.</li>
+            <li><strong>Assembly:</strong> Assemble the generation system components according to the provided diagrams.</li>
+            <li><strong>Alignment:</strong> Align the generator and ancillary equipment accurately.</li>
+            <li><strong>Electrical Connections:</strong> Connect the generator to the power grid and backup systems as per the wiring diagram.</li>
+            <li><strong>Commissioning:</strong> Perform a test run to ensure proper installation.</li>
+            </ol>
+            <p><strong>Operation</strong></p>
+            <ul>
+            <li><strong>Startup:</strong> Start the generator using the control panel.</li>
+            <li><strong>Monitoring:</strong> Regularly check for any unusual noises, vibrations, or emissions.</li>
+            <li><strong>Shutdown:</strong> Follow the recommended shutdown procedure to avoid damage.</li>
+            </ul>
+            <p><strong>Maintenance Activities</strong></p>
+            <ul>
+            <li><strong>Fuel System Inspection:</strong> Quarterly inspection and maintenance of the fuel system.</li>
+            <li><strong>Cooling System Maintenance:</strong> Bi-annual maintenance of the cooling system to prevent overheating.</li>
+            <li><strong>Lubrication:</strong> Monthly lubrication of moving parts to ensure smooth operation.</li>
+            <li><strong>Filter Replacement:</strong> Replace air and fuel filters quarterly.</li>
+            <li><strong>Electrical Connections:</strong> Annually check and tighten all electrical connections.</li>
+            </ul>
+            <p><strong>Safety Guidelines</strong></p>
+            <ul>
+            <li><strong>Training:</strong> Ensure operators are properly trained in the use of the generation system.</li>
+            <li><strong>Lockout/Tagout:</strong> Use lockout/tagout procedures during maintenance.</li>
+            <li><strong>PPE:</strong> Wear appropriate personal protective equipment.</li>
+            <li><strong>Emergency Stops:</strong> Make sure operators are familiar with the location and use of emergency stop buttons.</li>
+            </ul>
+            <p><strong>Benchmark Data</strong></p>
+            <ul>
+            <li><strong>Fuel Efficiency:</strong> The generator typically maintains above 92% fuel efficiency with regular maintenance.</li>
+            <li><strong>Component Wear:</strong> Major components show a wear rate of 1.5% per year.</li>
+            <li><strong>Downtime:</strong> Proper maintenance can reduce unplanned downtime by 20%.</li>
+            </ul>
+            <p><strong>Contact Information</strong></p>
+            <p>For further assistance, please contact our customer service department at:</p>
+            <ul>
+            <li><strong>Phone:</strong> +1-800-123-4571</li>
+            <li><strong>Email:</strong> support@generationsystems.com</li>
+            <li><strong>Website:</strong> <a href="http://www.generationsystems.com">www.generationsystems.com</a></li>
+            </ul>
+            <p><strong>OEM Manual: Transmission System</strong></p>
+            <p><strong>Introduction</strong></p>
+            <p>Welcome to the Original Equipment Manufacturer (OEM) manual for the Transmission System. This manual provides comprehensive instructions for the installation, operation, and maintenance of your transmission system to ensure peak performance and longevity.</p>
+            <p><strong>Specifications</strong></p>
+            <ul>
+            <li><strong>Model:</strong> TS-500 Transmission System</li>
+            <li><strong>Capacity:</strong> 500 kW</li>
+            <li><strong>Voltage:</strong> 400V, 50Hz</li>
+            </ul>
+            <p><strong>Installation</strong></p>
+            <ol>
+            <li><strong>Site Preparation:</strong> Ensure the installation site is level and free of obstacles.</li>
+            <li><strong>Foundation:</strong> Construct a reinforced concrete foundation as per specifications.</li>
+            <li><strong>Assembly:</strong> Follow the provided assembly diagrams to construct the transmission system.</li>
+            <li><strong>Alignment:</strong> Align the transmission lines and poles accurately.</li>
+            <li><strong>Electrical Connections:</strong> Connect the system to the power grid as per the wiring diagram.</li>
+            <li><strong>Commissioning:</strong> Conduct a trial run to verify proper installation.</li>
+            </ol>
+            <p><strong>Operation</strong></p>
+            <ul>
+            <li><strong>Startup:</strong> Activate the transmission system using the main control panel.</li>
+            <li><strong>Monitoring:</strong> Continuously monitor for any unusual noises, vibrations, or electrical issues.</li>
+            <li><strong>Shutdown:</strong> Follow the proper shutdown procedure to avoid damage.</li>
+            </ul>
+            <p><strong>Maintenance Activities</strong></p>
+            <ul>
+            <li><strong>Line Inspection:</strong> Quarterly inspection of transmission lines for wear and potential issues.</li>
+            <li><strong>Pole Maintenance:</strong> Annually inspect and maintain transmission poles.</li>
+            <li><strong>Transformer Maintenance:</strong> Bi-annual inspection and maintenance of transformers.</li>
+            <li><strong>Connection Tightening:</strong> Quarterly check and tighten all electrical connections.</li>
+            <li><strong>System Cleaning:</strong> Monthly cleaning to remove any accumulated debris or contaminants.</li>
+            </ul>
+            <p><strong>Safety Guidelines</strong></p>
+            <ul>
+            <li><strong>Training:</strong> Ensure all operators are trained in the use of the transmission system.</li>
+            <li><strong>Lockout/Tagout:</strong> Use lockout/tagout procedures during maintenance.</li>
+            <li><strong>PPE:</strong> Wear appropriate personal protective equipment.</li>
+            <li><strong>Emergency Stops:</strong> Ensure operators know the location and use of emergency stop buttons.</li>
+            </ul>
+            <p><strong>Benchmark Data</strong></p>
+            <ul>
+            <li><strong>Line Losses:</strong> Transmission lines typically show a loss rate of 2% per year.</li>
+            <li><strong>Transformer Efficiency:</strong> Transformers maintain above 98% efficiency with regular maintenance.</li>
+            <li><strong>Downtime:</strong> Proper maintenance reduces unplanned downtime by 22%.</li>
+            </ul>
+            <p><strong>Contact Information</strong></p>
+            <p>For further assistance, please contact our customer service department at:</p>
+            <ul>
+            <li><strong>Phone:</strong> +1-800-123-4572</li>
+            <li><strong>Email:</strong> support@transmissionsystems.com</li>
+            <li><strong>Website:</strong> <a href="http://www.transmissionsystems.com">www.transmissionsystems.com</a></li>
+            </ul>
+            <p><strong>OEM Manual: Distribution Panels</strong></p>
+            <p><strong>Introduction</strong></p>
+            <p>Welcome to the Original Equipment Manufacturer (OEM) manual for the Distribution Panels. This manual provides detailed instructions on the installation, operation, and maintenance of your distribution panels to ensure optimal performance and longevity.</p>
+            <p><strong>Specifications</strong></p>
+            <ul>
+            <li><strong>Model:</strong> DP-4000 Distribution Panels</li>
+            <li><strong>Capacity:</strong> 4000 A</li>
+            <li><strong>Voltage:</strong> 400V, 50Hz</li>
+            </ul>
+            <p><strong>Installation</strong></p>
+            <ol>
+            <li><strong>Site Preparation:</strong> Ensure the installation area is clear of obstacles and debris.</li>
+            <li><strong>Foundation:</strong> Build a stable concrete foundation as specified.</li>
+            <li><strong>Assembly:</strong> Assemble the distribution panels according to the provided diagrams.</li>
+            <li><strong>Alignment:</strong> Ensure the panels are aligned and securely fixed.</li>
+            <li><strong>Electrical Connections:</strong> Connect the panels to the power system as per the wiring diagram.</li>
+            <li><strong>Commissioning:</strong> Perform a test run to ensure proper installation.</li>
+            </ol>
+            <p><strong>Operation</strong></p>
+            <ul>
+            <li><strong>Startup:</strong> Activate the distribution panels using the control panel.</li>
+            <li><strong>Monitoring:</strong> Regularly check for any unusual noises, vibrations, or electrical issues.</li>
+            <li><strong>Shutdown:</strong> Follow the recommended shutdown procedure to avoid damage.</li>
+            </ul>
+            <p><strong>Maintenance Activities</strong></p>
+            <ul>
+            <li><strong>Circuit Breaker Testing:</strong> Annually test all circuit breakers for proper operation.</li>
+            <li><strong>Connection Tightening:</strong> Quarterly check and tighten all electrical connections.</li>
+            <li><strong>Panel Cleaning:</strong> Monthly cleaning to remove any accumulated dust or debris.</li>
+            <li><strong>Thermal Imaging:</strong> Bi-annual thermal imaging to detect hot spots.</li>
+            <li><strong>Component Replacement:</strong> Replace worn components as necessary to ensure reliability.</li>
+            </ul>
+            <p><strong>Safety Guidelines</strong></p>
+            <ul>
+            <li><strong>Training:</strong> Ensure operators are properly trained in the use of the distribution panels.</li>
+            <li><strong>Lockout/Tagout:</strong> Use lockout/tagout procedures during maintenance.</li>
+            <li><strong>PPE:</strong> Wear appropriate personal protective equipment.</li>
+            <li><strong>Emergency Stops:</strong> Make sure operators are familiar with the location and use of emergency stop buttons.</li>
+            </ul>
+            <p><strong>Benchmark Data</strong></p>
+            <ul>
+            <li><strong>Circuit Breaker Wear:</strong> Circuit breakers typically show a wear rate of 1% per year.</li>
+            <li><strong>Connection Efficiency:</strong> Electrical connections maintain above 98% efficiency with regular maintenance.</li>
+            <li><strong>Downtime:</strong> Proper maintenance can reduce unplanned downtime by 15%.</li>
+            </ul>
+            <p><strong>Contact Information</strong></p>
+            <p>For further assistance, please contact our customer service department at:</p>
+            <ul>
+            <li><strong>Phone:</strong> +1-800-123-4573</li>
+            <li><strong>Email:</strong> support@distributionpanels.com</li>
+            <li><strong>Website:</strong> <a href="http://www.distributionpanels.com">www.distributionpanels.com</a></li>
+            </ul>
+            <p><strong>OEM Manual: Backup Generators</strong></p>
+            <p><strong>Introduction</strong></p>
+            <p>Welcome to the Original Equipment Manufacturer (OEM) manual for the Backup Generators. This manual provides comprehensive instructions for the installation, operation, and maintenance of your backup generators to ensure peak performance and reliability.</p>
+            <p><strong>Specifications</strong></p>
+            <ul>
+            <li><strong>Model:</strong> BG-2000 Backup Generator</li>
+            <li><strong>Capacity:</strong> 2000 kW</li>
+            <li><strong>Voltage:</strong> 400V, 50Hz</li>
+            </ul>
+            <p><strong>Installation</strong></p>
+            <ol>
+            <li><strong>Site Preparation:</strong> Ensure the installation site is level and free of obstacles.</li>
+            <li><strong>Foundation:</strong> Construct a reinforced concrete foundation as per specifications.</li>
+            <li><strong>Assembly:</strong> Follow the provided assembly diagrams to construct the backup generator.</li>
+            <li><strong>Alignment:</strong> Align the generator and ancillary equipment accurately.</li>
+            <li><strong>Electrical Connections:</strong> Connect the generator to the power system and automatic transfer switch as per the wiring diagram.</li>
+            <li><strong>Commissioning:</strong> Conduct a trial run to verify proper installation.</li>
+            </ol>
+            <p><strong>Operation</strong></p>
+            <ul>
+            <li><strong>Startup:</strong> Start the backup generator using the control panel.</li>
+            <li><strong>Monitoring:</strong> Regularly check for any unusual noises, vibrations, or emissions.</li>
+            <li><strong>Shutdown:</strong> Follow the recommended shutdown procedure to avoid damage.</li>
+            </ul>
+            <p><strong>Maintenance Activities</strong></p>
+            <ul>
+            <li><strong>Fuel System Inspection:</strong> Quarterly inspection and maintenance of the fuel system.</li>
+            <li><strong>Cooling System Maintenance:</strong> Bi-annual maintenance of the cooling system to prevent overheating.</li>
+            <li><strong>Lubrication:</strong> Monthly lubrication of moving parts to ensure smooth operation.</li>
+            <li><strong>Filter Replacement:</strong> Replace air and fuel filters quarterly.</li>
+            <li><strong>Electrical Connections:</strong> Annually check and tighten all electrical connections.</li>
+            </ul>
+            <p><strong>Safety Guidelines</strong></p>
+            <ul>
+            <li><strong>Training:</strong> Ensure operators are properly trained in the use of the backup generators.</li>
+            <li><strong>Lockout/Tagout:</strong> Use lockout/tagout procedures during maintenance.</li>
+            <li><strong>PPE:</strong> Wear appropriate personal protective equipment.</li>
+            <li><strong>Emergency Stops:</strong> Ensure operators know the location and use of emergency stop buttons.</li>
+            </ul>
+            <p><strong>Benchmark Data</strong></p>
+            <ul>
+            <li><strong>Fuel Efficiency:</strong> The generator typically maintains above 92% fuel efficiency with regular maintenance.</li>
+            <li><strong>Component Wear:</strong> Major components show a wear rate of 1.5% per year.</li>
+            <li><strong>Downtime:</strong> Proper maintenance can reduce unplanned downtime by 20%.</li>
+            </ul>
+            <p><strong>Contact Information</strong></p>
+            <p>For further assistance, please contact our customer service department at:</p>
+            <ul>
+            <li><strong>Phone:</strong> +1-800-123-4574</li>
+            <li><strong>Email:</strong> support@backupgenerators.com</li>
+            <li><strong>Website:</strong> <a href="http://www.backupgenerators.com">www.backupgenerators.com</a></li>
+            </ul>
+            <p>These manuals provide detailed guidance on the proper installation, operation, and maintenance of key components in power systems, ensuring optimal performance and longevity of the equipment</p>           
+        </div>
+        <div class="sidebar-right">
+            <h2 class="responsive-text">Asset Management Master Data</h2>
+            <h2><Strong>Asset Information & Master Data</Strong></h2>
+            <a href="power_description.html"class="responsive-link">1.1 Asset Description</a>
+            <a href="power_asset_hierarchy.html" class="responsive-link">1.2 Asset Hierarchy</a>
+            <a href="power_risk_analysis.html" class="responsive-link">1.3 Asset Risk Analysis</a>
+            <a href="power_fmea.html" class="responsive-link">1.4 Asset FMEA and PMO activities</a>
+            <a href="power_strategies.html" class="responsive-link">1.5 Asset Strategies</a>
+            <a href="power_maintenance_plans.html" class="responsive-link">1.6 Asset Maintenance Plans</a>
+            <a href="power_whole_of_life_analysis.html" class="responsive-link">1.7 Asset WOL Analysis</a>
+            <a href="power_event_tables.html" class="responsive-link">1.8 Asset Event Scenarios</a>
+            <a href="MAINPAGE.html" class="responsive-link">Return to Home Page</a>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer-content">
+
+        </div>
+        <hr class="footer-line">
+        <p class="footer-text">&copy; ExSTO Global, Johan Snyman - The Author retains all moral rights. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function showPopup(popupId) {
+            document.getElementById(popupId).style.display = 'block';
+        }
+        function closePopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
+        }
+    </script>
+</body>
+</html>

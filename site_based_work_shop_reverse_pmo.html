@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site-Based Work SHOP & Reverse PMO</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scroll on body */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            padding-top: 5px; /* Padding to avoid button interference */
+            background-color: lightgrey; /* Matching the block color */
+            border: 2px solid lightgrey;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            cursor: move;
+        }
+        .content {
+            padding: 10px;
+            overflow: auto;
+            height: calc(100% - 5px);
+            background-color: lightgrey;
+        }
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 10px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #ffcccb;
+            border: 1px solid #000;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .prev-btn {
+            left: 10px;
+        }
+        .next-btn {
+            right: 80px;
+        }
+    </style>
+    <script>
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        function closePopup() {
+            const popup = document.querySelector('.container');
+            document.body.removeChild(popup);
+        }
+
+        function onMouseDown(e) {
+            isDragging = true;
+            offsetX = e.clientX - parseInt(window.getComputedStyle(popup).left);
+            offsetY = e.clientY - parseInt(window.getComputedStyle(popup).top);
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }
+
+        function onMouseMove(e) {
+            if (isDragging) {
+                popup.style.left = e.clientX - offsetX + 'px';
+                popup.style.top = e.clientY - offsetY + 'px';
+            }
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        window.onload = function() {
+            const popup = document.querySelector('.container');
+            popup.addEventListener('mousedown', onMouseDown);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h3>Site-Based Work SHOP & Reverse PMO Details</h3>
+            <p><strong>Who:</strong> Operations managers, maintenance teams</p>
+            <p><strong>What:</strong> On-site workshops for asset maintenance and Reverse Project Management Office (PMO) activities</p>
+            <p><strong>When:</strong> During maintenance schedules and project reviews</p>
+            <p><strong>Where:</strong> On-site workshops, maintenance facilities</p>
+            <p><strong>With:</strong> Maintenance tools, project management software</p>
+            <p><strong>How:</strong> By conducting on-site maintenance activities and reviewing project outcomes</p>
+            <p><strong>Why:</strong> To ensure effective maintenance and project management</p>
+            <p><strong>Quality Check:</strong></p>
+            <ul>
+                <li>Right person (managers, teams)</li>
+                <li>Right time (schedules, reviews)</li>
+                <li>Right place (workshops, facilities)</li>
+                <li>Right equipment (tools, software)</li>
+                <li>Right process (conducting, reviewing)</li>
+                <li>Right work (effective maintenance)</li>
+                <li>Right reason (project management)</li>
+            </ul>
+            <p><strong>Expanded Activities:</strong></p>
+            <ul>
+                <li>Conduct on-site maintenance workshops.</li>
+                <li>Review project outcomes through Reverse PMO.</li>
+                <li>Document findings and lessons learned.</li>
+                <li>Implement improvements based on reviews.</li>
+            </ul>
+            <p><strong>Research and Benchmarking:</strong></p>
+            <ul>
+                <li><strong>Best Practices:</strong> Utilize guidelines from the Project Management Institute (PMI) for PMO activities.</li>
+                <li><strong>Case Studies:</strong> Review site-based workshop practices from other ports to understand effective maintenance strategies.</li>
+                <li><strong>Benchmark Data:</strong> Compare your workshop and PMO activities with industry standards.</li>
+            </ul>
+            <p><strong>Narrative:</strong> This block involves conducting on-site workshops for asset maintenance and Reverse Project Management Office (PMO) activities to review project outcomes. This ensures that maintenance activities are carried out effectively and that project outcomes are assessed for continuous improvement.</p>
+        </div>
+    </div>
+</body>
+</html>
