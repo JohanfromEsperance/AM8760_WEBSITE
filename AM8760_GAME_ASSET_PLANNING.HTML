@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AM8760 - Asset Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color:#e7e7e7;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            height: 11%;
+            width: 100%;
+            text-align: center;
+            background-color: #ffffff;
+            padding: 0 0;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .logo {
+            height: 100%;
+            width: 10%;
+            position: absolute;
+            top: 0;
+        }
+        .left-logo {
+            left: 0;
+        }
+        .right-logo {
+            right: 0;
+        }
+        nav {
+            background-color: #f2f2f2;
+            overflow: hidden;
+            width: 100%;
+            display: flex;
+            text-align: center;
+            justify-content: normal;
+            box-sizing: border-box;
+        }
+        nav a {
+            display: block;
+            color: 	#e1e1e1;
+            text-align: left;
+            padding: 14px 16px;
+            text-decoration: none;
+            flex: 1;
+        }
+        nav a:hover {
+            background-color: 	#aeafb6;
+            color: black;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            flex-wrap: nowrap;
+            height: 60vh;
+            box-sizing: border-box;
+        }
+        .sidebar-left, .sidebar-right {
+            width: 15%;
+            background-color: 	#e1e1e1;
+            padding: 1px;
+            box-sizing: border-box;
+            color: #e1e1e1;
+            font-size: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .sidebar-left a, .sidebar-right a {
+            padding: 5px;
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            text-align: left;
+
+        }
+        .sidebar-left a:hover, .sidebar-right a:hover {
+            background-color: 	#aeafb6;
+        }
+        .main-content {
+            width: 70%;
+            padding: 30px;
+            box-sizing: border-box;
+            background-color: #e7e7e7;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 20%;
+            top: 10px;
+            width: 60%;
+            max-height: 100vh;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .popup h2 {
+            margin-top: 0;
+        }
+        .popup .close {
+            display: block;
+            text-align: right;
+            margin-top: -10px;
+            margin-right: -10px;
+        }
+        .popup .close a {
+            color: 	#aeafb6;
+            text-decoration: none;
+            font-size: 24px;
+        }
+        .footer {
+            background-color: #ffffff; /* Background color */
+            padding: 1px;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between; /* Default: Aligns images left, center, right */
+            align-items: center;
+            padding-bottom: 1px;
+            gap: 2px; /* Space between images */
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 250px) { footer-content {flex-direction: column; /* Stack images on smaller screens */justify-content: center;align-items: center; gap: 1px;}}
+
+        .footer-img {
+            width: 50px; /* Adjust image size */
+            height: auto;
+        }
+
+        .footer-line {
+            border: none;
+            border-top: 2px solid black; /* Bottom line */
+            margin: 1px auto;
+            width: 80%;
+        }
+
+        .footer-text {
+            font-size: 0.5rem;
+            color: black;
+            text-align: center;
+        }
+
+        .responsive-text {font-size: clamp(0.5rem, 1.0vw, 1.5rem); /* Auto-scales based on screen size */color: black;}
+
+        .responsive-link {background-color: rgb(186, 184, 189);color: black;font-size: clamp(0.5rem, 1.0vw, 1.0rem); /* Auto-scales based on screen size */}
+    </style>
+
+</head>
+<body>
+    <header>
+        <img src="EXSTO COMBINED.png" class="logo left-logo" alt="Left Logo">
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Port of ExSTO - AM8760 - Asset Management Training Simulation</h2>
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Asset Management Planning - Preparing to play AM8760</h2>
+        <img src="logo with xSTO.png" class="logo right-logo" alt="Right Logo">
+    </header>
+    <nav>
+        <a href="MAINPAGE.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Home</a>
+        <a href="AM8760_Board_Game.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">AM8760 Board Game</a>
+        <a href="vision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Vision & Asset Management Plan</a>
+        <a href="key_performance_indicators.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Key Performance Indicators</a>
+        <a href="financial_report.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Financial Report</a>
+        <a href="stateoftheasset.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">State of the Asset Table</a>
+        <a href="risk.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">5x5 Risk Table</a>
+        <a href="capital_investment_decision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Capital Investment Decision Making</a>
+        <a href="indexblocks.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Help Matrix</a>
+        <a href="training.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Training</a>
+        <a href="knowledge_test.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">GFMAM Knowledge Test</a>
+        <a href="knowledge_test_ISO.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">IOS55000 Knowledge Test</a>
+    </nav>
+    
+
+    <div class="container">
+        <div class="sidebar-left">
+            <h2 class="responsive-text">Asset Class Management Plans</h2>
+            <a href="bulk_material_handling_main.html" class="responsive-link">1.0 Bulk Material Handling</a>
+            <a href="storage_sheds_main.html"  class="responsive-link">2.0 Storage Sheds</strong></a>
+            <a href="rail_infrastructure_main.html"  class="responsive-link"> 3.0 Rail Infrastructure</strong></a>
+            <a href="ship_loader_unloader_main.html"  class="responsive-link">4.0 Ship Loader/Unloader</strong></a>
+            <a href="dust_suppression_main.html"  class="responsive-link">5.0 Dust Suppression Systems</strong></a>
+            <a href="weighbridges_main.html"  class="responsive-link">6.0 Weighbridges</strong></a>
+            <a href="security_systems_main.html"  class="responsive-link">7.0 Security Systems</strong></a>
+            <a href="spare.html"  class="responsive-link"> 8.0 SAMP</strong></a>
+            <a href="wharves_main.html"  class="responsive-link">9.0 Wharves, Berths and Jetties</strong></a>
+            <a href="breakwaters_main.html"  class="responsive-link">10.0 Breakwaters</strong></a>
+            <a href="navigational_aids_main.html"  class="responsive-link">11.0 Navigational Aids</strong></a>
+            <a href="channels_main.html"  class="responsive-link">12.0 Channels</strong></a>
+            <a href="ict_tangible_main.html"  class="responsive-link"> 13.0 ICT Tangible Assets</strong></a>
+            <a href="ict_intangible_main.html"  class="responsive-link">14.0 ICT Intangible Assets</strong></a>
+            <a href="hr_main.html"  class="responsive-link"> 15.0 Human Resources Management</strong></a>
+            <a href="power_main.html"  class="responsive-link"> 16.0 Power</strong></a>
+            <a href="utilities_main.html"class="responsive-link">17.0 Utilities</strong></a>
+        </div>
+
+        <div class="main-content" style="width: 100%; margin: 0 auto; display: flex; flex-direction: column; align-items: center;">
+            <!-- Top Text Box -->
+            <div style="width: 100%; text-align: left; font-size: 12px; margin-bottom: 5px;">
+                <p>Preparation: Reviewing and Analysing existing Port of ExSTO Financial Report, State of the Asset Tables</p>
+                <p>NOTE: The Port of ExSTO have a comprehnsive Digital Asset Information Manual that should be used in this session</p>
+            <div style="flex: 1; min-width: 150px; padding: 5px; border: 1px solid #ccc; margin: 1; box-sizing: border-box;">
+                    <h3>1. Analyse the Asset Classes and details of the Asset summary information sheet:</h3> <!-- Header for the first list -->
+                    <ul>
+                        <li>Record bullet point of your AP- Asset Policy</li>
+                        <li>Record key decision parameters for your AMP's</li>
+                        <li>Record key decision parameters for your MMP's</li>
+                        <li>Record key decision parameters for your Invetment decisions</li>
+                      </ul>
+                    <h3>2. If you land on a position with a crad that requires an Internal audit-This information will have a major score impact</h3> <!-- Header for the first list -->
+                    <h3>3. FOCUS on COST-RISK-PERFORMANCE in yoru review</h3> <!-- Header for the first list -->
+                    <h3>4. Make use of the AM8760 Asset Lifecyle Management and Asset Lifecycle Intervention Methodologies)</h3> <!-- Header for the first list -->
+                </div>
+            </div>
+            <!-- Images Container -->
+            <div style="width: 100%; display: flex; justify-content: space-around; align-items: center; margin-bottom: 20px;">
+                <img src="Asset Planning.png" alt="Description of Image 1" style="width: 50%; height: auto; max-height: 50vh;">
+                <img src="AM8760_Asset_Planning_CRP.png" alt="Description of Image 1" style="width: 50%; height: auto; max-height: 50vh;">
+            </div>
+            <!-- Bottom Text Boxes -->
+            <div style="width: 100%; display: flex; justify-content: space-between; margin-bottom: 20px;">
+                <div style="width: 49%; text-align: left; font-size: 10px; padding: 1px; border: 1px solid #ccc; margin-right: 2%; box-sizing: border-box;">
+                    <p>Record the TEAM name on top of the Asset Planning Sheet</p>
+                    <p>Record the TEAM members names on the Asset Planning Sheet</p>
+                    <p>Record the AP,AMP,MMP and IMP  before the game start on the Asset Planning Sheet</p>
+                    <p>Assign a TEAM member for keeping the Asset Planning Sheet updated (Asset Performance Analyst)</p>
+                    <p>Record changes in the SOA on the Asset Planning Sheet</p>
+                </div>
+                <div style="width: 49%; text-align: left; font-size: 10px; padding: 1px; border: 1px solid #ccc; box-sizing: border-box;">
+                    <p>There are two managmnet methodolgies to consider</p>
+                    <p>First consider the Event Scenario and which life cycle managment topic is covered</p>
+                    <p>Then use the Intervention process to PLAN-DO-CHECK-ADJUST your response</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-right">
+            <h2 class="responsive-text">AM8760 Board Game Rules and Information</h2>
+            <a href="AM8760_GAME_THEORY.HTML"class="responsive-link">AM8760 Game Theory</a>
+            <a href="AM8760_GAME_RULES.HTML" class="responsive-link">AM8760 Game Set-up & Rules</a>
+            <a href="AM8760_SCORE_SHEET.HTML" class="responsive-link">AM8760 Score Sheet</a>
+            <a href="AM8760_GAME_ASSET_PLANNING.HTML" class="responsive-link">AM8760 Asset Managment Planning</a>
+            <a href="AM8760_GAME_TRAINING_SESSION_1.HTML" class="responsive-link">AM8760 Asset Management Masterclass Session 1</a>
+            <a href="AM8760_GAME_TRAINING_SESSION_2.HTML" class="responsive-link">AM8760 Asset Management Masterclass Session 2</a>
+            <a href="MAINPAGE.html" class="responsive-link">Return to Home Page</a>
+        </div>
+        
+    </div>
+    <footer class="footer">
+        <div class="footer-content">
+
+        </div>
+        <hr class="footer-line">
+        <p class="footer-text">&copy; ExSTO Global, Johan Snyman - The Author retains all moral rights. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function showPopup(popupId) {
+            document.getElementById(popupId).style.display = 'block';
+        }
+        function closePopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
+        }
+    </script>
+</body>
+</html>

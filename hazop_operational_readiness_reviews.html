@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAZOP & Operational Readiness Reviews</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scroll on body */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            padding-top: 5px; /* Padding to avoid button interference */
+            background-color: lightgrey; /* Matching the block color */
+            border: 2px solid lightgrey;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            cursor: move;
+        }
+        .content {
+            padding: 10px;
+            overflow: auto;
+            height: calc(100% - 5px);
+            background-color: lightgrey;
+        }
+        .content {
+            padding: 20px;
+            overflow: auto;
+            height: calc(100% - 40px);
+            background-color: #f5f5dc;
+        }
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 10px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #ffcccb;
+            border: 1px solid #000;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .prev-btn {
+            left: 10px;
+        }
+        .next-btn {
+            right: 80px;
+        }
+    </style>
+    <script>
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        function closePopup() {
+            const popup = document.querySelector('.container');
+            document.body.removeChild(popup);
+        }
+
+        function onMouseDown(e) {
+            isDragging = true;
+            offsetX = e.clientX - parseInt(window.getComputedStyle(popup).left);
+            offsetY = e.clientY - parseInt(window.getComputedStyle(popup).top);
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }
+
+        function onMouseMove(e) {
+            if (isDragging) {
+                popup.style.left = e.clientX - offsetX + 'px';
+                popup.style.top = e.clientY - offsetY + 'px';
+            }
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        window.onload = function() {
+            const popup = document.querySelector('.container');
+            popup.addEventListener('mousedown', onMouseDown);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <div class="close-btn" onclick="closePopup()">X</div>
+            <h3>HAZOP & Operational Readiness Reviews Details</h3>
+            <p><strong>Who:</strong> Safety engineers, operations managers</p>
+            <p><strong>What:</strong> Hazard and Operability (HAZOP) studies and readiness reviews</p>
+            <p><strong>When:</strong> Prior to commissioning and during the design phase</p>
+            <p><strong>Where:</strong> Safety and operations departments</p>
+            <p><strong>With:</strong> HAZOP analysis tools, operational readiness checklists</p>
+            <p><strong>How:</strong> By conducting detailed HAZOP studies and readiness reviews to identify potential hazards and ensure operational readiness</p>
+            <p><strong>Why:</strong> To ensure safety and preparedness for asset operation</p>
+            <p><strong>Quality Check:</strong></p>
+            <ul>
+                <li>Right person (safety engineers, managers)</li>
+                <li>Right time (pre-commissioning)</li>
+                <li>Right place (safety and operations departments)</li>
+                <li>Right equipment (analysis tools, checklists)</li>
+                <li>Right process (HAZOP studies, readiness reviews)</li>
+                <li>Right work (identifying hazards)</li>
+                <li>Right reason (safety and preparedness)</li>
+            </ul>
+            <p><strong>Expanded Activities:</strong></p>
+            <ul>
+                <li>Conduct HAZOP studies to identify potential hazards in port operations.</li>
+                <li>Perform operational readiness reviews before commissioning new assets.</li>
+                <li>Identify and document potential hazards and their mitigation measures.</li>
+                <li>Review findings and ensure all necessary preparations are made for safe and efficient asset operation.</li>
+            </ul>
+            <p><strong>Research and Benchmarking:</strong></p>
+            <ul>
+                <li><strong>Best Practices:</strong> Utilize guidelines from the International Maritime Organization (IMO) for HAZOP studies.</li>
+                <li><strong>Case Studies:</strong> Analyze HAZOP reports from other ports to identify common hazards and mitigation strategies.</li>
+                <li><strong>Benchmark Data:</strong> Use data from industry reports to benchmark readiness review processes.</li>
+            </ul>
+            <p><strong>Narrative:</strong> This block focuses on ensuring the safety and operational readiness of port assets before they are commissioned. It includes conducting HAZOP studies to identify and mitigate potential hazards, as well as performing operational readiness reviews to ensure that all necessary preparations have been made for safe and efficient asset operation.</p>
+        </div>
+    </div>
+</body>
+</html>

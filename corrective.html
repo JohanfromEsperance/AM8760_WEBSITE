@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corrective</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scroll on body */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            padding-top: 5px; /* Padding to avoid button interference */
+            background-color: lightgrey; /* Matching the block color */
+            border: 2px solid lightgrey;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            cursor: move;
+        }
+        .content {
+            padding: 10px;
+            overflow: auto;
+            height: calc(100% - 5px);
+            background-color: lightgrey;
+        }
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 10px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #ffcccb;
+            border: 1px solid #000;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .prev-btn {
+            left: 10px;
+        }
+        .next-btn {
+            right: 80px;
+        }
+    </style>
+    <script>
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        function closePopup() {
+            const popup = document.querySelector('.container');
+            document.body.removeChild(popup);
+        }
+
+        function onMouseDown(e) {
+            isDragging = true;
+            offsetX = e.clientX - parseInt(window.getComputedStyle(popup).left);
+            offsetY = e.clientY - parseInt(window.getComputedStyle(popup).top);
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }
+
+        function onMouseMove(e) {
+            if (isDragging) {
+                popup.style.left = e.clientX - offsetX + 'px';
+                popup.style.top = e.clientY - offsetY + 'px';
+            }
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        window.onload = function() {
+            const popup = document.querySelector('.container');
+            popup.addEventListener('mousedown', onMouseDown);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h3>Corrective Maintenance Details</h3>
+            <p><strong>Who:</strong> Maintenance teams, reliability engineers</p>
+            <p><strong>What:</strong> Corrective maintenance activities to address asset failures</p>
+            <p><strong>When:</strong> As needed, based on asset condition and performance</p>
+            <p><strong>Where:</strong> Operational sites, maintenance facilities</p>
+            <p><strong>With:</strong> Maintenance tools, CMMS</p>
+            <p><strong>How:</strong> By performing repairs and corrective actions to restore asset functionality</p>
+            <p><strong>Why:</strong> To minimize downtime and ensure asset reliability</p>
+            <p><strong>Quality Check:</strong></p>
+            <ul>
+                <li>Right person (teams, engineers)</li>
+                <li>Right time (as needed)</li>
+                <li>Right place (sites, facilities)</li>
+                <li>Right equipment (tools, CMMS)</li>
+                <li>Right process (repairing, correcting)</li>
+                <li>Right work (restoring functionality)</li>
+                <li>Right reason (minimize downtime)</li>
+            </ul>
+            <p><strong>Expanded Activities:</strong></p>
+            <ul>
+                <li>Identify and diagnose asset failures.</li>
+                <li>Perform necessary repairs and corrective actions.</li>
+                <li>Document corrective maintenance activities in CMMS.</li>
+                <li>Review and analyze failure data to prevent recurrence.</li>
+            </ul>
+            <p><strong>Research and Benchmarking:</strong></p>
+            <ul>
+                <li><strong>Best Practices:</strong> Follow guidelines from the Reliability-Centered Maintenance (RCM) methodology for corrective maintenance.</li>
+                <li><strong>Case Studies:</strong> Review corrective maintenance practices from other ports to identify effective strategies.</li>
+                <li><strong>Benchmark Data:</strong> Compare your corrective maintenance practices with industry standards to ensure reliability.</li>
+            </ul>
+            <p><strong>Narrative:</strong> This block involves performing corrective maintenance activities to address asset failures and restore functionality. This helps to minimize downtime and ensure the reliability of port assets.</p>
+        </div>
+    </div>
+</body>
+</html>

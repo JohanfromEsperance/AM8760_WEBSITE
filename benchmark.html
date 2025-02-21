@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benchmark</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scroll on body */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            padding-top: 5px; /* Padding to avoid button interference */
+            background-color: lightgrey; /* Matching the block color */
+            border: 2px solid lightgrey;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            cursor: move;
+        }
+        .content {
+            padding: 10px;
+            overflow: auto;
+            height: calc(100% - 5px);
+            background-color: lightgrey;
+        }
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 10px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #ffcccb;
+            border: 1px solid #000;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .prev-btn {
+            left: 10px;
+        }
+        .next-btn {
+            right: 80px;
+        }
+    </style>
+    <script>
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        function closePopup() {
+            const popup = document.querySelector('.container');
+            document.body.removeChild(popup);
+        }
+
+        function onMouseDown(e) {
+            isDragging = true;
+            offsetX = e.clientX - parseInt(window.getComputedStyle(popup).left);
+            offsetY = e.clientY - parseInt(window.getComputedStyle(popup).top);
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }
+
+        function onMouseMove(e) {
+            if (isDragging) {
+                popup.style.left = e.clientX - offsetX + 'px';
+                popup.style.top = e.clientY - offsetY + 'px';
+            }
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        window.onload = function() {
+            const popup = document.querySelector('.container');
+            popup.addEventListener('mousedown', onMouseDown);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h3>Detailed Process for Benchmarking as a Precursor to Developing Maintenance Strategies, Tactics, and Budgets</h3>
+            <p><strong>Who:</strong> Asset managers, data analysts</p>
+            <p><strong>What:</strong> Process of comparing asset performance and practices against industry standards</p>
+            <p><strong>When:</strong> During strategic planning and periodic reviews</p>
+            <p><strong>Where:</strong> Asset management and planning departments</p>
+            <p><strong>With:</strong> Benchmarking tools, industry reports</p>
+            <p><strong>How:</strong> By collecting data, analyzing performance, and comparing against benchmarks</p>
+            <p><strong>Why:</strong> To identify areas for improvement and ensure competitive performance</p>
+            <p><strong>Quality Check:</strong></p>
+            <ul>
+            <h3>Activities and Benchmark Details</h3>
+            <ol>
+            <li>
+            <p><strong>Collect Performance Data for Port Assets:</strong></p>
+            <ul>
+            <li><strong>Who:</strong> Asset managers, data analysts</li>
+            <li><strong>What:</strong> Process of comparing asset performance and practices against industry standards</li>
+            <li><strong>When:</strong> During strategic planning and periodic reviews</li>
+            <li><strong>Where:</strong> Asset management and planning departments</li>
+            <li><strong>With:</strong> Benchmarking tools, industry reports</li>
+            <li><strong>How:</strong> Use asset management systems, manual data collection</li>
+            <li><strong>Why:</strong> To identify areas for improvement and ensure competitive performance</li>
+            <li><strong>Tools:</strong> CMMS (Computerized Maintenance Management Systems), EAM (Enterprise Asset Management) software</li>
+            <li><strong>Outputs:</strong> Raw performance data, maintenance records, operational logs</li>
+            </ul>
+            </li>
+            <li>
+            <p><strong>Analyze Data to Identify Trends, Strengths, and Weaknesses:</strong></p>
+            <ul>
+            <li><strong>Who:</strong> Data analysts</li>
+            <li><strong>What:</strong> Process of comparing asset performance and practices against industry standards</li>
+            <li><strong>When:</strong> During strategic planning and periodic reviews</li>
+            <li><strong>Where:</strong> Asset management and planning departments</li>
+            <li><strong>With:</strong> Benchmarking tools, industry reports</li>
+            <li><strong>How:</strong> Statistical analysis, trend analysis, root cause analysis</li>
+            <li><strong>Why:</strong> To identify areas for improvement and ensure competitive performance</li>
+            <li><strong>Tools:</strong> Statistical software, data visualization tools</li>
+            <li><strong>Outputs:</strong> Analytical reports, trend graphs, SWOT analysis</li>
+            </ul>
+            </li>
+            <li>
+            <p><strong>Compare Data Against Industry Benchmarks to Identify Areas for Improvement:</strong></p>
+            <ul>
+            <li><strong>Who:</strong> Asset managers, data analysts</li>
+            <li><strong>What:</strong> Process of comparing asset performance and practices against industry standards</li>
+            <li><strong>When:</strong> During strategic planning and periodic reviews</li>
+            <li><strong>Where:</strong> Asset management and planning departments</li>
+            <li><strong>With:</strong> Benchmarking tools, industry reports</li>
+            <li><strong>How:</strong> Benchmarking reports, performance scorecards</li>
+            <li><strong>Why:</strong> To identify areas for improvement and ensure competitive performance</li>
+            <li><strong>Tools:</strong> Industry benchmark reports, benchmarking software</li>
+            <li><strong>Outputs:</strong> Comparative analysis reports, performance gap analysis</li>
+            </ul>
+            </li>
+            <li>
+            <p><strong>Document Findings and Develop Plans to Implement Improvements:</strong></p>
+            <ul>
+            <li><strong>Who:</strong> Asset managers, strategy planners</li>
+            <li><strong>What:</strong> Process of comparing asset performance and practices against industry standards</li>
+            <li><strong>When:</strong> During strategic planning and periodic reviews</li>
+            <li><strong>Where:</strong> Asset management and planning departments</li>
+            <li><strong>With:</strong> Benchmarking tools, industry reports</li>
+            <li><strong>How:</strong> Report writing, strategic planning sessions</li>
+            <li><strong>Why:</strong> To identify areas for improvement and ensure competitive performance</li>
+            <li><strong>Tools:</strong> Document management systems, planning software</li>
+            <li><strong>Outputs:</strong> Improvement plans, strategic action items, budget proposals</li>
+            </ul>
+            </li>
+            </ol>
+            <h3>Quality Check</h3>
+            <ul>
+            <li><strong>Right person:</strong> Managers, analysts</li>
+            <li><strong>Right time:</strong> Planning, reviews</li>
+            <li><strong>Right place:</strong> Management, planning departments</li>
+            <li><strong>Right equipment:</strong> Tools, reports</li>
+            <li><strong>Right process:</strong> Collecting, analyzing, comparing</li>
+            <li><strong>Right work:</strong> Improvement identification</li>
+            <li><strong>Right reason:</strong> Competitive performance</li>
+            </ul>
+            <h3>Research and Benchmarking</h3>
+            <ol>
+            <li>
+            <p><strong>Best Practices:</strong></p>
+            <ul>
+            <li><strong>Follow guidelines from the Benchmarking Exchange (TBEx) for asset benchmarking.</strong></li>
+            <li><strong>Who:</strong> Asset managers, analysts</li>
+            <li><strong>How:</strong> Reviewing TBEx guidelines, integrating best practices into processes</li>
+            <li><strong>Tools:</strong> TBEx publications, online resources</li>
+            <li><strong>Website:</strong> <a href="https://www.benchnet.com/" target="_new" rel="noreferrer">The Benchmarking Exchange (TBEx)</a></li>
+            </ul>
+            </li>
+            <li>
+            <p><strong>Case Studies:</strong></p>
+            <ul>
+            <li><strong>Study benchmarking reports from other ports to identify effective practices.</strong></li>
+            <li><strong>Who:</strong> Data analysts, strategy planners</li>
+            <li><strong>How:</strong> Analyzing case studies, extracting relevant practices</li>
+            <li><strong>Tools:</strong> Benchmarking case study repositories, industry reports, white papers</li>
+            <li><strong>White Papers:</strong> Refer to industry-specific white papers for detailed case studies and insights</li>
+            </ul>
+            </li>
+            <li>
+            <p><strong>Benchmark Data:</strong></p>
+            <ul>
+            <li><strong>Use industry reports to compare your performance metrics with those of other ports.</strong></li>
+            <li><strong>Who:</strong> Data analysts, asset managers</li>
+            <li><strong>How:</strong> Accessing and reviewing industry reports, comparing metrics</li>
+            <li><strong>Tools:</strong> Industry publications, benchmarking databases</li>
+            </ul>
+            </li>
+            </ol>
+            <h3>Narrative</h3>
+            <p>This benchmarking process involves assessing the performance and practices of port assets against industry standards. It includes collecting performance data, analyzing it to identify trends, strengths, and weaknesses, and comparing it against benchmarks to pinpoint areas for improvement. The ultimate goal is to ensure that the port's asset management practices are competitive and aligned with industry best practices. This systematic approach helps in developing effective maintenance strategies, tactics, and budgets that are informed by thorough benchmarking activities.</p>
+    
+            </div>
+    </div>
+</body>
+</html>

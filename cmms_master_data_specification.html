@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMMS Master Data Specification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scroll on body */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            padding-top: 5px; /* Padding to avoid button interference */
+            background-color: lightgrey; /* Matching the block color */
+            border: 2px solid lightgrey;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            cursor: move;
+        }
+        .content {
+            padding: 10px;
+            overflow: auto;
+            height: calc(100% - 5px);
+            background-color: lightgrey;
+        }
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 10px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #ffcccb;
+            border: 1px solid #000;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .prev-btn {
+            left: 10px;
+        }
+        .next-btn {
+            right: 80px;
+        }
+    </style>
+    <script>
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        function closePopup() {
+            const popup = document.querySelector('.container');
+            document.body.removeChild(popup);
+        }
+
+        function onMouseDown(e) {
+            isDragging = true;
+            offsetX = e.clientX - parseInt(window.getComputedStyle(popup).left);
+            offsetY = e.clientY - parseInt(window.getComputedStyle(popup).top);
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }
+
+        function onMouseMove(e) {
+            if (isDragging) {
+                popup.style.left = e.clientX - offsetX + 'px';
+                popup.style.top = e.clientY - offsetY + 'px';
+            }
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        window.onload = function() {
+            const popup = document.querySelector('.container');
+            popup.addEventListener('mousedown', onMouseDown);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h3>CMMS Master Data Specification Details</h3>
+            <p><strong>Who:</strong> Data analysts, asset managers</p>
+            <p><strong>What:</strong> Creation of master data specifications for the CMMS (Computerized Maintenance Management System)</p>
+            <p><strong>When:</strong> During system implementation and periodic updates</p>
+            <p><strong>Where:</strong> Centralized CMMS system</p>
+            <p><strong>With:</strong> Data entry tools, CMMS software</p>
+            <p><strong>How:</strong> By defining data fields, ensuring data accuracy, and maintaining data integrity</p>
+            <p><strong>Why:</strong> To support effective asset management and maintenance planning</p>
+            <p><strong>Quality Check:</strong></p>
+            <ul>
+                <li>Right person (analysts, managers)</li>
+                <li>Right time (implementation, updates)</li>
+                <li>Right place (CMMS)</li>
+                <li>Right equipment (data tools, software)</li>
+                <li>Right process (defining, maintaining data)</li>
+                <li>Right work (data accuracy)</li>
+                <li>Right reason (effective management)</li>
+            </ul>
+            <p><strong>Expanded Activities:</strong></p>
+            <ul>
+                <li>Define and document data fields relevant to port assets (e.g., asset ID, location, condition, maintenance history).</li>
+                <li>Input and verify asset data in the CMMS.</li>
+                <li>Maintain data integrity by regularly reviewing and cleaning the data.</li>
+                <li>Conduct periodic audits to ensure data accuracy and completeness.</li>
+            </ul>
+            <p><strong>Research and Benchmarking:</strong></p>
+            <ul>
+                <li><strong>Best Practices:</strong> Follow guidelines from ISO 55000 for asset management.</li>
+                <li><strong>Case Studies:</strong> Review implementations of CMMS in other ports to identify best practices.</li>
+                <li><strong>Benchmark Data:</strong> Compare data specifications with industry standards.</li>
+            </ul>
+            <p><strong>Narrative:</strong> This block involves setting up and maintaining master data in the CMMS. This includes defining data fields such as asset ID, location, condition, and maintenance history, ensuring that the data is accurate and up-to-date. This supports effective asset management and maintenance planning.</p>
+        </div>
+    </div>
+</body>
+</html>

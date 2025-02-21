@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AM8760 - Asset Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color:#e7e7e7;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            height: 11%;
+            width: 100%;
+            text-align: center;
+            background-color: #ffffff;
+            padding: 0 0;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .logo {
+            height: 100%;
+            width: 10%;
+            position: absolute;
+            top: 0;
+        }
+        .left-logo {
+            left: 0;
+        }
+        .right-logo {
+            right: 0;
+        }
+        nav {
+            background-color: #f2f2f2;
+            overflow: hidden;
+            width: 100%;
+            display: flex;
+            text-align: center;
+            justify-content: normal;
+            box-sizing: border-box;
+        }
+        nav a {
+            display: block;
+            color: 	#e1e1e1;
+            text-align: left;
+            padding: 14px 16px;
+            text-decoration: none;
+            flex: 1;
+        }
+        nav a:hover {
+            background-color: 	#aeafb6;
+            color: black;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            flex-wrap: nowrap;
+            height: 60vh;
+            box-sizing: border-box;
+        }
+        .sidebar-left, .sidebar-right {
+            width: 15%;
+            background-color: 	#e1e1e1;
+            padding: 1px;
+            box-sizing: border-box;
+            color: #e1e1e1;
+            font-size: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .sidebar-left a, .sidebar-right a {
+            padding: 5px;
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            text-align: left;
+
+        }
+        .sidebar-left a:hover, .sidebar-right a:hover {
+            background-color: 	#aeafb6;
+        }
+        .main-content {
+            width: 70%;
+            padding: 30px;
+            box-sizing: border-box;
+            background-color: #e7e7e7;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 20%;
+            top: 10px;
+            width: 60%;
+            max-height: 100vh;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .popup h2 {
+            margin-top: 0;
+        }
+        .popup .close {
+            display: block;
+            text-align: right;
+            margin-top: -10px;
+            margin-right: -10px;
+        }
+        .popup .close a {
+            color: 	#aeafb6;
+            text-decoration: none;
+            font-size: 24px;
+        }
+        .footer {
+            background-color: #ffffff; /* Background color */
+            padding: 1px;
+            text-align: center;
+        }
+
+    .footer-content {
+        display: flex;
+        justify-content: space-between; /* Default: Aligns images left, center, right */
+        align-items: center;
+        padding-bottom: 1px;
+        gap: 2px; /* Space between images */
+    }
+
+    /* Responsive adjustments for smaller screens */
+    @media (max-width: 250px) { footer-content {flex-direction: column; /* Stack images on smaller screens */justify-content: center;align-items: center; gap: 1px;}}
+
+    .footer-img {
+        width: 50px; /* Adjust image size */
+        height: auto;
+    }
+
+    .footer-line {
+        border: none;
+        border-top: 2px solid black; /* Bottom line */
+        margin: 1px auto;
+        width: 80%;
+    }
+
+    .footer-text {
+        font-size: 0.5rem;
+        color: black;
+        text-align: center;
+    }
+    .responsive-text {font-size: clamp(0.5rem, 1.0vw, 1.5rem); /* Auto-scales based on screen size */color: black;}
+
+        .responsive-link {background-color: rgb(186, 184, 189);color: black;font-size: clamp(0.5rem, 1.0vw, 1.0rem); /* Auto-scales based on screen size */}
+
+        .main-content table {
+            width: 100%; /* Ensures the table takes full width of the container */
+            table-layout: auto; /* Allows columns to automatically adjust their size */
+        }
+
+        .main-content th, .main-content td {
+            text-align: left;
+            padding: 1px; /* Adjust padding as needed */
+            font-size: calc(0.5vw + 0.2vh + 0.2vmin); /* Responsively adjusts font size based on the viewport size */
+            white-space: normal; /* Allows text to wrap within the cell */
+            overflow-wrap: break-word; /* Ensures words break to prevent overflow */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="EXSTO COMBINED.png" class="logo left-logo" alt="Left Logo">
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Port of ExSTO - AM8760 - Asset Management Training Simulation</h2>
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Welcome to The Port of ExSTO</h2>
+        <img src="logo with xSTO.png" class="logo right-logo" alt="Right Logo">
+    </header>
+    <nav>
+        <a href="MAINPAGE.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Home</a>
+        <a href="AM8760_Board_Game.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">AM8760 Board Game</a>
+        <a href="vision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Vision & Asset Management Plan</a>
+        <a href="key_performance_indicators.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Key Performance Indicators</a>
+        <a href="financial_report.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Financial Report</a>
+        <a href="stateoftheasset.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">State of the Asset Table</a>
+        <a href="risk.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">5x5 Risk Table</a>
+        <a href="capital_investment_decision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Capital Investment Decision Making</a>
+        <a href="indexblocks.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Help Matrix</a>
+        <a href="training.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Training</a>
+        <a href="knowledge_test.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">GFMAM Knowledge Test</a>
+        <a href="knowledge_test_ISO.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">IOS55000 Knowledge Test</a>
+    </nav>
+    
+    <style>
+        .responsive-text {font-size: clamp(0.5rem, 1.0vw, 1.5rem); /* Auto-scales based on screen size */color: black;}
+    </style>
+
+    <style>
+        .responsive-link {
+            background-color: rgb(186, 184, 189);color: black;font-size: clamp(0.5rem, 1.0vw, 1.0rem); /* Auto-scales based on screen size */}
+    </style>
+
+    <div class="container">
+        <div class="sidebar-left">
+            <h2 class="responsive-text">Asset Class Management Plans</h2>
+            <a href="bulk_material_handling_main.html" class="responsive-link">1.0 Bulk Material Handling</a>
+            <a href="storage_sheds_main.html"  class="responsive-link">2.0 Storage Sheds</strong></a>
+            <a href="rail_infrastructure_main.html"  class="responsive-link"> 3.0 Rail Infrastructure</strong></a>
+            <a href="ship_loader_unloader_main.html"  class="responsive-link">4.0 Ship Loader/Unloader</strong></a>
+            <a href="dust_suppression_main.html"  class="responsive-link">5.0 Dust Suppression Systems</strong></a>
+            <a href="weighbridges_main.html"  class="responsive-link">6.0 Weighbridges</strong></a>
+            <a href="security_systems_main.html"  class="responsive-link">7.0 Security Systems</strong></a>
+            <a href="spare.html"  class="responsive-link"> 8.0 SAMP</strong></a>
+            <a href="wharves_main.html"  class="responsive-link">9.0 Wharves, Berths and Jetties</strong></a>
+            <a href="breakwaters_main.html"  class="responsive-link">10.0 Breakwaters</strong></a>
+            <a href="navigational_aids_main.html"  class="responsive-link">11.0 Navigational Aids</strong></a>
+            <a href="channels_main.html"  class="responsive-link">12.0 Channels</strong></a>
+            <a href="ict_tangible_main.html"  class="responsive-link"> 13.0 ICT Tangible Assets</strong></a>
+            <a href="ict_intangible_main.html"  class="responsive-link">14.0 ICT Intangible Assets</strong></a>
+            <a href="hr_main.html"  class="responsive-link"> 15.0 Human Resources Management</strong></a>
+            <a href="power_main.html"  class="responsive-link"> 16.0 Power</strong></a>
+            <a href="utilities_main.html"class="responsive-link">17.0 Utilities</strong></a>
+        </div>
+        <div class="main-content">
+            <h3>Port of Exsto Channel Maintenance Management Manual</h3>
+<h2>Table of Contents</h2>
+<ol>
+<li>Introduction</li>
+<li>Maintenance Objectives</li>
+<li>Maintenance Strategy</li>
+<li>Maintenance Activities</li>
+<li>Risk Management</li>
+<li>Compliance and Safety</li>
+<li>Monitoring and Reporting</li>
+<li>Training and Development</li>
+<li>Continuous Improvement</li>
+<li>Appendices</li>
+</ol>
+<hr />
+<h3>1. Introduction</h3>
+<p>The Port of Exsto's channels are critical for ensuring the safe and efficient movement of vessels. This manual provides detailed guidelines for the maintenance management of the port's channels, outlining objectives, strategies, activities, risk management, compliance, and continuous improvement processes.</p>
+<hr />
+<h3>2. Maintenance Objectives</h3>
+<p>The primary objectives of the channel maintenance management program are to:</p>
+<ul>
+<li>Ensure the navigability and safety of the port&rsquo;s channels.</li>
+<li>Minimize downtime and operational disruptions.</li>
+<li>Comply with environmental and safety regulations.</li>
+<li>Extend the lifespan of channel infrastructure.</li>
+<li>Enhance the efficiency and reliability of channel operations.</li>
+</ul>
+<hr />
+<h3>3. Maintenance Strategy</h3>
+<h4>Preventive Maintenance</h4>
+<p>Preventive maintenance involves regular and scheduled activities to prevent sediment buildup, erosion, and equipment failure. This includes:</p>
+<ul>
+<li>Routine dredging to maintain channel depth and width.</li>
+<li>Regular inspection and maintenance of buoys, beacons, and markers.</li>
+<li>Erosion control measures to stabilize banks.</li>
+</ul>
+<h4>Predictive Maintenance</h4>
+<p>Predictive maintenance utilizes monitoring data to predict potential failures and address issues proactively. This includes:</p>
+<ul>
+<li>Using hydrographic surveys and sonar systems to monitor sediment levels.</li>
+<li>Implementing real-time monitoring of navigational aids.</li>
+<li>Scheduling maintenance based on predictive analysis.</li>
+</ul>
+<h4>Corrective Maintenance</h4>
+<p>Corrective maintenance involves addressing issues as they arise. This includes:</p>
+<ul>
+<li>Emergency dredging in response to sudden sediment buildup.</li>
+<li>Immediate repair of damaged navigational aids.</li>
+<li>Rapid response to bank collapses and other structural failures.</li>
+</ul>
+<hr />
+<h3>4. Maintenance Activities</h3>
+<table>
+<thead>
+<tr>
+<th>Activity</th>
+<th>Frequency</th>
+<th>Responsible Party</th>
+<th>Tools and Equipment</th>
+<th>Procedures</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dredging</td>
+<td>Quarterly</td>
+<td>Maintenance Team</td>
+<td>Dredgers, Survey Equipment</td>
+<td>Conduct hydrographic surveys; schedule and execute dredging.</td>
+</tr>
+<tr>
+<td>Buoy Inspection</td>
+<td>Monthly</td>
+<td>Navigational Aid Team</td>
+<td>Inspection Tools</td>
+<td>Inspect and test buoy functionality; repair or replace as needed.</td>
+</tr>
+<tr>
+<td>Beacon Maintenance</td>
+<td>Bi-Monthly</td>
+<td>Navigational Aid Team</td>
+<td>Ladders, Tools, Lights</td>
+<td>Inspect and maintain beacon lights; ensure proper operation.</td>
+</tr>
+<tr>
+<td>Marker Resetting</td>
+<td>Bi-Monthly</td>
+<td>Navigational Aid Team</td>
+<td>Inspection Tools</td>
+<td>Inspect markers; reset displaced markers.</td>
+</tr>
+<tr>
+<td>Erosion Control</td>
+<td>Annually</td>
+<td>Civil Engineering Team</td>
+<td>Erosion Control Materials</td>
+<td>Assess bank stability; implement erosion control measures.</td>
+</tr>
+<tr>
+<td>Survey Equipment Maintenance</td>
+<td>Quarterly</td>
+<td>Survey Team</td>
+<td>Calibration Tools</td>
+<td>Inspect and calibrate survey equipment.</td>
+</tr>
+<tr>
+<td>Sensor Replacement</td>
+<td>As Needed</td>
+<td>Monitoring Team</td>
+<td>Sensors, Calibration Tools</td>
+<td>Inspect sensors; replace and calibrate faulty sensors.</td>
+</tr>
+<tr>
+<td>Debris Removal</td>
+<td>Weekly</td>
+<td>Maintenance Team</td>
+<td>Debris Removal Equipment</td>
+<td>Conduct visual inspections; remove floating debris.</td>
+</tr>
+<tr>
+<td>Water Quality Monitoring</td>
+<td>Monthly</td>
+<td>Environmental Team</td>
+<td>Water Testing Kits</td>
+<td>Test water quality; treat contaminants as needed.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>5. Risk Management</h3>
+<h4>Risk Identification</h4>
+<p>Identify potential risks related to channel maintenance, such as:</p>
+<ul>
+<li>Sediment buildup</li>
+<li>Erosion</li>
+<li>Navigational aid failures</li>
+<li>Environmental contamination</li>
+</ul>
+<h4>Risk Assessment</h4>
+<p>Assess the likelihood and impact of identified risks using a risk matrix. Prioritize risks based on their severity.</p>
+<h4>Risk Mitigation</h4>
+<p>Implement mitigation actions to address identified risks. For example:</p>
+<ul>
+<li>Regular dredging to prevent sediment buildup.</li>
+<li>Erosion control measures to protect channel banks.</li>
+<li>Routine inspections and maintenance of navigational aids.</li>
+<li>Water quality monitoring and treatment to address contamination.</li>
+</ul>
+<hr />
+<h3>6. Compliance and Safety</h3>
+<h4>Regulatory Compliance</h4>
+<p>Ensure all maintenance activities comply with relevant regulations, including:</p>
+<ul>
+<li>Environmental Protection Act</li>
+<li>Occupational Health and Safety Standards</li>
+<li>Maritime Safety Regulations</li>
+</ul>
+<h4>Safety Protocols</h4>
+<p>Implement strict safety protocols for maintenance activities, including:</p>
+<ul>
+<li>Personal Protective Equipment (PPE) for all personnel.</li>
+<li>Safety training for maintenance teams.</li>
+<li>Emergency response plans for accidents and environmental hazards.</li>
+</ul>
+<hr />
+<h3>7. Monitoring and Reporting</h3>
+<h4>Monitoring Systems</h4>
+<p>Implement advanced monitoring systems to track channel conditions and maintenance activities, including:</p>
+<ul>
+<li>Real-time hydrographic surveys</li>
+<li>Automated navigational aid monitoring</li>
+<li>Environmental sensors for water quality</li>
+</ul>
+<h4>Reporting Procedures</h4>
+<p>Establish reporting procedures for documenting maintenance activities and outcomes, including:</p>
+<ul>
+<li>Maintenance logs</li>
+<li>Risk assessment reports</li>
+<li>Compliance and safety audits</li>
+</ul>
+<hr />
+<h3>8. Training and Development</h3>
+<p>Provide continuous training and development opportunities for maintenance personnel, including:</p>
+<ul>
+<li>Technical training on maintenance procedures and equipment use.</li>
+<li>Safety training and emergency response drills.</li>
+<li>Professional development programs to enhance skills and knowledge.</li>
+</ul>
+<hr />
+<h3>9. Continuous Improvement</h3>
+<p>Adopt a continuous improvement approach to channel maintenance management, including:</p>
+<ul>
+<li>Regularly reviewing and updating maintenance strategies and procedures.</li>
+<li>Incorporating feedback from maintenance personnel and stakeholders.</li>
+<li>Implementing best practices and new technologies.</li>
+</ul>
+<hr />
+<h3>10. Appendices</h3>
+<h4>A. Maintenance Checklists</h4>
+<ul>
+<li>Detailed checklists for each maintenance activity.</li>
+</ul>
+<h4>B. Risk Matrix</h4>
+<ul>
+<li>Risk assessment matrix template for evaluating potential risks.</li>
+</ul>
+<h4>C. Regulatory Guidelines</h4>
+<ul>
+<li>Summary of relevant regulatory requirements and standards.</li>
+</ul>
+<h4>D. Contact Information</h4>
+<ul>
+<li>Emergency contacts and key personnel involved in channel maintenance.</li>
+</ul>
+<hr />
+<p>By following this comprehensive Channel Maintenance Management Manual, the Port of Exsto can ensure the safe, efficient, and compliant operation of its navigational channels, supporting the overall success and sustainability of port activities</p>
+<p>&nbsp;</p>            
+        </div>
+        <div class="sidebar-right">
+            <h2 class="responsive-text">Asset Management Master Data</h2>
+            <h2><Strong>Asset Information & Master Data</Strong></h2>
+            <a href="channels_description.html"class="responsive-link">1.1 Asset Description</a>
+            <a href="channels_asset_hierarchy.html" class="responsive-link">1.2 Asset Hierarchy</a>
+            <a href="channels_risk_analysis.html" class="responsive-link">1.3 Asset Risk Analysis</a>
+            <a href="channels_fmea.html" class="responsive-link">1.4 Asset FMEA and PMO activities</a>
+            <a href="channels_strategies.html" class="responsive-link">1.5 Asset Strategies</a>
+            <a href="channels_maintenance_plans.html" class="responsive-link">1.6 Asset Maintenance Plans</a>
+            <a href="channels_whole_of_life_analysis.html" class="responsive-link">1.7 Asset WOL Analysis</a>
+            <a href="channels_event_tables.html" class="responsive-link">1.8 Asset Event Scenarios</a>
+            <a href="MAINPAGE.html" class="responsive-link">Return to Home Page</a>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer-content">
+
+        </div>
+        <hr class="footer-line">
+        <p class="footer-text">&copy; ExSTO Global, Johan Snyman - The Author retains all moral rights. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function showPopup(popupId) {
+            document.getElementById(popupId).style.display = 'block';
+        }
+        function closePopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
+        }
+    </script>
+</body>
+</html>

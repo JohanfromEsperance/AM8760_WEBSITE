@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConMON – Asset Health</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scroll on body */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            padding-top: 5px; /* Padding to avoid button interference */
+            background-color: lightgrey; /* Matching the block color */
+            border: 2px solid lightgrey;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            cursor: move;
+        }
+        .content {
+            padding: 10px;
+            overflow: auto;
+            height: calc(100% - 5px);
+            background-color: lightgrey;
+        }
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 10px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #ffcccb;
+            border: 1px solid #000;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .prev-btn {
+            left: 10px;
+        }
+        .next-btn {
+            right: 80px;
+        }
+    </style>
+    <script>
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        function closePopup() {
+            const popup = document.querySelector('.container');
+            document.body.removeChild(popup);
+        }
+
+        function onMouseDown(e) {
+            isDragging = true;
+            offsetX = e.clientX - parseInt(window.getComputedStyle(popup).left);
+            offsetY = e.clientY - parseInt(window.getComputedStyle(popup).top);
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }
+
+        function onMouseMove(e) {
+            if (isDragging) {
+                popup.style.left = e.clientX - offsetX + 'px';
+                popup.style.top = e.clientY - offsetY + 'px';
+            }
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        window.onload = function() {
+            const popup = document.querySelector('.container');
+            popup.addEventListener('mousedown', onMouseDown);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h3>ConMON – Asset Health Details</h3>
+            <p><strong>Who:</strong> Maintenance teams, reliability engineers</p>
+            <p><strong>What:</strong> Monitoring the health and condition of port assets</p>
+            <p><strong>When:</strong> Continuously, with periodic reviews</p>
+            <p><strong>Where:</strong> On-site, reported in asset management systems</p>
+            <p><strong>With:</strong> Condition monitoring tools, sensors, CMMS</p>
+            <p><strong>How:</strong> By using condition monitoring techniques and analyzing data</p>
+            <p><strong>Why:</strong> To detect potential issues early and maintain asset performance</p>
+            <p><strong>Quality Check:</strong></p>
+            <ul>
+                <li>Right person (maintenance teams, engineers)</li>
+                <li>Right time (continuously, periodic reviews)</li>
+                <li>Right place (on-site, management systems)</li>
+                <li>Right equipment (monitoring tools, sensors)</li>
+                <li>Right process (monitoring, analyzing)</li>
+                <li>Right work (detecting issues)</li>
+                <li>Right reason (maintain performance)</li>
+            </ul>
+            <p><strong>Expanded Activities:</strong></p>
+            <ul>
+                <li>Install and calibrate monitoring tools.</li>
+                <li>Collect and analyze data from sensors regularly.</li>
+                <li>Identify trends and potential issues.</li>
+                <li>Schedule and execute necessary maintenance based on findings.</li>
+            </ul>
+            <p><strong>Research and Benchmarking:</strong></p>
+            <ul>
+                <li><strong>Best Practices:</strong> Refer to ISO 17359 for guidelines on condition monitoring and diagnostics of machines.</li>
+                <li><strong>Case Studies:</strong> Study the condition monitoring practices of leading ports to identify successful strategies.</li>
+                <li><strong>Benchmark Data:</strong> Use industry benchmark data to compare the effectiveness of your condition monitoring processes.</li>
+            </ul>
+            <p><strong>Narrative:</strong> This block involves continuous monitoring of the health and condition of port assets using condition monitoring tools and sensors. By analyzing the data collected, ports can detect potential issues early and take corrective action to maintain asset performance.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asset Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scroll on body */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            padding-top: 5px; /* Padding to avoid button interference */
+            background-color: lightgrey; /* Matching the block color */
+            border: 2px solid lightgrey;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            cursor: move;
+        }
+        .content {
+            padding: 10px;
+            overflow: auto;
+            height: calc(100% - 5px);
+            background-color: lightgrey;
+        }
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 10px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #ffcccb;
+            border: 1px solid #000;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .prev-btn {
+            left: 10px;
+        }
+        .next-btn {
+            right: 80px;
+        }
+    </style>
+    <script>
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        function closePopup() {
+            const popup = document.querySelector('.container');
+            document.body.removeChild(popup);
+        }
+
+        function onMouseDown(e) {
+            isDragging = true;
+            offsetX = e.clientX - parseInt(window.getComputedStyle(popup).left);
+            offsetY = e.clientY - parseInt(window.getComputedStyle(popup).top);
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }
+
+        function onMouseMove(e) {
+            if (isDragging) {
+                popup.style.left = e.clientX - offsetX + 'px';
+                popup.style.top = e.clientY - offsetY + 'px';
+            }
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        window.onload = function() {
+            const popup = document.querySelector('.container');
+            popup.addEventListener('mousedown', onMouseDown);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <div class="close-btn" onclick="closePopup()">X</div>
+            <h3>Asset Register Details and Design guidelines</h3>
+            <p><strong>Who:</strong> Data analysts, asset managers</p>
+            <p><strong>What:</strong> Comprehensive list of all assets, including details on ownership, location, condition, and remaining life</p>
+            <p><strong>When:</strong> During asset acquisition, regularly updated</p>
+            <p><strong>Where:</strong> Centralized asset management system</p>
+            <p><strong>With:</strong> Asset management software, databases</p>
+            <p><strong>How:</strong> By creating and maintaining a comprehensive asset register</p>
+            <p><strong>Why:</strong> To ensure all assets are accounted for and organized systematically</p>
+            <p><strong>Quality Check:</strong></p>
+            <ul>
+                <li>Right person (analysts, managers)</li>
+                <li>Right time (acquisition, updates)</li>
+                <li>Right place (management system)</li>
+                <li>Right equipment (software, databases)</li>
+                <li>Right process (creating, maintaining)</li>
+                <li>Right work (detailed information)</li>
+                <li>Right reason (systematic organization)</li>
+            </ul>
+            <p><strong>Expanded Activities:</strong></p>
+            <ul>
+                <li>Input and verify asset details in the register (e.g., asset ID, location, condition).</li>
+                <li>Maintain accuracy by regularly updating the register with new acquisitions and changes.</li>
+                <li>Conduct periodic audits to ensure the register is comprehensive and up-to-date.</li>
+                <li>Document all asset details systematically for easy reference and management.</li>
+            </ul>
+            <p><strong>Research and Benchmarking:</strong></p>
+            <ul>
+                <li><strong>Best Practices:</strong> Follow ISO 55000 guidelines for asset management.</li>
+                <li><strong>Case Studies:</strong> Review asset registers from other ports to understand best practices.</li>
+                <li><strong>Benchmark Data:</strong> Compare your asset register with industry standards to ensure comprehensiveness and accuracy.</li>
+            </ul>
+            <p>Guidleine for developing an ISO 14224-compliant asset hierarchy and asset register:</p>
+<h3>ISO 14224-Based Asset Hierarchy and Asset Register</h3>
+<h4>Step 1: Define Scope and Objectives</h4>
+<ul>
+<li><strong>Purpose:</strong> Clarify why the asset register is essential for reliability and maintenance data management.</li>
+<li><strong>Scope:</strong> Determine the coverage of the asset register as per ISO 14224&rsquo;s focus areas.</li>
+</ul>
+<h4>Step 2: Gather and Review Existing Data</h4>
+<ul>
+<li><strong>Existing Data Sources:</strong> Compile existing asset information from various sources.</li>
+<li><strong>Review Standards and Compliance:</strong>
+<ul>
+<li><strong>Clause 4.2 (General Data Requirements):</strong> Ensures all asset data meets general standards for data entry and management.</li>
+</ul>
+</li>
+</ul>
+<h3>Step 3: Develop Asset Classification System</h3>
+<h4>Clause Reference:</h4>
+<ul>
+<li><strong>Clause 5.1 (Classification System):</strong> Describes the requirements for developing a classification system for asset categorization.</li>
+</ul>
+<h3>Hierarchy Levels: Define the Structure</h3>
+<h4>Level 1: Facility</h4>
+<ul>
+<li><strong>Definition:</strong> A major physical entity such as a plant, refinery, or factory.</li>
+<li><strong>Sub-steps:</strong>
+<ol>
+<li><strong>Identify Facilities:</strong> List all facilities within the organization.</li>
+<li><strong>Assign Unique Identifiers:</strong> Use a systematic approach to assign unique IDs to each facility.</li>
+<li><strong>Document Facility Attributes:</strong> Record attributes such as location, capacity, operational status, and environmental conditions.</li>
+</ol>
+</li>
+</ul>
+<h4>Level 2: System</h4>
+<ul>
+<li><strong>Definition:</strong> A collection of related equipment within a facility that performs a specific function.</li>
+<li><strong>Sub-steps:</strong>
+<ol>
+<li><strong>Identify Systems:</strong> Determine the main systems within each facility (e.g., power generation, water treatment).</li>
+<li><strong>Assign System Codes:</strong> Use consistent coding conventions for systems.</li>
+<li><strong>Detail System Specifications:</strong> Document specifications such as system type, function, and performance parameters.</li>
+</ol>
+</li>
+</ul>
+<h4>Level 3: Subsystem</h4>
+<ul>
+<li><strong>Definition:</strong> A subset of a system, composed of components that perform specific tasks within the system.</li>
+<li><strong>Sub-steps:</strong>
+<ol>
+<li><strong>Break Down Systems into Subsystems:</strong> Identify the subsystems within each system.</li>
+<li><strong>Assign Subsystem Codes:</strong> Create a unique identifier for each subsystem.</li>
+<li><strong>Record Subsystem Data:</strong> Document subsystem attributes such as configuration, dependencies, and operational conditions.</li>
+</ol>
+</li>
+</ul>
+<h4>Level 4: Equipment</h4>
+<ul>
+<li><strong>Definition:</strong> Individual units of machinery or apparatus within a subsystem.</li>
+<li><strong>Sub-steps:</strong>
+<ol>
+<li><strong>Catalog Equipment:</strong> List all equipment within each subsystem.</li>
+<li><strong>Unique Equipment IDs:</strong> Assign unique identifiers to each piece of equipment.</li>
+<li><strong>Capture Equipment Details:</strong> Document details including manufacturer, model, serial number, installation date, and maintenance history.</li>
+</ol>
+</li>
+</ul>
+<h4>Level 5: Component</h4>
+<ul>
+<li><strong>Definition:</strong> Individual parts or elements of equipment that can be individually maintained or replaced.</li>
+<li><strong>Sub-steps:</strong>
+<ol>
+<li><strong>Identify Components:</strong> Break down equipment into its individual components.</li>
+<li><strong>Component Codes:</strong> Assign unique codes to each component.</li>
+<li><strong>Document Component Specifications:</strong> Record specifications such as part number, material, and expected lifespan.</li>
+</ol>
+</li>
+</ul>
+<h3>Detailed Sub-Steps for Creating and Defining Levels</h3>
+<h4>Step 3.1: Facility Level</h4>
+<ol>
+<li>
+<p><strong>Survey and List Facilities:</strong></p>
+<ul>
+<li>Conduct a survey to identify all operational and non-operational facilities.</li>
+<li>Create a comprehensive list of all facilities.</li>
+</ul>
+</li>
+<li>
+<p><strong>Assign Unique Identifiers:</strong></p>
+<ul>
+<li>Develop a naming convention that includes facility type and location (e.g., PLT-001 for Plant 1).</li>
+<li>Use a database or CMMS to maintain and track these identifiers.</li>
+</ul>
+</li>
+<li>
+<p><strong>Document Facility Attributes:</strong></p>
+<ul>
+<li>Record essential attributes: name, location, size, operational status, production capacity, and environmental considerations.</li>
+<li>Ensure data accuracy and completeness through regular audits.</li>
+</ul>
+</li>
+</ol>
+<h4>Step 3.2: System Level</h4>
+<ol>
+<li>
+<p><strong>Identify Key Systems:</strong></p>
+<ul>
+<li>Map out major systems within each facility, such as HVAC, electrical, and process systems.</li>
+<li>Ensure that all systems contributing to facility operations are considered.</li>
+</ul>
+</li>
+<li>
+<p><strong>Assign System Codes:</strong></p>
+<ul>
+<li>Develop a systematic coding convention (e.g., SYS-001 for HVAC System).</li>
+<li>Ensure consistency across all facilities to facilitate data management.</li>
+</ul>
+</li>
+<li>
+<p><strong>Detail System Specifications:</strong></p>
+<ul>
+<li>Document system attributes: system type, function, capacity, and performance metrics.</li>
+<li>Use technical manuals and manufacturer data to enrich system information.</li>
+</ul>
+</li>
+</ol>
+<h4>Step 3.3: Subsystem Level</h4>
+<ol>
+<li>
+<p><strong>Break Down Systems:</strong></p>
+<ul>
+<li>Identify subsystems within each main system, such as compressors within an HVAC system.</li>
+<li>Ensure all critical and non-critical subsystems are documented.</li>
+</ul>
+</li>
+<li>
+<p><strong>Assign Subsystem Codes:</strong></p>
+<ul>
+<li>Create a hierarchical coding structure (e.g., SYS-001-SS1 for Subsystem 1 of HVAC System).</li>
+<li>Maintain a central registry of subsystem codes for reference.</li>
+</ul>
+</li>
+<li>
+<p><strong>Record Subsystem Data:</strong></p>
+<ul>
+<li>Capture configuration details, dependencies, and specific operational conditions.</li>
+<li>Ensure that data is accessible and up-to-date in the asset management system.</li>
+</ul>
+</li>
+</ol>
+<h4>Step 3.4: Equipment Level</h4>
+<ol>
+<li>
+<p><strong>Catalog Equipment:</strong></p>
+<ul>
+<li>Develop a comprehensive inventory of all equipment within each subsystem.</li>
+<li>Regularly update the inventory to reflect changes such as new installations or decommissioned equipment.</li>
+</ul>
+</li>
+<li>
+<p><strong>Unique Equipment IDs:</strong></p>
+<ul>
+<li>Use a structured approach to assign unique IDs (e.g., SYS-001-SS1-EQ1 for Equipment 1 in Subsystem 1 of HVAC System).</li>
+<li>Integrate these IDs into the CMMS for tracking and management.</li>
+</ul>
+</li>
+<li>
+<p><strong>Capture Equipment Details:</strong></p>
+<ul>
+<li>Document detailed specifications: manufacturer, model, serial number, installation date, maintenance history, and performance metrics.</li>
+<li>Use manufacturer documentation and maintenance records to ensure completeness.</li>
+</ul>
+</li>
+</ol>
+<h4>Step 3.5: Component Level</h4>
+<ol>
+<li>
+<p><strong>Identify Components:</strong></p>
+<ul>
+<li>Break down each piece of equipment into its maintainable components.</li>
+<li>Ensure that all critical components are identified, including spare parts and consumables.</li>
+</ul>
+</li>
+<li>
+<p><strong>Component Codes:</strong></p>
+<ul>
+<li>Develop unique codes for each component (e.g., SYS-001-SS1-EQ1-CMP1 for Component 1 of Equipment 1 in Subsystem 1 of HVAC System).</li>
+<li>Maintain a centralized component registry to avoid duplication.</li>
+</ul>
+</li>
+<li>
+<p><strong>Document Component Specifications:</strong></p>
+<ul>
+<li>Capture detailed specifications: part number, material, manufacturer, expected lifespan, and maintenance requirements.</li>
+<li>Ensure that component data is linked to equipment data for seamless integration</li>
+<li>Facility Level (PLT-001)<br />└── System Level (SYS-001)<br /> └── Subsystem Level (SYS-001-SS1)<br /> └── Equipment Level (SYS-001-SS1-EQ1)<br /> └── Component Level (SYS-001-SS1-EQ1-CMP1)</li>
+</ul>
+</li>
+</ol>
+<h3>Step 4: Define Asset Attributes</h3>
+<h4>Clause Reference:</h4>
+<ul>
+<li><strong>Clause 5.2 (Data Categories):</strong> Specifies the mandatory data categories for asset attributes, emphasizing the need for consistency, accuracy, and comprehensiveness in asset information.</li>
+</ul>
+<h3>Asset Attributes Definition</h3>
+<p>Asset attributes are specific pieces of information that define and describe the characteristics of an asset. These attributes must be accurately captured and maintained within a central repository (CMMS, EAM system) to ensure effective management and compliance with ISO 14224.</p>
+<h3>Alignment with Master Data Management</h3>
+<p>Master data management (MDM) involves creating a single, authoritative view of all critical data in an organization. Asset attributes in an ISO 14224-compliant asset hierarchy must align with MDM practices to ensure data integrity, consistency, and availability across all systems. This alignment involves:</p>
+<ul>
+<li><strong>Standardization:</strong> Establishing standard definitions and formats for asset data.</li>
+<li><strong>Integration:</strong> Ensuring asset data is integrated across various systems with a central governance mechanism.</li>
+<li><strong>Quality Control:</strong> Implementing procedures to continuously clean, validate, and update data.</li>
+<li><strong>Accessibility:</strong> Ensuring data is accessible to all relevant stakeholders while maintaining security and compliance standards.</li>
+</ul>
+<h3>Key Asset Attributes</h3>
+<ol>
+<li><strong>Identification Data:</strong>
+<ul>
+<li>Asset ID</li>
+<li>Serial Number</li>
+<li>Manufacturer</li>
+<li>Model</li>
+</ul>
+</li>
+<li><strong>Operational Data:</strong>
+<ul>
+<li>Installation Date</li>
+<li>Warranty Expiry Date</li>
+<li>Service Life</li>
+<li>Criticality</li>
+</ul>
+</li>
+<li><strong>Performance Data:</strong>
+<ul>
+<li>Capacity</li>
+<li>Efficiency</li>
+<li>Output Quality</li>
+</ul>
+</li>
+<li><strong>Maintenance Data:</strong>
+<ul>
+<li>Last Maintenance Date</li>
+<li>Scheduled Maintenance Date</li>
+<li>Maintenance History</li>
+<li>Failure Modes</li>
+</ul>
+</li>
+</ol>
+<h3>Example Tabled Format of Asset Attributes</h3>
+<p>Below is an example table that outlines potential asset attributes aligned with the requirements of ISO 14224 and best practices in master data management:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Attribute Category</strong></th>
+<th><strong>Attribute</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Data Type</strong></th>
+<th><strong>Example</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identification Data</td>
+<td>Asset ID</td>
+<td>Unique identifier for the asset</td>
+<td>Numeric/Text</td>
+<td>Pump-001</td>
+</tr>
+<tr>
+<td>Identification Data</td>
+<td>Serial Number</td>
+<td>Manufacturer's serial number</td>
+<td>Text</td>
+<td>SN123456789</td>
+</tr>
+<tr>
+<td>Identification Data</td>
+<td>Manufacturer</td>
+<td>Name of the asset manufacturer</td>
+<td>Text</td>
+<td>ABC Corp</td>
+</tr>
+<tr>
+<td>Identification Data</td>
+<td>Model</td>
+<td>Model designation by the manufacturer</td>
+<td>Text</td>
+<td>Model X</td>
+</tr>
+<tr>
+<td>Operational Data</td>
+<td>Installation Date</td>
+<td>Date when the asset was installed</td>
+<td>Date</td>
+<td>2020-01-15</td>
+</tr>
+<tr>
+<td>Operational Data</td>
+<td>Warranty Expiry</td>
+<td>Date when the warranty will expire</td>
+<td>Date</td>
+<td>2025-01-15</td>
+</tr>
+<tr>
+<td>Operational Data</td>
+<td>Service Life</td>
+<td>Expected operational lifespan of the asset</td>
+<td>Numeric</td>
+<td>15 years</td>
+</tr>
+<tr>
+<td>Operational Data</td>
+<td>Criticality</td>
+<td>Importance of the asset to operations</td>
+<td>Text</td>
+<td>High, Medium, Low</td>
+</tr>
+<tr>
+<td>Performance Data</td>
+<td>Capacity</td>
+<td>Maximum output capacity of the asset</td>
+<td>Numeric</td>
+<td>200 units/hour</td>
+</tr>
+<tr>
+<td>Performance Data</td>
+<td>Efficiency</td>
+<td>Operational efficiency as a percentage</td>
+<td>Percentage</td>
+<td>85%</td>
+</tr>
+<tr>
+<td>Performance Data</td>
+<td>Output Quality</td>
+<td>Quality of output measured against standards</td>
+<td>Text</td>
+<td>High, Standard, Low</td>
+</tr>
+<tr>
+<td>Maintenance Data</td>
+<td>Last Maintenance</td>
+<td>Most recent date the asset was maintained</td>
+<td>Date</td>
+<td>2023-06-30</td>
+</tr>
+<tr>
+<td>Maintenance Data</td>
+<td>Next Maintenance</td>
+<td>Scheduled date for next maintenance</td>
+<td>Date</td>
+<td>2023-12-30</td>
+</tr>
+<tr>
+<td>Maintenance Data</td>
+<td>Maintenance History</td>
+<td>Record of past maintenance activities</td>
+<td>Text/Document</td>
+<td>Maintenance_Log.docx</td>
+</tr>
+<tr>
+<td>Maintenance Data</td>
+<td>Failure Modes</td>
+<td>Documented potential failure modes of the asset</td>
+<td>Text</td>
+<td>Overheating, Leakage</td>
+</tr>
+</tbody>
+</table>
+<h3>Integration and Utilization</h3>
+<p>Integrating and utilizing this structured asset data allows organizations to:</p>
+<ul>
+<li><strong>Improve decision-making:</strong> Leveraging accurate, up-to-date data for strategic decisions.</li>
+<li><strong>Enhance maintenance planning:</strong> Using detailed maintenance and operational data to schedule activities more effectively.</li>
+<li><strong>Increase compliance and reliability:</strong> Ensuring all data aligns with ISO 14224 and MDM standards to uphold data integrity and asset reliability</li>
+</ul>
+<h4>Step 5: Data Collection Protocols</h4>
+<ul>
+<li><strong>Clause Reference:</strong>
+<ul>
+<li><strong>Clause 6.3 (Data Collection):</strong> Outlines specific methodologies for reliable data collection.</li>
+</ul>
+</li>
+<li><strong>Data Collection Methods:</strong> Set up standard operating procedures for collecting and updating asset data.</li>
+<li><strong>Training:</strong> Educate personnel on ISO 14224 compliance and data handling.</li>
+</ul>
+<h4>Step 6: Implement Data Quality Management</h4>
+<ul>
+<li><strong>Data Verification:</strong> Ensure data accuracy and reliability through systematic verification.</li>
+<li><strong>Data Update Procedures:</strong> Maintain current data, referencing:
+<ul>
+<li><strong>Clause 6.4 (Data Updating):</strong> Details procedures for regular data updates and integrity checks.</li>
+</ul>
+</li>
+</ul>
+<h4>Step 7: Integrate Reliability and Maintenance Data</h4>
+<ul>
+<li><strong>Clause Reference:</strong>
+<ul>
+<li><strong>Clause 7 (Integration of Data):</strong> Emphasizes the integration of maintenance and reliability data to enhance asset management.</li>
+</ul>
+</li>
+<li><strong>Maintenance Records:</strong> Document all maintenance activities as per standardized formats.</li>
+<li><strong>Reliability Analysis:</strong> Analyze data to optimize maintenance schedules and equipment lifecycle.</li>
+</ul>
+<h4>Step 8: Software and Tool Selection</h4>
+<ul>
+<li><strong>ISO 14224 Compliance:</strong> Choose tools that facilitate compliance with the standard.</li>
+<li><strong>Integration Capabilities:</strong> Ensure compatibility with existing systems, reinforcing:
+<ul>
+<li><strong>Clause 8.1 (Software Requirements):</strong> Specifies software capabilities required for compliance and data integrity.</li>
+</ul>
+</li>
+</ul>
+<h4>Step 9: Asset Register Compilation</h4>
+<ul>
+<li><strong>Document Format:</strong> Format the asset register to align with ISO 14224 specifications, particularly:
+<ul>
+<li><strong>Clause 9.1 (Documentation Requirements):</strong> Defines how to document asset data and hierarchy effectively.</li>
+</ul>
+</li>
+<li><strong>Review and Approval:</strong> Validate the asset register with relevant stakeholders.</li>
+</ul>
+<h4>Step 10: Continuous Improvement and Update</h4>
+<ul>
+<li><strong>Regular Reviews:</strong> Commit to periodic reviews to ensure the asset register remains relevant and effective.</li>
+<li><strong>Feedback Mechanism:</strong> Incorporate feedback to continually improve data accuracy and usability.</li>
+</ul>
+<h4>Documentation</h4>
+<ul>
+<li><strong>Document Control:</strong> Manage documents with an eye on:
+<ul>
+<li><strong>Clause 9.2 (Control of Documents):</strong> Manages how documents should be updated, archived, and protected.</li>
+</ul>
+</li>
+<li><strong>Compliance Audits:</strong> Regularly audit practices for adherence to ISO 14224 and identify areas for improvement.</li>
+</ul>
+<h3>Conclusion</h3>
+<ul>
+<li><strong>Strategic Alignment:</strong> Ensure that the asset register supports strategic objectives in asset management.</li>
+<li><strong>Compliance Confirmation:</strong> Regularly confirm compliance with ISO 14224 through audits and reviews.</li>
+</ul>
+            
+            <p><strong>Narrative:</strong> This block involves creating and maintaining a comprehensive asset register that lists all port assets, including details on ownership, location, condition, and remaining life. This ensures that all assets are accounted for and organized systematically.</p>
+        </div>
+    </div>
+</body>
+</html>

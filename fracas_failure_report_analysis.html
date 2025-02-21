@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRACAS (Failure Reporting, Analysis, and Corrective Action System)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scroll on body */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            padding-top: 5px; /* Padding to avoid button interference */
+            background-color: lightgrey; /* Matching the block color */
+            border: 2px solid lightgrey;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            cursor: move;
+        }
+        .content {
+            padding: 10px;
+            overflow: auto;
+            height: calc(100% - 5px);
+            background-color: lightgrey;
+        }
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 10px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #ffcccb;
+            border: 1px solid #000;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .prev-btn {
+            left: 10px;
+        }
+        .next-btn {
+            right: 80px;
+        }
+    </style>
+    <script>
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        function closePopup() {
+            const popup = document.querySelector('.container');
+            document.body.removeChild(popup);
+        }
+
+        function onMouseDown(e) {
+            isDragging = true;
+            offsetX = e.clientX - parseInt(window.getComputedStyle(popup).left);
+            offsetY = e.clientY - parseInt(window.getComputedStyle(popup).top);
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }
+
+        function onMouseMove(e) {
+            if (isDragging) {
+                popup.style.left = e.clientX - offsetX + 'px';
+                popup.style.top = e.clientY - offsetY + 'px';
+            }
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        window.onload = function() {
+            const popup = document.querySelector('.container');
+            popup.addEventListener('mousedown', onMouseDown);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h3>FRACAS (Failure Reporting, Analysis, and Corrective Action System) Details</h3>
+            <p><strong>Who:</strong> Reliability engineers, maintenance planners</p>
+            <p><strong>What:</strong> Implementation of a system for reporting, analyzing, and correcting asset failures</p>
+            <p><strong>When:</strong> Continuously, with periodic reviews</p>
+            <p><strong>Where:</strong> Reliability and maintenance departments</p>
+            <p><strong>With:</strong> FRACAS software, CMMS</p>
+            <p><strong>How:</strong> By developing and implementing a FRACAS for port assets</p>
+            <p><strong>Why:</strong> To identify and correct asset failures to improve reliability and performance</p>
+            <p><strong>Quality Check:</strong></p>
+            <ul>
+                <li>Right person (engineers, planners)</li>
+                <li>Right time (continuously, reviews)</li>
+                <li>Right place (reliability, maintenance departments)</li>
+                <li>Right equipment (FRACAS software, CMMS)</li>
+                <li>Right process (reporting, analyzing)</li>
+                <li>Right work (correcting failures)</li>
+                <li>Right reason (improve reliability)</li>
+            </ul>
+            <p><strong>Expanded Activities:</strong></p>
+            <ul>
+                <li>Develop and implement a FRACAS for reporting and analyzing asset failures.</li>
+                <li>Use CMMS to track and document failure reports and corrective actions.</li>
+                <li>Analyze failure data to identify trends and root causes.</li>
+                <li>Implement corrective actions and monitor their effectiveness.</li>
+            </ul>
+            <p><strong>Research and Benchmarking:</strong></p>
+            <ul>
+                <li><strong>Best Practices:</strong> Follow guidelines from the Reliability-Centered Maintenance (RCM) methodology for implementing FRACAS.</li>
+                <li><strong>Case Studies:</strong> Review FRACAS implementations from other ports to identify effective strategies.</li>
+                <li><strong>Benchmark Data:</strong> Compare your FRACAS practices with industry standards to ensure comprehensive failure management.</li>
+            </ul>
+            <p><strong>Narrative:</strong> This block involves implementing a Failure Reporting, Analysis, and Corrective Action System (FRACAS) for port assets. This system helps to identify and correct asset failures to improve reliability and performance.</p>
+        </div>
+    </div>
+</body>
+</html>

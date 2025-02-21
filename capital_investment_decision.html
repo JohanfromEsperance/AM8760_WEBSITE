@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AM8760 - Asset Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color:#e7e7e7;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            height: 11%;
+            width: 100%;
+            text-align: center;
+            background-color: #ffffff;
+            padding: 0 0;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .logo {
+            height: 100%;
+            width: 10%;
+            position: absolute;
+            top: 0;
+        }
+        .left-logo {
+            left: 0;
+        }
+        .right-logo {
+            right: 0;
+        }
+        nav {
+            background-color: #f2f2f2;
+            overflow: hidden;
+            width: 100%;
+            display: flex;
+            text-align: center;
+            justify-content: normal;
+            box-sizing: border-box;
+        }
+        nav a {
+            display: block;
+            color: 	#e1e1e1;
+            text-align: left;
+            padding: 14px 16px;
+            text-decoration: none;
+            flex: 1;
+        }
+        nav a:hover {
+            background-color: 	#aeafb6;
+            color: black;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            flex-wrap: nowrap;
+            height: 60vh;
+            box-sizing: border-box;
+        }
+        .sidebar-left, .sidebar-right {
+            width: 15%;
+            background-color: 	#e1e1e1;
+            padding: 1px;
+            box-sizing: border-box;
+            color: #e1e1e1;
+            font-size: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .sidebar-left a, .sidebar-right a {
+            padding: 5px;
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            text-align: left;
+
+        }
+        .sidebar-left a:hover, .sidebar-right a:hover {
+            background-color: 	#aeafb6;
+        }
+        .main-content {
+            width: 70%;
+            padding: 30px;
+            box-sizing: border-box;
+            background-color: #e7e7e7;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 20%;
+            top: 10px;
+            width: 60%;
+            max-height: 100vh;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .popup h2 {
+            margin-top: 0;
+        }
+        .popup .close {
+            display: block;
+            text-align: right;
+            margin-top: -10px;
+            margin-right: -10px;
+        }
+        .popup .close a {
+            color: 	#aeafb6;
+            text-decoration: none;
+            font-size: 24px;
+        }
+        .footer {
+            background-color: #ffffff; /* Background color */
+            padding: 1px;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between; /* Default: Aligns images left, center, right */
+            align-items: center;
+            padding-bottom: 1px;
+            gap: 2px; /* Space between images */
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 250px) { footer-content {flex-direction: column; /* Stack images on smaller screens */justify-content: center;align-items: center; gap: 1px;}}
+
+        .footer-img {
+            width: 50px; /* Adjust image size */
+            height: auto;
+        }
+
+        .footer-line {
+            border: none;
+            border-top: 2px solid black; /* Bottom line */
+            margin: 1px auto;
+            width: 80%;
+        }
+
+        .footer-text {
+            font-size: 0.5rem;
+            color: black;
+            text-align: center;
+        }
+
+        .responsive-text {font-size: clamp(0.5rem, 1.0vw, 1.5rem); /* Auto-scales based on screen size */color: black;}
+
+        .responsive-link {background-color: rgb(186, 184, 189);color: black;font-size: clamp(0.5rem, 1.0vw, 1.0rem); /* Auto-scales based on screen size */}
+    
+        .main-content table {
+            width: 100%; /* Ensures the table takes full width of the container */
+            table-layout: auto; /* Allows columns to automatically adjust their size */
+        }
+
+        .main-content th, .main-content td {
+            text-align: left;
+            padding: 1px; /* Adjust padding as needed */
+            font-size: calc(0.5vw + 0.2vh + 0.2vmin); /* Responsively adjusts font size based on the viewport size */
+            white-space: normal; /* Allows text to wrap within the cell */
+            overflow-wrap: break-word; /* Ensures words break to prevent overflow */
+        }
+        </style>
+    </head>
+<body>
+    <header>
+        <img src="EXSTO COMBINED.png" class="logo left-logo" alt="Left Logo">
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Port of ExSTO - AM8760 - Asset Management Training Simulation</h2>
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Welcome to The Port of ExSTO</h2>
+        <img src="logo with xSTO.png" class="logo right-logo" alt="Right Logo">
+    </header>
+    <nav>
+        <a href="MAINPAGE.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Home</a>
+        <a href="AM8760_Board_Game.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">AM8760 Board Game</a>
+        <a href="vision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Vision & Asset Management Plan</a>
+        <a href="key_performance_indicators.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Key Performance Indicators</a>
+        <a href="financial_report.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Financial Report</a>
+        <a href="stateoftheasset.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">State of the Asset Table</a>
+        <a href="risk.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">5x5 Risk Table</a>
+        <a href="capital_investment_decision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Capital Investment Decision Making</a>
+        <a href="indexblocks.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Help Matrix</a>
+        <a href="training.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Training</a>
+        <a href="knowledge_test.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">GFMAM Knowledge Test</a>
+        <a href="knowledge_test_ISO.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">IOS55000 Knowledge Test</a>
+    </nav>
+    <div class="container">
+        <div class="sidebar-left">
+            <h2 class="responsive-text">Asset Class Management Plans</h2>
+            <a href="bulk_material_handling_main.html" class="responsive-link">1.0 Bulk Material Handling</a>
+            <a href="storage_sheds_main.html"  class="responsive-link">2.0 Storage Sheds</strong></a>
+            <a href="rail_infrastructure_main.html"  class="responsive-link"> 3.0 Rail Infrastructure</strong></a>
+            <a href="ship_loader_unloader_main.html"  class="responsive-link">4.0 Ship Loader/Unloader</strong></a>
+            <a href="dust_suppression_main.html"  class="responsive-link">5.0 Dust Suppression Systems</strong></a>
+            <a href="weighbridges_main.html"  class="responsive-link">6.0 Weighbridges</strong></a>
+            <a href="security_systems_main.html"  class="responsive-link">7.0 Security Systems</strong></a>
+            <a href="spare.html"  class="responsive-link"> 8.0 SAMP</strong></a>
+            <a href="wharves_main.html"  class="responsive-link">9.0 Wharves, Berths and Jetties</strong></a>
+            <a href="breakwaters_main.html"  class="responsive-link">10.0 Breakwaters</strong></a>
+            <a href="navigational_aids_main.html"  class="responsive-link">11.0 Navigational Aids</strong></a>
+            <a href="channels_main.html"  class="responsive-link">12.0 Channels</strong></a>
+            <a href="ict_tangible_main.html"  class="responsive-link"> 13.0 ICT Tangible Assets</strong></a>
+            <a href="ict_intangible_main.html"  class="responsive-link">14.0 ICT Intangible Assets</strong></a>
+            <a href="hr_main.html"  class="responsive-link"> 15.0 Human Resources Management</strong></a>
+            <a href="power_main.html"  class="responsive-link"> 16.0 Power</strong></a>
+            <a href="utilities_main.html"class="responsive-link">17.0 Utilities</strong></a>
+        </div>
+        <div class="main-content">
+            <table dir="ltr" border="1" cellspacing="0" cellpadding="0" data-sheets-root="1"><colgroup><col width="339" /><col width="443" /><col width="75" /><col width="243" /><col width="168" /><col width="273" /></colgroup>
+                <tbody>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Capital Investment Decision-Making Table with Decision Making Categories and Points&quot;}">
+                <div>
+                <div>Capital Investment Decision-Making Table with Decision Making Categories and Points</div>
+                </div>
+                </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                </tr>
+                <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Decision Criteria and Categories&quot;}">Decision Criteria and Categories</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                </tr>
+                <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Decision Criteria&quot;}">Decision Criteria</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Description&quot;}">Description</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Weight (%)&quot;}">Weight (%)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Class&quot;}">Asset Class</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Decision Making Category&quot;}">Decision Making Category</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Benchmarks/Standards&quot;}">Benchmarks/Standards</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Initial Cost&quot;}">Initial Cost</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;The upfront cost required to acquire the asset&quot;}">The upfront cost required to acquire the asset</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:15}">15</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;All&quot;}">All</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Investment&quot;}">Investment</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Industry Cost Data, Supplier Quotes&quot;}">Industry Cost Data, Supplier Quotes</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Potential ROI&quot;}">Potential ROI</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;The return on investment expected from the asset&quot;}">The return on investment expected from the asset</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20}">20</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;All&quot;}">All</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Investment&quot;}">Investment</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;ROI Calculations, Financial Projections&quot;}">ROI Calculations, Financial Projections</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Maintenance Requirements&quot;}">Maintenance Requirements</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;The ongoing maintenance needs and costs associated with the asset&quot;}">The ongoing maintenance needs and costs associated with the asset</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10}">10</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;All&quot;}">All</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Value, Downtime&quot;}">Asset Value, Downtime</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Historical Maintenance Data&quot;}">Historical Maintenance Data</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Lifecycle Cost&quot;}">Lifecycle Cost</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Total cost of ownership over the asset's life&quot;}">Total cost of ownership over the asset's life</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:15}">15</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;All&quot;}">All</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Investment, Asset Value&quot;}">Investment, Asset Value</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Lifecycle Cost Analysis&quot;}">Lifecycle Cost Analysis</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Risk Assessment&quot;}">Risk Assessment</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Evaluation of potential risks and their impact on the investment&quot;}">Evaluation of potential risks and their impact on the investment</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10}">10</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;All&quot;}">All</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Compliance, Downtime&quot;}">Compliance, Downtime</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;FMEA, Risk Matrices&quot;}">FMEA, Risk Matrices</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Compliance Requirements&quot;}">Compliance Requirements</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Regulatory and environmental requirements for the asset&quot;}">Regulatory and environmental requirements for the asset</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;All&quot;}">All</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Compliance&quot;}">Compliance</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;ISO 55000, Local Regulations&quot;}">ISO 55000, Local Regulations</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Operational Efficiency&quot;}">Operational Efficiency</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Improvement in operational efficiency due to the new asset&quot;}">Improvement in operational efficiency due to the new asset</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:15}">15</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;All&quot;}">All</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Value, Downtime&quot;}">Asset Value, Downtime</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Efficiency Metrics, Performance Indicators&quot;}">Efficiency Metrics, Performance Indicators</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Strategic Alignment&quot;}">Strategic Alignment</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Alignment of the investment with the organization&rsquo;s strategic goals&quot;}">Alignment of the investment with the organization&rsquo;s strategic goals</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10}">10</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;All&quot;}">All</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Investment&quot;}">Investment</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Strategic Plans, Business Goals&quot;}">Strategic Plans, Business Goals</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Technological Advancement&quot;}">Technological Advancement</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Incorporation of advanced technology and future-proofing&quot;}">Incorporation of advanced technology and future-proofing</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;ICT, Security Systems, Power Systems&quot;}">ICT, Security Systems, Power Systems</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Value, Investment&quot;}">Asset Value, Investment</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Technological Trends, Industry Standards&quot;}">Technological Trends, Industry Standards</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Human Resources Impact&quot;}">Human Resources Impact</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Impact on workforce, including training and skill development needs&quot;}">Impact on workforce, including training and skill development needs</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;All&quot;}">All</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;HR Management&quot;}">HR Management</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;HR Impact Analysis, Training Plans&quot;}">HR Impact Analysis, Training Plans</td>
+                </tr>
+                </tbody>
+                </table>
+                </div>
+                <div class="sidebar-right">
+                    <h2 class="responsive-text">Asset Class Information</h2>
+                     <a href="#" onclick="showPopup('bulkMaterialHandlingPopup')" class="responsive-link" >1.0 Bulk Material Handling</a>
+                    <a href="#" onclick="showPopup('storageShedsPopup')" class="responsive-link">2.0 Storage Sheds</a>
+                    <a href="#" onclick="showPopup('railInfrastructurePopup')" class="responsive-link">3.0 Rail Infrastructure</a>
+                    <a href="#" onclick="showPopup('shipLoaderUnloaderPopup')" class="responsive-link">4.0 Ship Loader/Unloader</a>
+                    <a href="#" onclick="showPopup('dustSuppressionPopup')" class="responsive-link">5.0 Dust Suppression Systems</a>
+                    <a href="#" onclick="showPopup('weighbridgesPopup')" class="responsive-link">6.0 Weighbridges</a>
+                    <a href="#" onclick="showPopup('securitySystemsPopup')" class="responsive-link">7.0 Security Systems</a>
+                    <a href="#" onclick="showPopup('securitySystemsPopup')" class="responsive-link">8.0 Spare</a>
+                    <a href="#" onclick="showPopup('wharvesPopup')" class="responsive-link">9.0 Wharves, Berths and Jetties</a>
+                    <a href="#" onclick="showPopup('breakwatersPopup')" class="responsive-link">10.0 Breakwaters</a>
+                    <a href="#" onclick="showPopup('navigationalAidsPopup')" class="responsive-link">11.0 Navigational Aids</a>
+                    <a href="#" onclick="showPopup('channelsPopup')" class="responsive-link">12.0 Channels</a>
+                    <a href="#" onclick="showPopup('ictTangiblePopup')" class="responsive-link">13.0 ICT Tangible Assets</a>
+                    <a href="#" onclick="showPopup('ictIntangiblePopup')" class="responsive-link">14.0 ICT Intangible Assets</a>
+                    <a href="#" onclick="showPopup('hrPopup')" class="responsive-link">15.0 Human Resources Management</a>
+                    <a href="#" onclick="showPopup('powerPopup')" class="responsive-link">16.0 Power</a>
+                    <a href="#" onclick="showPopup('utilitiesPopup')" class="responsive-link">17.0 Utilities</a>
+                </div>
+            </div>
+        
+            <!-- Popup windows -->
+            <div id="bulkMaterialHandlingPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('bulkMaterialHandlingPopup')">&times;</a></div>
+                <h2>Bulk Material Handling</h2>
+                <p>Bulk Material Handling involves the transport, storage, and control of materials in bulk. This includes equipment like conveyor belts, crushers, transfer stations, and more.</p>
+            </div>
+            <div id="storageShedsPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('storageShedsPopup')">&times;</a></div>
+                <h2>Storage Sheds</h2>
+                <p>Storage Sheds are used for the temporary storage of materials. They protect materials from the elements and provide a controlled environment for storage.</p>
+            </div>
+            <div id="railInfrastructurePopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('railInfrastructurePopup')">&times;</a></div>
+                <h2>Rail Infrastructure</h2>
+                <p>Rail Infrastructure includes tracks, bridges, and other structures necessary for the operation of rail transport systems. Maintenance and upgrades are crucial for safety and efficiency.</p>
+            </div>
+            <div id="shipLoaderUnloaderPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('shipLoaderUnloaderPopup')">&times;</a></div>
+                <h2>Ship Loader/Unloader</h2>
+                <p>Ship Loaders/Unloaders are crucial for the efficient handling of cargo on and off ships. Regular maintenance ensures safe and timely operations.</p>
+            </div>
+            <div id="dustSuppressionPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('dustSuppressionPopup')">&times;</a></div>
+                <h2>Dust Suppression</h2>
+                <p>Dust Suppression systems control dust emissions during material handling processes. They are essential for environmental compliance and worker safety.</p>
+            </div>
+            <div id="weighbridgesPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('weighbridgesPopup')">&times;</a></div>
+                <h2>Weighbridges</h2>
+                <p>Weighbridges are used to measure the weight of vehicles and their cargo. Accurate measurements are essential for logistics and inventory management.</p>
+            </div>
+            <div id="securitySystemsPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('securitySystemsPopup')">&times;</a></div>
+                <h2>Security Systems</h2>
+                <p>Security Systems include surveillance cameras, alarms, and other measures to protect assets from theft, vandalism, and other threats.</p>
+            </div>
+            <div id="sparePopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('sparePopup')">&times;</a></div>
+                <h2>SPARE</h2>
+                <p>Reserved for future asset class descriptions and details.</p>
+            </div>
+            <div id="wharvesPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('wharvesPopup')">&times;</a></div>
+                <h2>Wharves, Berths and Jetties</h2>
+                <p>Wharves, Berths, and Jetties are structures on the shore of a harbor where ships may dock to load and unload cargo. They are critical to port operations and require regular maintenance.</p>
+            </div>
+            <div id="breakwatersPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('breakwatersPopup')">&times;</a></div>
+                <h2>Breakwaters</h2>
+                <p>Breakwaters are structures designed to protect a shore or harbor from the force of waves. They play a vital role in maintaining calm waters for safe docking and loading operations.</p>
+            </div>
+            <div id="navigationalAidsPopup" class="popup">
+               <div class="close"><a href="#" onclick="closePopup('navigationalAidsPopup')">&times;</a></div>
+                <h2>Navigational Aids</h2>
+                <p>Navigational Aids include buoys, lights, and other markers that guide ships safely through channels and into port. Regular maintenance ensures their visibility and effectiveness.</p>
+            </div>
+            <div id="channelsPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('channelsPopup')">&times;</a></div>
+                <h2>Channels</h2>
+                <p>Channels are navigable paths through which ships travel. Regular dredging and maintenance ensure that channels remain deep enough for safe passage of vessels.</p>
+            </div>
+            <div id="ictTangiblePopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('ictTangiblePopup')">&times;</a></div>
+                <h2>ICT Tangible Assets</h2>
+                <p>ICT Tangible assets include hardware such as servers, computers, and networking equipment. Regular updates and maintenance are required to keep these systems operational.</p>
+            </div>
+            <div id="ictIntangiblePopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('ictIntangiblePopup')">&times;</a></div>
+                <h2>ICT Intangible Assets</h2>
+                <p>ICT Intangible assets include software and data. Ensuring software is up-to-date and data is securely backed up is essential for operational continuity.</p>
+            </div>
+            <div id="hrPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('hrPopup')">&times;</a></div>
+                <h2>Human Resources Management</h2>
+                <p>Human Resources Management (HR) is critical for ensuring the workforce is well-trained, motivated, and operating efficiently. It includes employee training, recruitment, and performance management.</p>
+            </div>
+            <div id="powerPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('powerPopup')">&times;</a></div>
+                <h2>Power</h2>
+                <p>The power system includes all elements that provide energy to the port facility, including generators, transformers, and distribution networks. Maintenance ensures a reliable power supply.</p>
+            </div>
+            <div id="utilitiesPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('utilitiesPopup')">&times;</a></div>
+                <h2>Utilities</h2>
+                <p>Utilities include water supply, sewage, and waste management systems. Proper maintenance ensures the availability of essential services and compliance with environmental regulations.</p>
+            </div>
+        
+            <footer class="footer">
+                <div class="footer-content">
+        
+                </div>
+                <hr class="footer-line">
+                <p class="footer-text">&copy; ExSTO Global, Johan Snyman - The Author retains all moral rights. All rights reserved.</p>
+            </footer>
+        
+            <script>
+                function showPopup(popupId) {
+                    document.getElementById(popupId).style.display = 'block';
+                }
+                function closePopup(popupId) {
+                    document.getElementById(popupId).style.display = 'none';
+                }
+            </script>
+        </div>
+</body>
+</html>

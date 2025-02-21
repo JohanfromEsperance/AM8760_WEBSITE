@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AM8760 - Asset Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color:#e7e7e7;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            height: 11%;
+            width: 100%;
+            text-align: center;
+            background-color: #ffffff;
+            padding: 0 0;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .logo {
+            height: 100%;
+            width: 10%;
+            position: absolute;
+            top: 0;
+        }
+        .left-logo {
+            left: 0;
+        }
+        .right-logo {
+            right: 0;
+        }
+        nav {
+            background-color: #f2f2f2;
+            overflow: hidden;
+            width: 100%;
+            display: flex;
+            text-align: center;
+            justify-content: normal;
+            box-sizing: border-box;
+        }
+        nav a {
+            display: block;
+            color: 	#e1e1e1;
+            text-align: left;
+            padding: 14px 16px;
+            text-decoration: none;
+            flex: 1;
+        }
+        nav a:hover {
+            background-color: 	#aeafb6;
+            color: black;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            flex-wrap: nowrap;
+            height: 60vh;
+            box-sizing: border-box;
+        }
+        .sidebar-left, .sidebar-right {
+            width: 15%;
+            background-color: 	#e1e1e1;
+            padding: 1px;
+            box-sizing: border-box;
+            color: #e1e1e1;
+            font-size: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .sidebar-left a, .sidebar-right a {
+            padding: 5px;
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            text-align: left;
+
+        }
+        .sidebar-left a:hover, .sidebar-right a:hover {
+            background-color: 	#aeafb6;
+        }
+        .main-content {
+            width: 70%;
+            padding: 30px;
+            box-sizing: border-box;
+            background-color: #e7e7e7;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 20%;
+            top: 10px;
+            width: 60%;
+            max-height: 100vh;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .popup h2 {
+            margin-top: 0;
+        }
+        .popup .close {
+            display: block;
+            text-align: right;
+            margin-top: -10px;
+            margin-right: -10px;
+        }
+        .popup .close a {
+            color: 	#aeafb6;
+            text-decoration: none;
+            font-size: 24px;
+        }
+        .footer {
+            background-color: #ffffff; /* Background color */
+            padding: 1px;
+            text-align: center;
+        }
+
+    .footer-content {
+        display: flex;
+        justify-content: space-between; /* Default: Aligns images left, center, right */
+        align-items: center;
+        padding-bottom: 1px;
+        gap: 2px; /* Space between images */
+    }
+
+    /* Responsive adjustments for smaller screens */
+    @media (max-width: 250px) { footer-content {flex-direction: column; /* Stack images on smaller screens */justify-content: center;align-items: center; gap: 1px;}}
+
+    .footer-img {
+        width: 50px; /* Adjust image size */
+        height: auto;
+    }
+
+    .footer-line {
+        border: none;
+        border-top: 2px solid black; /* Bottom line */
+        margin: 1px auto;
+        width: 80%;
+    }
+
+    .footer-text {
+        font-size: 0.5rem;
+        color: black;
+        text-align: center;
+    }
+    .responsive-text {font-size: clamp(0.5rem, 1.0vw, 1.5rem); /* Auto-scales based on screen size */color: black;}
+
+        .responsive-link {background-color: rgb(186, 184, 189);color: black;font-size: clamp(0.5rem, 1.0vw, 1.0rem); /* Auto-scales based on screen size */}
+
+        .main-content table {
+            width: 100%; /* Ensures the table takes full width of the container */
+            table-layout: auto; /* Allows columns to automatically adjust their size */
+        }
+
+        .main-content th, .main-content td {
+            text-align: left;
+            padding: 1px; /* Adjust padding as needed */
+            font-size: calc(0.5vw + 0.2vh + 0.2vmin); /* Responsively adjusts font size based on the viewport size */
+            white-space: normal; /* Allows text to wrap within the cell */
+            overflow-wrap: break-word; /* Ensures words break to prevent overflow */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="EXSTO COMBINED.png" class="logo left-logo" alt="Left Logo">
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Port of ExSTO - AM8760 - Asset Management Training Simulation</h2>
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Welcome to The Port of ExSTO</h2>
+        <img src="logo with xSTO.png" class="logo right-logo" alt="Right Logo">
+    </header>
+    <nav>
+        <a href="MAINPAGE.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Home</a>
+        <a href="AM8760_Board_Game.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">AM8760 Board Game</a>
+        <a href="vision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Vision & Asset Management Plan</a>
+        <a href="key_performance_indicators.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Key Performance Indicators</a>
+        <a href="financial_report.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Financial Report</a>
+        <a href="stateoftheasset.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">State of the Asset Table</a>
+        <a href="risk.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">5x5 Risk Table</a>
+        <a href="capital_investment_decision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Capital Investment Decision Making</a>
+        <a href="indexblocks.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Help Matrix</a>
+        <a href="training.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Training</a>
+        <a href="knowledge_test.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">GFMAM Knowledge Test</a>
+        <a href="knowledge_test_ISO.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">IOS55000 Knowledge Test</a>
+    </nav>
+    
+    <style>
+        .responsive-text {font-size: clamp(0.5rem, 1.0vw, 1.5rem); /* Auto-scales based on screen size */color: black;}
+    </style>
+
+    <style>
+        .responsive-link {
+            background-color: rgb(186, 184, 189);color: black;font-size: clamp(0.5rem, 1.0vw, 1.0rem); /* Auto-scales based on screen size */}
+    </style>
+
+    <div class="container">
+        <div class="sidebar-left">
+            <h2 class="responsive-text">Asset Class Management Plans</h2>
+            <a href="bulk_material_handling_main.html" class="responsive-link">1.0 Bulk Material Handling</a>
+            <a href="storage_sheds_main.html"  class="responsive-link">2.0 Storage Sheds</strong></a>
+            <a href="rail_infrastructure_main.html"  class="responsive-link"> 3.0 Rail Infrastructure</strong></a>
+            <a href="ship_loader_unloader_main.html"  class="responsive-link">4.0 Ship Loader/Unloader</strong></a>
+            <a href="dust_suppression_main.html"  class="responsive-link">5.0 Dust Suppression Systems</strong></a>
+            <a href="weighbridges_main.html"  class="responsive-link">6.0 Weighbridges</strong></a>
+            <a href="security_systems_main.html"  class="responsive-link">7.0 Security Systems</strong></a>
+            <a href="spare.html"  class="responsive-link"> 8.0 SAMP</strong></a>
+            <a href="wharves_main.html"  class="responsive-link">9.0 Wharves, Berths and Jetties</strong></a>
+            <a href="breakwaters_main.html"  class="responsive-link">10.0 Breakwaters</strong></a>
+            <a href="navigational_aids_main.html"  class="responsive-link">11.0 Navigational Aids</strong></a>
+            <a href="channels_main.html"  class="responsive-link">12.0 Channels</strong></a>
+            <a href="ict_tangible_main.html"  class="responsive-link"> 13.0 ICT Tangible Assets</strong></a>
+            <a href="ict_intangible_main.html"  class="responsive-link">14.0 ICT Intangible Assets</strong></a>
+            <a href="hr_main.html"  class="responsive-link"> 15.0 Human Resources Management</strong></a>
+            <a href="power_main.html"  class="responsive-link"> 16.0 Power</strong></a>
+            <a href="utilities_main.html"class="responsive-link">17.0 Utilities</strong></a>
+        </div>
+        <div class="main-content">
+            <table dir="ltr" border="1" cellspacing="0" cellpadding="0" data-sheets-root="1"><colgroup><col width="358" /><col width="664" /><col width="380" /><col width="371" /><col width="168" /><col width="254" /><col width="232" /><col width="312" /><col width="60" /><col width="60" /><col width="60" /></colgroup>
+                <tbody>
+                <tr>
+                <td colspan="11" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;10.0 Breakwaters Event Tables&quot;}">10.0 Breakwaters Event Tables</td>
+                </tr>
+                <tr>
+                <td colspan="11" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Master Data&quot;}">Asset Master Data</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Name&quot;}">Asset Name</td>
+                <td colspan="10" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Breakwaters&quot;}">Breakwaters</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Description&quot;}">Asset Description</td>
+                <td colspan="10" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Structures designed to protect the port from waves and erosion.&quot;}">Structures designed to protect the port from waves and erosion.</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Initial Cost ($)&quot;}">Initial Cost ($)</td>
+                <td colspan="10" rowspan="1" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:750000}">750000</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Maintenance Requirements&quot;}">Maintenance Requirements</td>
+                <td colspan="10" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Erosion control, structural inspections, repairs&quot;}">Erosion control, structural inspections, repairs</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Potential ROI (%)&quot;}">Potential ROI (%)</td>
+                <td colspan="10" rowspan="1" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:12}">12</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Replacement Value ($)&quot;}">Asset Replacement Value ($)</td>
+                <td colspan="10" rowspan="1" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:800000}">800000</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Maintenance Cost per Year ($)&quot;}">Maintenance Cost per Year ($)</td>
+                <td colspan="10" rowspan="1" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:30000}">30000</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Lifespan (Years)&quot;}">Lifespan (Years)</td>
+                <td colspan="10" rowspan="1" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}">40</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Installation Date (Year)&quot;}">Installation Date (Year)</td>
+                <td colspan="10" rowspan="1">&nbsp;</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Current State of the Asset (WSCAM)&quot;}">Current State of the Asset (WSCAM)</td>
+                <td colspan="10" rowspan="1">&nbsp;</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Criticality (1E/2H/3M/4L/5NI)&quot;}">Asset Criticality (1E/2H/3M/4L/5NI)</td>
+                <td colspan="10" rowspan="1">&nbsp;</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Risk Ranking (5X5 MATRIX)&quot;}">Risk Ranking (5X5 MATRIX)</td>
+                <td colspan="10" rowspan="1">&nbsp;</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Key Performance Indicators (KPIs)&quot;}">Key Performance Indicators (KPIs)</td>
+                <td colspan="10" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Durability, Environmental Impact, Maintenance Costs&quot;}">Durability, Environmental Impact, Maintenance Costs</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Utilization (%)&quot;}">Utilization (%)</td>
+                <td colspan="10" rowspan="1" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:90}">90</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Availability (%)&quot;}">Availability (%)</td>
+                <td colspan="10" rowspan="1" data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:97}">97</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Event Scenario&quot;}">Event Scenario</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Description&quot;}">Description</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Impact&quot;}">Impact</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Action Required&quot;}">Action Required</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Cost ($)&quot;}">Cost ($)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Points Awarded&quot;}">Points Awarded</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Points Deducted&quot;}">Points Deducted</td>
+                <td colspan="4" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Decision Making Category&quot;}">Decision Making Category</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Breakwater Maintenance Program&quot;}">Breakwater Maintenance Program</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Implement a regular maintenance program for breakwaters.&quot;}">Implement a regular maintenance program for breakwaters.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Ensure breakwaters remain effective.&quot;}">Ensure breakwaters remain effective.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Invest in annual maintenance.&quot;}">Invest in annual maintenance.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;30,000 annually&quot;}">30,000 annually</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;+10 (each year)&quot;}">+10 (each year)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;-20 (if skipped)&quot;}">-20 (if skipped)</td>
+                <td colspan="4" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Value&quot;}">Asset Value</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Storm Damage Repair&quot;}">Storm Damage Repair</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Repair breakwaters damaged by a storm.&quot;}">Repair breakwaters damaged by a storm.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Ensure breakwaters remain operational.&quot;}">Ensure breakwaters remain operational.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Invest in repairs.&quot;}">Invest in repairs.</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:100000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">100,000</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;+10 (repaired)&quot;}">+10 (repaired)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;-20 (if delayed)&quot;}">-20 (if delayed)</td>
+                <td colspan="4" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Downtime, Asset Value&quot;}">Downtime, Asset Value</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Structural Reinforcement&quot;}">Structural Reinforcement</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Reinforce breakwaters to withstand stronger storms.&quot;}">Reinforce breakwaters to withstand stronger storms.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Increase durability by 20%.&quot;}">Increase durability by 20%.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Invest in reinforcement.&quot;}">Invest in reinforcement.</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:150000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">150,000</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;+20 (improved durability)&quot;}">+20 (improved durability)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;-15 (if ignored)&quot;}">-15 (if ignored)</td>
+                <td colspan="4" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Value, Investment&quot;}">Asset Value, Investment</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Expansion Opportunity&quot;}">Expansion Opportunity</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Expand breakwaters to protect a larger area.&quot;}">Expand breakwaters to protect a larger area.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Increase port protection by 15%.&quot;}">Increase port protection by 15%.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Invest in expansion.&quot;}">Invest in expansion.</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:250000}">250000</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;+25 (successful expansion)&quot;}">+25 (successful expansion)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;-20 (if ignored)&quot;}">-20 (if ignored)</td>
+                <td colspan="4" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Value, Investment&quot;}">Asset Value, Investment</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Erosion Control Measures&quot;}">Erosion Control Measures</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Implement measures to control erosion around breakwaters.&quot;}">Implement measures to control erosion around breakwaters.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Reduce maintenance costs by 10%.&quot;}">Reduce maintenance costs by 10%.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Invest in erosion control.&quot;}">Invest in erosion control.</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50000}">50000</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;+15 (reduced erosion)&quot;}">+15 (reduced erosion)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;-10 (if ignored)&quot;}">-10 (if ignored)</td>
+                <td colspan="4" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Value, Investment&quot;}">Asset Value, Investment</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Environmental Impact Assessment&quot;}">Environmental Impact Assessment</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Conduct an environmental impact assessment.&quot;}">Conduct an environmental impact assessment.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Ensure compliance with regulations.&quot;}">Ensure compliance with regulations.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Invest in assessment.&quot;}">Invest in assessment.</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">20,000</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;+20 (compliance)&quot;}">+20 (compliance)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;-30 (if failed)&quot;}">-30 (if failed)</td>
+                <td colspan="4" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Compliance&quot;}">Compliance</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Inspection and Monitoring Program&quot;}">Inspection and Monitoring Program</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Regular inspection and monitoring of breakwaters.&quot;}">Regular inspection and monitoring of breakwaters.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Detect and address issues early.&quot;}">Detect and address issues early.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Invest in annual inspections.&quot;}">Invest in annual inspections.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;25,000 annually&quot;}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">25,000 annually</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;+15 (each year)&quot;}">+15 (each year)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;-10 (if skipped)&quot;}">-10 (if skipped)</td>
+                <td colspan="4" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Value, Downtime, Compliance&quot;}">Asset Value, Downtime, Compliance</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Wave Energy Conversion Installation&quot;}">Wave Energy Conversion Installation</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Install wave energy converters on breakwaters.&quot;}">Install wave energy converters on breakwaters.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Generate electricity and reduce energy costs by 10%.&quot;}">Generate electricity and reduce energy costs by 10%.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Invest in converters.&quot;}">Invest in converters.</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:300000}">300000</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;+30 (energy generation)&quot;}">+30 (energy generation)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;-20 (if ignored)&quot;}">-20 (if ignored)</td>
+                <td colspan="4" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Investment, Compliance&quot;}">Investment, Compliance</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Upgrade to Eco-friendly Materials&quot;}">Upgrade to Eco-friendly Materials</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Upgrade breakwaters using eco-friendly materials.&quot;}">Upgrade breakwaters using eco-friendly materials.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Reduce environmental impact.&quot;}">Reduce environmental impact.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Invest in materials.&quot;}">Invest in materials.</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:100000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">100,000</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;+20 (eco-friendly)&quot;}">+20 (eco-friendly)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;-15 (if ignored)&quot;}">-15 (if ignored)</td>
+                <td colspan="4" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Investment, Compliance&quot;}">Investment, Compliance</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Breakwater Automation&quot;}">Breakwater Automation</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Automate monitoring and maintenance of breakwaters.&quot;}">Automate monitoring and maintenance of breakwaters.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Increase efficiency and reduce costs by 10%.&quot;}">Increase efficiency and reduce costs by 10%.</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Invest in automation.&quot;}">Invest in automation.</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:150000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">150,000</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;+25 (successful automation)&quot;}">+25 (successful automation)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;-15 (if ignored)&quot;}">-15 (if ignored)</td>
+                <td colspan="4" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Value, Investment&quot;}">Asset Value, Investment</td>
+                </tr>
+                <tr>
+                <td colspan="11" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Information Table for Breakwaters&quot;}">Asset Information Table for Breakwaters</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Name&quot;}">Asset Name</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Description&quot;}">Asset Description</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Initial Cost ($)&quot;}">Initial Cost ($)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Maintenance Requirements&quot;}">Maintenance Requirements</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Potential ROI (%)&quot;}">Potential ROI (%)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Replacement Value ($)&quot;}">Asset Replacement Value ($)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Maintenance Cost per Year ($)&quot;}">Maintenance Cost per Year ($)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Lifespan (Years)&quot;}">Lifespan (Years)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Key Performance Indicators (KPIs)&quot;}">Key Performance Indicators (KPIs)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Utilization (%)&quot;}">Utilization (%)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Availability (%)&quot;}">
+                <div>
+                <div>Availability (%)</div>
+                </div>
+                </td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Breakwaters&quot;}">Breakwaters</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Structures designed to protect the harbor and coastline from waves and erosion, including armor stones, core material, toe protection, crest elements, groynes, sand traps, and concrete elements.&quot;}">Structures designed to protect the harbor and coastline from waves and erosion, including armor stones, core material, toe protection, crest elements, groynes, sand traps, and concrete elements.</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:3000000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">3,000,000</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Structural inspections, repair of damages&quot;}">Structural inspections, repair of damages</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.05}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">5%</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2800000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">2,800,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:200000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">200,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}">40</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Structural integrity, repair frequency&quot;}">Structural integrity, repair frequency</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.75}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">75%</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.99}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">99%</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Armor Stones&quot;}">Armor Stones</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Large stones placed on the exterior of breakwaters to absorb wave energy.&quot;}">Large stones placed on the exterior of breakwaters to absorb wave energy.</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1000000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,000,000</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Regular inspections, replacement of displaced stones&quot;}">Regular inspections, replacement of displaced stones</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.04}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">4%</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:950000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">950,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:100000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">100,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}">40</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Wave absorption efficiency, displacement rate&quot;}">Wave absorption efficiency, displacement rate</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.8}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">80%</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.99}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">99%</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Core Material&quot;}">Core Material</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Smaller stones or rubble placed beneath the armor layer to provide structural stability.&quot;}">Smaller stones or rubble placed beneath the armor layer to provide structural stability.</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:500000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">500,000</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Periodic inspections, replenishment as needed&quot;}">Periodic inspections, replenishment as needed</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.03}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">3%</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:480000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">480,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">50,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}">40</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Stability, erosion rate&quot;}">Stability, erosion rate</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.78}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">78%</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.99}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">99%</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Toe Protection&quot;}">Toe Protection</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Elements placed at the base of the breakwater to prevent undermining by waves and currents.&quot;}">Elements placed at the base of the breakwater to prevent undermining by waves and currents.</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:400000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">400,000</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Regular checks, reinforcement if necessary&quot;}">Regular checks, reinforcement if necessary</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.04}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">4%</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:380000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">380,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">40,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}">40</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Undermining prevention, structural integrity&quot;}">Undermining prevention, structural integrity</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.75}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">75%</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.99}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">99%</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Crest Elements&quot;}">Crest Elements</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Top layer of the breakwater, often used for access and additional wave protection.&quot;}">Top layer of the breakwater, often used for access and additional wave protection.</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:200000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">200,000</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Surface maintenance, inspections&quot;}">Surface maintenance, inspections</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.03}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">3%</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:180000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">180,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">10,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:30}">30</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Accessibility, structural integrity&quot;}">Accessibility, structural integrity</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.85}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">85%</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.99}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">99%</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Groynes&quot;}">Groynes</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Structures extending from the shore into the water to prevent beach erosion.&quot;}">Structures extending from the shore into the water to prevent beach erosion.</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:600000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">600,000</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Regular inspections, repair of damages&quot;}">Regular inspections, repair of damages</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.05}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">5%</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:570000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">570,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:60000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">60,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:30}">30</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Erosion control efficiency, structural integrity&quot;}">Erosion control efficiency, structural integrity</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.8}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">80%</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.98}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">98%</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Sand Traps&quot;}">Sand Traps</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Systems designed to capture and hold sand to prevent it from moving along the coast.&quot;}">Systems designed to capture and hold sand to prevent it from moving along the coast.</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:300000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">300,000</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Regular monitoring, sand removal&quot;}">Regular monitoring, sand removal</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.04}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">4%</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:280000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">280,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:30000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">30,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25}">25</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Sand capture efficiency, maintenance frequency&quot;}">Sand capture efficiency, maintenance frequency</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.78}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">78%</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.97}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">97%</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Concrete Elements&quot;}">Concrete Elements</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Precast or poured-in-place concrete components used in the construction of breakwaters.&quot;}">Precast or poured-in-place concrete components used in the construction of breakwaters.</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:400000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">400,000</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Regular inspections, repair of cracks&quot;}">Regular inspections, repair of cracks</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.04}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">4%</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:380000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">380,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">40,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:35}">35</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Structural integrity, crack frequency&quot;}">Structural integrity, crack frequency</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.85}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">85%</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:0.99}" data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">99%</td>
+                </tr>
+                <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">&nbsp;</td>
+                <td>&nbsp;</td>
+                <td data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">&nbsp;</td>
+                <td data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">&nbsp;</td>
+                <td data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">&nbsp;</td>
+                <td data-sheets-numberformat="{&quot;1&quot;:3,&quot;2&quot;:&quot;0%&quot;,&quot;3&quot;:1}">&nbsp;</td>
+                </tr>
+                <tr>
+                <td colspan="11" rowspan="1">&nbsp;</td>
+                </tr>
+                </tbody>
+                </table>
+        </div>
+        <div class="sidebar-right">
+            <h2 class="responsive-text">Asset Management Master Data</h2>
+            <h2><Strong>Asset Information & Master Data</Strong></h2>
+            <a href="breakwaters_description.html"class="responsive-link">1.1 Asset Description</a>
+            <a href="breakwaters_asset_hierarchy.html" class="responsive-link">1.2 Asset Hierarchy</a>
+            <a href="breakwaters_risk_analysis.html" class="responsive-link">1.3 Asset Risk Analysis</a>
+            <a href="breakwaters_fmea.html" class="responsive-link">1.4 Asset FMEA and PMO activities</a>
+            <a href="breakwaters_strategies.html" class="responsive-link">1.5 Asset Strategies</a>
+            <a href="breakwaters_maintenance_plans.html" class="responsive-link">1.6 Asset Maintenance Plans</a>
+            <a href="breakwaters_whole_of_life_analysis.html" class="responsive-link">1.7 Asset WOL Analysis</a>
+            <a href="breakwaters_event_tables.html" class="responsive-link">1.8 Asset Event Scenarios</a>
+            <a href="MAINPAGE.html" class="responsive-link">Return to Home Page</a>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer-content">
+
+        </div>
+        <hr class="footer-line">
+        <p class="footer-text">&copy; ExSTO Global, Johan Snyman - The Author retains all moral rights. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function showPopup(popupId) {
+            document.getElementById(popupId).style.display = 'block';
+        }
+        function closePopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
+        }
+    </script>
+</body>
+</html>

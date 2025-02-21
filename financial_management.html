@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Management</title>
+    <style>
+         body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scroll on body */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            padding-top: 5px; /* Padding to avoid button interference */
+            background-color: lightgrey; /* Matching the block color */
+            border: 2px solid lightgrey;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            cursor: move;
+        }
+        .content {
+            padding: 10px;
+            overflow: auto;
+            height: calc(100% - 5px);
+            background-color: lightgrey;
+        }
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 10px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #ffcccb;
+            border: 1px solid #000;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .prev-btn {
+            left: 10px;
+        }
+        .next-btn {
+            right: 80px;
+        }
+    </style>
+    <script>
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        function closePopup() {
+            const popup = document.querySelector('.container');
+            document.body.removeChild(popup);
+        }
+
+        function onMouseDown(e) {
+            isDragging = true;
+            offsetX = e.clientX - parseInt(window.getComputedStyle(popup).left);
+            offsetY = e.clientY - parseInt(window.getComputedStyle(popup).top);
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }
+
+        function onMouseMove(e) {
+            if (isDragging) {
+                popup.style.left = e.clientX - offsetX + 'px';
+                popup.style.top = e.clientY - offsetY + 'px';
+            }
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        window.onload = function() {
+            const popup = document.querySelector('.container');
+            popup.addEventListener('mousedown', onMouseDown);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h3>Financial Management Details</h3>
+            <p><strong>Who:</strong> Financial analysts, asset managers</p>
+            <p><strong>What:</strong> Management of financial resources for asset maintenance</p>
+            <p><strong>When:</strong> Continuously, with periodic reviews</p>
+            <p><strong>Where:</strong> Financial systems, asset management databases</p>
+            <p><strong>With:</strong> Financial tracking tools, budget management software</p>
+            <p><strong>How:</strong> By allocating budgets, tracking costs, and optimizing spending</p>
+            <p><strong>Why:</strong> To ensure financial efficiency and support maintenance strategies</p>
+            <p><strong>Quality Check:</strong></p>
+            <ul>
+                <li>Right person (financial analysts, managers)</li>
+                <li>Right time (continuously, reviews)</li>
+                <li>Right place (financial systems)</li>
+                <li>Right equipment (tracking tools, software)</li>
+                <li>Right process (budgeting, tracking)</li>
+                <li>Right work (managing resources)</li>
+                <li>Right reason (financial efficiency)</li>
+            </ul>
+            <p><strong>Expanded Activities:</strong></p>
+            <ul>
+                <li>Allocate budgets for maintenance and operational tasks.</li>
+                <li>Track maintenance costs and compare against budgets.</li>
+                <li>Optimize spending by analyzing cost data and identifying savings opportunities.</li>
+                <li>Review and adjust financial plans based on performance data.</li>
+            </ul>
+            <p><strong>Research and Benchmarking:</strong></p>
+            <ul>
+                <li><strong>Best Practices:</strong> Utilize guidelines from the Association for Financial Professionals (AFP) for financial management in asset maintenance.</li>
+                <li><strong>Case Studies:</strong> Study the financial management practices of leading ports to understand budgeting and cost tracking strategies.</li>
+                <li><strong>Benchmark Data:</strong> Compare your financial management practices with industry benchmarks to ensure efficiency and cost-effectiveness.</li>
+            </ul>
+            <p><strong>Narrative:</strong> This block involves managing the financial resources necessary for the maintenance of port assets. It includes allocating budgets, tracking maintenance costs, and optimizing spending to ensure financial efficiency and support the organization's maintenance strategies.</p>
+        </div>
+    </div>
+</body>
+</html>

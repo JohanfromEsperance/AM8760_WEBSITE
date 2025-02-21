@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AM8760 - Asset Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color:#e7e7e7;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            height: 11%;
+            width: 100%;
+            text-align: center;
+            background-color: #ffffff;
+            padding: 0 0;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .logo {
+            height: 100%;
+            width: 10%;
+            position: absolute;
+            top: 0;
+        }
+        .left-logo {
+            left: 0;
+        }
+        .right-logo {
+            right: 0;
+        }
+        nav {
+            background-color: #f2f2f2;
+            overflow: hidden;
+            width: 100%;
+            display: flex;
+            text-align: center;
+            justify-content: normal;
+            box-sizing: border-box;
+        }
+        nav a {
+            display: block;
+            color: 	#e1e1e1;
+            text-align: left;
+            padding: 14px 16px;
+            text-decoration: none;
+            flex: 1;
+        }
+        nav a:hover {
+            background-color: 	#aeafb6;
+            color: black;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            flex-wrap: nowrap;
+            height: 60vh;
+            box-sizing: border-box;
+        }
+        .sidebar-left, .sidebar-right {
+            width: 15%;
+            background-color: 	#e1e1e1;
+            padding: 1px;
+            box-sizing: border-box;
+            color: #e1e1e1;
+            font-size: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .sidebar-left a, .sidebar-right a {
+            padding: 5px;
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            text-align: left;
+
+        }
+        .sidebar-left a:hover, .sidebar-right a:hover {
+            background-color: 	#aeafb6;
+        }
+        .main-content {
+            width: 70%;
+            padding: 30px;
+            box-sizing: border-box;
+            background-color: #e7e7e7;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 20%;
+            top: 10px;
+            width: 60%;
+            max-height: 100vh;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .popup h2 {
+            margin-top: 0;
+        }
+        .popup .close {
+            display: block;
+            text-align: right;
+            margin-top: -10px;
+            margin-right: -10px;
+        }
+        .popup .close a {
+            color: 	#aeafb6;
+            text-decoration: none;
+            font-size: 24px;
+        }
+        .footer {
+            background-color: #ffffff; /* Background color */
+            padding: 1px;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between; /* Default: Aligns images left, center, right */
+            align-items: center;
+            padding-bottom: 1px;
+            gap: 2px; /* Space between images */
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 250px) { footer-content {flex-direction: column; /* Stack images on smaller screens */justify-content: center;align-items: center; gap: 1px;}}
+
+        .footer-img {
+            width: 50px; /* Adjust image size */
+            height: auto;
+        }
+
+        .footer-line {
+            border: none;
+            border-top: 2px solid black; /* Bottom line */
+            margin: 1px auto;
+            width: 80%;
+        }
+
+        .footer-text {
+            font-size: 0.5rem;
+            color: black;
+            text-align: center;
+        }
+
+        .responsive-text {font-size: clamp(0.5rem, 1.0vw, 1.5rem); /* Auto-scales based on screen size */color: black;}
+
+        .responsive-link {background-color: rgb(186, 184, 189);color: black;font-size: clamp(0.5rem, 1.0vw, 1.0rem); /* Auto-scales based on screen size */}
+    
+        .main-content table {
+            width: 100%; /* Ensures the table takes full width of the container */
+            table-layout: auto; /* Allows columns to automatically adjust their size */
+        }
+
+        .main-content th, .main-content td {
+            text-align: left;
+            padding: 1px; /* Adjust padding as needed */
+            font-size: calc(0.5vw + 0.2vh + 0.2vmin); /* Responsively adjusts font size based on the viewport size */
+            white-space: normal; /* Allows text to wrap within the cell */
+            overflow-wrap: break-word; /* Ensures words break to prevent overflow */
+        }
+    </style>
+    </head>
+<body>
+    <header>
+        <img src="EXSTO COMBINED.png" class="logo left-logo" alt="Left Logo">
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Port of ExSTO - AM8760 - Asset Management Training Simulation</h2>
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Welcome to The Port of ExSTO</h2>
+        <img src="logo with xSTO.png" class="logo right-logo" alt="Right Logo">
+    </header>
+    <nav>
+        <a href="MAINPAGE.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Home</a>
+        <a href="AM8760_Board_Game.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">AM8760 Board Game</a>
+        <a href="vision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Vision & Asset Management Plan</a>
+        <a href="key_performance_indicators.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Key Performance Indicators</a>
+        <a href="financial_report.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Financial Report</a>
+        <a href="stateoftheasset.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">State of the Asset Table</a>
+        <a href="risk.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">5x5 Risk Table</a>
+        <a href="capital_investment_decision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Capital Investment Decision Making</a>
+        <a href="indexblocks.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Help Matrix</a>
+        <a href="training.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Training</a>
+        <a href="knowledge_test.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">GFMAM Knowledge Test</a>
+        <a href="knowledge_test_ISO.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">IOS55000 Knowledge Test</a>
+    </nav>
+    <div class="container">
+        <div class="sidebar-left">
+            <h2 class="responsive-text">Asset Class Management Plans</h2>
+            <a href="bulk_material_handling_main.html" class="responsive-link">1.0 Bulk Material Handling</a>
+            <a href="storage_sheds_main.html"  class="responsive-link">2.0 Storage Sheds</strong></a>
+            <a href="rail_infrastructure_main.html"  class="responsive-link"> 3.0 Rail Infrastructure</strong></a>
+            <a href="ship_loader_unloader_main.html"  class="responsive-link">4.0 Ship Loader/Unloader</strong></a>
+            <a href="dust_suppression_main.html"  class="responsive-link">5.0 Dust Suppression Systems</strong></a>
+            <a href="weighbridges_main.html"  class="responsive-link">6.0 Weighbridges</strong></a>
+            <a href="security_systems_main.html"  class="responsive-link">7.0 Security Systems</strong></a>
+            <a href="spare.html"  class="responsive-link"> 8.0 SAMP</strong></a>
+            <a href="wharves_main.html"  class="responsive-link">9.0 Wharves, Berths and Jetties</strong></a>
+            <a href="breakwaters_main.html"  class="responsive-link">10.0 Breakwaters</strong></a>
+            <a href="navigational_aids_main.html"  class="responsive-link">11.0 Navigational Aids</strong></a>
+            <a href="channels_main.html"  class="responsive-link">12.0 Channels</strong></a>
+            <a href="ict_tangible_main.html"  class="responsive-link"> 13.0 ICT Tangible Assets</strong></a>
+            <a href="ict_intangible_main.html"  class="responsive-link">14.0 ICT Intangible Assets</strong></a>
+            <a href="hr_main.html"  class="responsive-link"> 15.0 Human Resources Management</strong></a>
+            <a href="power_main.html"  class="responsive-link"> 16.0 Power</strong></a>
+            <a href="utilities_main.html"class="responsive-link">17.0 Utilities</strong></a>
+        </div>
+        <div class="main-content">
+            <table dir="ltr" border="1" cellspacing="0" cellpadding="0" data-sheets-root="1"><colgroup><col width="170" /><col width="176" /><col width="63" /><col width="34" /><col width="25" /><col width="45" /><col width="52" /><col width="25" /><col width="52" /><col width="25" /><col width="63" /><col width="60" /><col width="34" /><col width="343" /><col width="52" /><col width="45" /><col width="45" /><col width="25" /><col width="83" /><col width="58" /><col width="63" /><col width="83" /><col width="83" /><col width="83" /><col width="77" /><col width="83" /><col width="77" /><col width="87" /><col width="87" /><col width="87" /><col width="87" /><col width="66" /></colgroup>
+                <tbody>
+                <tr>
+                <td colspan="32" rowspan="1" bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Financial Report for PoExSTO (End of Year)&quot;}">Financial Report for PoExSTO (End of Year)</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" bgcolor="lightgreen" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;This comprehensive financial report supports effective decision-making and strategic planning in asset management by providing a detailed overview of financial performance, maintenance activities, depreciation, NPV, RONA, condition ratings, risk rankings, and future life cycle costs for each asset class&quot;}">This financial report supports effective decision-making and strategic planning in asset management by providing a detailed overview of financial performance, maintenance activities, depreciation, NPV, RONA, condition ratings, risk rankings, and future life cycle costs for each asset class</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1">&nbsp;</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" bgcolor="lightgreen" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;The table below summarizes the financial performance of all assets, including activities, values, maintenance costs, depreciation, installation date, lifespan, remaining useful life, WSCAM condition rating, overall risk ranking, future life cycle cost for 10 years, WSCAM state after 10 years if all activities are performed, WSCAM state after 10 years if no activities are performed, and the risk associated with doing nothing.&quot;}">The table below summarizes the financial performance of all assets, including activities, values, maintenance costs, depreciation, installation date, lifespan, remaining useful life, WSCAM condition rating, overall risk ranking, future life cycle cost for 10 years, WSCAM state after 10 years if all activities are performed, WSCAM state after 10 years if no activities are performed, and the risk associated with doing nothing.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1">&nbsp;</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" bgcolor="lightred" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Financial Report Summary&quot;}">Financial Report Summary</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1">&nbsp;</td>
+                </tr>
+                <tr>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Class&quot;}">Asset Class</td>
+                <td bgcolor=" #50b8e7" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Name&quot;}">Asset Name</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Initial Cost ($)&quot;}">Initial Cost ($)</td>
+                <td bgcolor=" #50b8e7" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Installation Date&quot;}">Installation Date</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Lifespan (years)&quot;}">Lifespan (years)</td>
+                <td bgcolor=" #50b8e7" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Remaining Useful Life (years)&quot;}">Remaining Useful Life (years)</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Maintenance Cost/Yr ($)&quot;}">Maintenance Cost/Yr ($)</td>
+                <td bgcolor=" #50b8e7" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Depreciation Rate (%)&quot;}">Depreciation Rate (%)</td>
+                <td bgcolor=" #50b8e7" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Depreciation/Yr ($)&quot;}">Depreciation/Yr ($)</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Potential ROI (%)&quot;}">Potential ROI (%)</td>
+                <td bgcolor=" #50b8e7" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Replacement Value ($)&quot;}">Replacement Value ($)</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;NPV ($)&quot;}">NPV ($)</td>
+                <td bgcolor=" #50b8e7" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;RONA (%)&quot;}">RONA (%)</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Activities Performed&quot;}">Activities Performed</td>
+                <td bgcolor=" #50b8e7" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Total Activity Cost ($)&quot;}">Total Activity Cost ($)</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Total Points Awarded&quot;}"></td>
+                <td bgcolor=" #50b8e7" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Total Points Deducted&quot;}"></td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Net Points&quot;}"></td>
+                <td bgcolor=" #50b8e7" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM Condition Rating&quot;}">WSCAM Condition Rating</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Overall Risk Ranking&quot;}">Overall Risk Ranking</td>
+                <td bgcolor=" #50b8e7" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Future Life Cycle Cost (10 yrs) ($)&quot;}">Future Life Cycle Cost (10 yrs) ($)</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 2 Years (All Activities)&quot;}">WSCAM State After 2 Years (All Activities)</td>
+                <td bgcolor=" #50b8e7" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 4 Years (All Activities)&quot;}">WSCAM State After 4 Years (All Activities)</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 6 Years (All Activities)&quot;}">WSCAM State After 6 Years (All Activities)</td>
+                <td bgcolor=" #50b8e7" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 8 Years (All Activities)&quot;}">WSCAM State After 8 Years (All Activities)</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 10 Years (All Activities)&quot;}">WSCAM State After 10 Years (All Activities)</td>
+                <td bgcolor="#50b8e7" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 2 Years (No Activities)&quot;}">WSCAM State After 2 Years (No Activities)</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 4 Years (No Activities)&quot;}">WSCAM State After 4 Years (No Activities)</td>
+                <td bgcolor=" #50b8e7" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 6 Years (No Activities)&quot;}">WSCAM State After 6 Years (No Activities)</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 8 Years (No Activities)&quot;}">WSCAM State After 8 Years (No Activities)</td>
+                <td bgcolor=" #50b8e7" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 10 Years (No Activities)&quot;}">WSCAM State After 10 Years (No Activities)</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Risk After 10 Years (No Activities)&quot;}">Risk After 10 Years (No Activities)</td>
+                </tr>
+                <tr>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Bulk Material Handling&quot;}">Bulk Material Handling</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Conveyor System&quot;}">Conveyor System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1000000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,000,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2015}">2015</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20}">20</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:11}">11</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">150,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">50,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10}">10</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1200000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,200,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1100000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,100,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:9.1}">9.1</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Belt replacement, Motor maintenance&quot;}">Belt replacement, Motor maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:60000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">60,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:100}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:60}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}"></td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Medium&quot;}">Medium</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1100000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,100,000</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5&rdquo;">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td>&nbsp;</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Transfer System&quot;}">Transfer System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:500000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">500,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2016}">2016</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20}">20</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:12}">12</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">220,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">25,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8}">8</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:600000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">600,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:550000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">550,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8.2}">8.2</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Chute cleaning, Feeder maintenance&quot;}">Chute cleaning, Feeder maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:30000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">30,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:80}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:30}"></td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Medium&quot;}">Medium</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:550000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">550,000</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td>&nbsp;</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Stacker/Reclaimer&quot;}">Stacker/Reclaimer</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2000000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">2,000,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2014}">2014</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25}">25</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:15}">15</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:100000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,100,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:100000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">100,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:12}">12</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2400000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">2,400,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2200000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">2,200,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10.9}">10.9</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Boom inspection, Slewing mechanism check&quot;}">Boom inspection, Slewing mechanism check</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:120000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">120,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:120}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:70}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50}"></td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;High&quot;}">High</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2200000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">2,200,000</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Port Cranes&quot;}">Port Cranes</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Hoist System&quot;}">Hoist System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1500000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,500,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2017}">2017</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20}">20</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:13}">13</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:75000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">275,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:75000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">75,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:9}">9</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1800000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,800,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1650000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,650,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:9.5}">9.5</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Hoist cable replacement, Motor maintenance&quot;}">Hoist cable replacement, Motor maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:90000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">90,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:110}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:65}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:45}"></td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Medium&quot;}">Medium</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1650000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,650,000</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td>&nbsp;</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Slewing System&quot;}">Slewing System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:750000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">750,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2018}">2018</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20}">20</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:14}">14</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:37500}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">177,500</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:37500}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">37,500</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8}">8</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:900000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">900,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:825000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">825,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8.7}">8.7</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Slew drive inspection, Motor maintenance&quot;}">Slew drive inspection, Motor maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:45000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">45,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:85}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:45}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}"></td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Medium&quot;}">Medium</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:825000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">825,000</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Storage Sheds&quot;}">Storage Sheds</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Structural System&quot;}">Structural System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:800000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">800,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2013}">2013</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:30}">30</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:19}">19</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">400,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">40,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:7}">7</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1000000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,000,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:900000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">900,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8.2}">8.2</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Roof repair, Wall maintenance&quot;}">Roof repair, Wall maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">50,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:95}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:55}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}"></td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;High&quot;}">High</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:900000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">900,000</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td>&nbsp;</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Electrical System&quot;}">Electrical System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:300000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">300,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2019}">2019</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20}">20</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:15}">15</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:15000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">150,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:15000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">15,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:6}">6</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:360000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">360,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:330000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">330,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:7.3}">7.3</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Lighting replacement, Transformer maintenance&quot;}">Lighting replacement, Transformer maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">20,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:70}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:30}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}"></td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Low&quot;}">Low</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:330000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">330,000</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Rail Infrastructure&quot;}">Rail Infrastructure</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Track System&quot;}">Track System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2500000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">2,500,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2010}">2010</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}">40</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:26}">26</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:125000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,125,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:125000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">125,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:11}">11</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:3000000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">3,000,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2750000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">2,750,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10.2}">10.2</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Track alignment, Rail replacement&quot;}">Track alignment, Rail replacement</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:150000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">150,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:130}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:80}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50}"></td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;High&quot;}">High</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2750000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">2,750,000</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td>&nbsp;</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Signaling System&quot;}">Signaling System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:600000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">600,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2016}">2016</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25}">25</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:17}">17</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:30000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">300,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:30000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">30,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8}">8</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:720000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">7,220,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:660000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">660,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8.9}">8.9</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Signal maintenance, Cable repair&quot;}">Signal maintenance, Cable repair</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:35000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">35,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:90}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50}"></td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Medium&quot;}">Medium</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:660000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">660,000</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Dust Suppression Systems&quot;}">Dust Suppression Systems</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Dust Collection System&quot;}">Dust Collection System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:400000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">400,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2018}">2018</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:15}">15</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:11}">11</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">200,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">20,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:7}">7</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:480000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">480,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:440000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">440,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8.4}">8.4</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Filter replacement, Fan maintenance&quot;}">Filter replacement, Fan maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">25,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:85}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:35}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50}"></td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">3 (Average)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Low&quot;}">Low</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:440000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">440,000</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">2 (Good)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td>&nbsp;</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Water Spray System&quot;}">Water Spray System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:250000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">250,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2019}">2019</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:15}">15</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:12}">12</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:12500}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">122,500</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:12500}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">12,500</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:6}">6</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:300000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">300,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:275000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">275,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:7.6}">7.6</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Nozzle cleaning, Pump maintenance&quot;}">Nozzle cleaning, Pump maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:15000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">15,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:75}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50}"></td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Low&quot;}">Low</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:275000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">275,000</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Weighbridges&quot;}">Weighbridges</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Load Measurement System&quot;}">Load Measurement System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:500000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">500,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2017}">2017</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20}">20</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:13}">13</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">250,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">25,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8}">8</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:600000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">600,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:550000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">550,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8.2}">8.2</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Load cell replacement, Platform repair&quot;}">Load cell replacement, Platform repair</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:30000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">30,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:80}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}"></td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Medium&quot;}">Medium</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:550000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">550,000</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td>&nbsp;</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Control System&quot;}">Control System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:200000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">200,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2018}">2018</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20}">20</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:14}">14</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">100,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">10,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:240000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">240,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:220000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">220,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:6.8}">6.8</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Control system update, Cable maintenance&quot;}">Control system update, Cable maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:12000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">12,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:65}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}"></td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Medium&quot;}">Medium</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:220000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">220,000</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Security Systems&quot;}">Security Systems</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Surveillance System&quot;}">Surveillance System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:300000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">300,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2019}">2019</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:15}">15</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:11}">11</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:15000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">150,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:15000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">15,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:6}">6</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:360000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">360,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:330000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">330,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:7.3}">7.3</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Camera replacement, Mount maintenance&quot;}">Camera replacement, Mount maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">20,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:75}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:30}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:45}"></td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Low&quot;}">Low</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:330000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">330,000</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td>&nbsp;</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Access Control System&quot;}">Access Control System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:200000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">200,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2018}">2018</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:15}">15</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10}">10</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">100,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">10,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:240000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">240,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:220000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">220,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:6.8}">6.8</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Card reader replacement, Lock maintenance&quot;}">Card reader replacement, Lock maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:12000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">12,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:65}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}"></td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Low&quot;}">Low</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:220000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">220,000</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Wharves&quot;}">Wharves</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Structural System&quot;}">Structural System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1000000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,000,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2010}">2010</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}">40</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:26}">26</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,250,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">50,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:9}">9</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1200000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,200,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1100000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,100,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:9.1}">9.1</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Deck repair, Pile maintenance&quot;}">Deck repair, Pile maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:60000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">60,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:100}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:55}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:45}"></td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;High&quot;}">High</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1100000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,100,000</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td>&nbsp;</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Mooring System&quot;}">Mooring System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:400000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">400,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2012}">2012</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:30}">30</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:18}">18</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">600,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">20,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:7}">7</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:480000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">480,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:440000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">440,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8.4}">8.4</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Bollard inspection, Anchor maintenance&quot;}">Bollard inspection, Anchor maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">25,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:85}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:35}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50}"></td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Medium&quot;}">Medium</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:440000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">440,000</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Breakwaters&quot;}">Breakwaters</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Armor Units&quot;}">Armor Units</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1200000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,200,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2005}">2005</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50}">50</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:31}">31</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:60000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">600,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:60000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">60,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10}">10</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1440000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,440,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1320000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,320,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:9.6}">9.6</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Armor unit repositioning, Core material maintenance&quot;}">Armor unit repositioning, Core material maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:70000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">70,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:110}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:60}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50}"></td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;High&quot;}">High</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1320000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,320,000</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td>&nbsp;</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Toe Structure&quot;}">Toe Structure</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:600000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">600,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2010}">2010</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50}">50</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:36}">36</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:30000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">130,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:30000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">30,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8}">8</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:720000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">720,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:660000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">660,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8.9}">8.9</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Toe protection maintenance, Erosion control&quot;}">Toe protection maintenance, Erosion control</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:35000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">35,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:90}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50}"></td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Medium&quot;}">Medium</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:660000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">660,000</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Navigational Aids&quot;}">Navigational Aids</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Light Beacons&quot;}">Light Beacons</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:200000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">200,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2017}">2017</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20}">20</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:13}">13</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">900,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">10,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:240000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">240,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:220000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">220,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:6.8}">6.8</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Light replacement, Solar panel maintenance&quot;}">Light replacement, Solar panel maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:12000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">12,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:65}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}"></td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Medium&quot;}">Medium</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:220000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">220,000</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td>&nbsp;</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Buoys&quot;}">Buoys</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:150000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">150,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2019}">2019</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:15}">15</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:12}">12</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:7500}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">370,500</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:7500}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">7,500</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:4}">4</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:180000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">180,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:165000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">165,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:6.4}">6.4</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Buoy repositioning, Anchor maintenance&quot;}">Buoy repositioning, Anchor maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">10,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:60}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}"></td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Low&quot;}">Low</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:165000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">165,000</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Power Systems&quot;}">Power Systems</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Generation System&quot;}">Generation System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2000000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">2,000,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2010}">2010</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25}">25</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:11}">11</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:100000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">800,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:100000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">100,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:12}">12</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2400000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">2,400,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2200000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">2,200,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10.9}">10.9</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Generator maintenance, Fuel system inspection&quot;}">Generator maintenance, Fuel system inspection</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:120000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">120,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:120}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:70}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50}"></td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;High&quot;}">High</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2200000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">2,200,000</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td>&nbsp;</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Transmission System&quot;}">Transmission System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1000000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,000,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2015}">2015</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25}">25</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:16}">16</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">500,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:50000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">50,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10}">10</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1200000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,200,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1100000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,100,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:9.1}">9.1</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Line inspection, Pole maintenance&quot;}">Line inspection, Pole maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:60000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">60,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:100}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:60}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}"></td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Medium&quot;}">Medium</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:1100000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">1,100,000</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Utilities&quot;}">Utilities</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Water Supply System&quot;}">Water Supply System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:500000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">500,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2016}">2016</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20}">20</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:12}">12</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">250,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">25,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8}">8</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:600000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">600,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:550000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">550,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8.2}">8.2</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Water main repair, Pump maintenance&quot;}">Water main repair, Pump maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:30000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">30,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:80}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}"></td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Medium&quot;}">Medium</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:550000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">550,000</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td>&nbsp;</td>
+                <td bgcolor="lightgrey" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Wastewater System&quot;}">Wastewater System</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:400000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">400,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:2014}">2014</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25}">25</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:17}">17</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">200,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">20,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:7}">7</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:480000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">480,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:440000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">440,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8.4}">8.4</td>
+                <td bgcolor="lightblue" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Sewer line inspection, Manhole cover maintenance&quot;}">Sewer line inspection, Manhole cover maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">25,000</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:75}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:35}"></td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:40}"></td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Medium&quot;}">Medium</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:440000}" data-sheets-numberformat="{&quot;1&quot;:2,&quot;2&quot;:&quot;#,##0&quot;,&quot;3&quot;:1}">440,000</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="lightgreen" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;2">2 (Good)</td>
+                <td bgcolor="green" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;1">1 (Excellent)</td>
+                <td bgcolor="orange" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;3">3 (Average)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="yellow"data-sheets-value=&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;4">4 (Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td bgcolor="red" data-sheets-value="&ldquo;{&quot;1&quot;:2,&quot;2&quot;:&quot;5">5 (Very Poor)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Very High&quot;}">Very High</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1">&nbsp;</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" bgcolor="amber" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Explanation of the Columns&quot;}">Explanation of the Columns</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1">&nbsp;</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Class: The category of the asset.&quot;}">Asset Class: The category of the asset.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Name: The specific asset within the class.&quot;}">Asset Name: The specific asset within the class.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Initial Cost ($): The initial purchase cost of the asset.&quot;}">Initial Cost ($): The initial purchase cost of the asset.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Installation Date: The date the asset was installed.&quot;}">Installation Date: The date the asset was installed.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Lifespan (years): The expected lifespan of the asset.&quot;}">Lifespan (years): The expected lifespan of the asset.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Remaining Useful Life (years): The remaining useful life of the asset based on the lifespan and installation date.&quot;}">Remaining Useful Life (years): The remaining useful life of the asset based on the lifespan and installation date.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Maintenance Cost/Yr ($): The annual maintenance cost for the asset.&quot;}">Maintenance Cost/Yr ($): The annual maintenance cost for the asset.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Depreciation Rate (%): The annual depreciation rate for the asset.&quot;}">Depreciation Rate (%): The annual depreciation rate for the asset.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Depreciation/Yr ($): The annual depreciation cost for the asset.&quot;}">Depreciation/Yr ($): The annual depreciation cost for the asset.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Potential ROI (%): The potential return on investment for the asset.&quot;}">Potential ROI (%): The potential return on investment for the asset.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Replacement Value ($): The current replacement value of the asset.&quot;}">Replacement Value ($): The current replacement value of the asset.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;NPV ($): The net present value of the asset based on current CPI.&quot;}">NPV ($): The net present value of the asset based on current CPI.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;RONA (%): Return on net assets for the asset.&quot;}">RONA (%): Return on net assets for the asset.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Activities Performed: The maintenance and operational activities performed during the year.&quot;}">Activities Performed: The maintenance and operational activities performed during the year.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Total Activity Cost ($): The total cost of all activities performed on the asset during the year.&quot;}">Total Activity Cost ($): The total cost of all activities performed on the asset during the year.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Total Points Awarded: The total points awarded for the maintenance and operational activities performed.&quot;}">Total Points Awarded: The total points awarded for the maintenance and operational activities performed.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Total Points Deducted: The total points deducted for any failures or lack of maintenance.&quot;}">Total Points Deducted: The total points deducted for any failures or lack of maintenance.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Net Points: The net points after considering both points awarded and deducted.&quot;}">Net Points: The net points after considering both points awarded and deducted.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM Condition Rating: The current condition rating assigned to the asset based on previous activities.&quot;}">WSCAM Condition Rating: The current condition rating assigned to the asset based on previous activities.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Overall Risk Ranking: The overall risk ranking for the asset class.&quot;}">Overall Risk Ranking: The overall risk ranking for the asset class.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Future Life Cycle Cost (10 yrs) ($): The projected cost of maintaining the asset over the next 10 years.&quot;}">Future Life Cycle Cost (10 yrs) ($): The projected cost of maintaining the asset over the next 10 years.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 2 Years (All Activities): The WSCAM condition rating after 2 years if all maintenance activities are performed.&quot;}">WSCAM State After 2 Years (All Activities): The WSCAM condition rating after 2 years if all maintenance activities are performed.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 4 Years (All Activities): The WSCAM condition rating after 4 years if all maintenance activities are performed.&quot;}">WSCAM State After 4 Years (All Activities): The WSCAM condition rating after 4 years if all maintenance activities are performed.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 6 Years (All Activities): The WSCAM condition rating after 6 years if all maintenance activities are performed.&quot;}">WSCAM State After 6 Years (All Activities): The WSCAM condition rating after 6 years if all maintenance activities are performed.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 8 Years (All Activities): The WSCAM condition rating after 8 years if all maintenance activities are performed.&quot;}">WSCAM State After 8 Years (All Activities): The WSCAM condition rating after 8 years if all maintenance activities are performed.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 10 Years (All Activities): The WSCAM condition rating after 10 years if all maintenance activities are performed.&quot;}">WSCAM State After 10 Years (All Activities): The WSCAM condition rating after 10 years if all maintenance activities are performed.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 2 Years (No Activities): The WSCAM condition rating after 2 years if no maintenance activities are performed.&quot;}">WSCAM State After 2 Years (No Activities): The WSCAM condition rating after 2 years if no maintenance activities are performed.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 4 Years (No Activities): The WSCAM condition rating after 4 years if no maintenance activities are performed.&quot;}">WSCAM State After 4 Years (No Activities): The WSCAM condition rating after 4 years if no maintenance activities are performed.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 6 Years (No Activities): The WSCAM condition rating after 6 years if no maintenance activities are performed.&quot;}">WSCAM State After 6 Years (No Activities): The WSCAM condition rating after 6 years if no maintenance activities are performed.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 8 Years (No Activities): The WSCAM condition rating after 8 years if no maintenance activities are performed.&quot;}">WSCAM State After 8 Years (No Activities): The WSCAM condition rating after 8 years if no maintenance activities are performed.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;WSCAM State After 10 Years (No Activities): The WSCAM condition rating after 10 years if no maintenance activities are performed.&quot;}">WSCAM State After 10 Years (No Activities): The WSCAM condition rating after 10 years if no maintenance activities are performed.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Risk After 10 Years (No Activities): The risk level associated with not performing any maintenance activities over the next 10 years.&quot;}">Risk After 10 Years (No Activities): The risk level associated with not performing any maintenance activities over the next 10 years.</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1">&nbsp;</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;This comprehensive financial report supports effective decision-making and strategic planning in asset management by providing a detailed overview of financial performance, maintenance activities, depreciation, NPV, RONA, condition ratings, risk rankings, and future life cycle costs for each asset class&quot;}">This comprehensive financial report supports effective decision-making and strategic planning in asset management by providing a detailed overview of financial performance, maintenance activities, depreciation, NPV, RONA, condition ratings, risk rankings, and future life cycle costs for each asset class</td>
+                </tr>
+                <tr>
+                <td colspan="32" rowspan="1">&nbsp;</td>
+                </tr>
+                </tbody>
+                </table>
+            </div>
+            <div class="sidebar-right">
+                <h2 class="responsive-text">Asset Class Information</h2>
+                 <a href="#" onclick="showPopup('bulkMaterialHandlingPopup')" class="responsive-link" >1.0 Bulk Material Handling</a>
+                <a href="#" onclick="showPopup('storageShedsPopup')" class="responsive-link">2.0 Storage Sheds</a>
+                <a href="#" onclick="showPopup('railInfrastructurePopup')" class="responsive-link">3.0 Rail Infrastructure</a>
+                <a href="#" onclick="showPopup('shipLoaderUnloaderPopup')" class="responsive-link">4.0 Ship Loader/Unloader</a>
+                <a href="#" onclick="showPopup('dustSuppressionPopup')" class="responsive-link">5.0 Dust Suppression Systems</a>
+                <a href="#" onclick="showPopup('weighbridgesPopup')" class="responsive-link">6.0 Weighbridges</a>
+                <a href="#" onclick="showPopup('securitySystemsPopup')" class="responsive-link">7.0 Security Systems</a>
+                <a href="#" onclick="showPopup('securitySystemsPopup')" class="responsive-link">8.0 Spare</a>
+                <a href="#" onclick="showPopup('wharvesPopup')" class="responsive-link">9.0 Wharves, Berths and Jetties</a>
+                <a href="#" onclick="showPopup('breakwatersPopup')" class="responsive-link">10.0 Breakwaters</a>
+                <a href="#" onclick="showPopup('navigationalAidsPopup')" class="responsive-link">11.0 Navigational Aids</a>
+                <a href="#" onclick="showPopup('channelsPopup')" class="responsive-link">12.0 Channels</a>
+                <a href="#" onclick="showPopup('ictTangiblePopup')" class="responsive-link">13.0 ICT Tangible Assets</a>
+                <a href="#" onclick="showPopup('ictIntangiblePopup')" class="responsive-link">14.0 ICT Intangible Assets</a>
+                <a href="#" onclick="showPopup('hrPopup')" class="responsive-link">15.0 Human Resources Management</a>
+                <a href="#" onclick="showPopup('powerPopup')" class="responsive-link">16.0 Power</a>
+                <a href="#" onclick="showPopup('utilitiesPopup')" class="responsive-link">17.0 Utilities</a>
+            </div>
+    </div>
+
+    <!-- Popup windows -->
+    <div id="bulkMaterialHandlingPopup" class="popup">
+        <div class="close"><a href="#" onclick="closePopup('bulkMaterialHandlingPopup')">&times;</a></div>
+        <h2>Bulk Material Handling</h2>
+        <p>Bulk Material Handling involves the transport, storage, and control of materials in bulk. This includes equipment like conveyor belts, crushers, transfer stations, and more.</p>
+    </div>
+    <div id="storageShedsPopup" class="popup">
+        <div class="close"><a href="#" onclick="closePopup('storageShedsPopup')">&times;</a></div>
+        <h2>Storage Sheds</h2>
+        <p>Storage Sheds are used for the temporary storage of materials. They protect materials from the elements and provide a controlled environment for storage.</p>
+    </div>
+    <div id="railInfrastructurePopup" class="popup">
+        <div class="close"><a href="#" onclick="closePopup('railInfrastructurePopup')">&times;</a></div>
+        <h2>Rail Infrastructure</h2>
+        <p>Rail Infrastructure includes tracks, bridges, and other structures necessary for the operation of rail transport systems. Maintenance and upgrades are crucial for safety and efficiency.</p>
+    </div>
+    <div id="shipLoaderUnloaderPopup" class="popup">
+        <div class="close"><a href="#" onclick="closePopup('shipLoaderUnloaderPopup')">&times;</a></div>
+        <h2>Ship Loader/Unloader</h2>
+        <p>Ship Loaders/Unloaders are crucial for the efficient handling of cargo on and off ships. Regular maintenance ensures safe and timely operations.</p>
+    </div>
+    <div id="dustSuppressionPopup" class="popup">
+        <div class="close"><a href="#" onclick="closePopup('dustSuppressionPopup')">&times;</a></div>
+        <h2>Dust Suppression</h2>
+        <p>Dust Suppression systems control dust emissions during material handling processes. They are essential for environmental compliance and worker safety.</p>
+    </div>
+    <div id="weighbridgesPopup" class="popup">
+        <div class="close"><a href="#" onclick="closePopup('weighbridgesPopup')">&times;</a></div>
+        <h2>Weighbridges</h2>
+        <p>Weighbridges are used to measure the weight of vehicles and their cargo. Accurate measurements are essential for logistics and inventory management.</p>
+    </div>
+    <div id="securitySystemsPopup" class="popup">
+        <div class="close"><a href="#" onclick="closePopup('securitySystemsPopup')">&times;</a></div>
+        <h2>Security Systems</h2>
+        <p>Security Systems include surveillance cameras, alarms, and other measures to protect assets from theft, vandalism, and other threats.</p>
+    </div>
+    <div id="sparePopup" class="popup">
+        <div class="close"><a href="#" onclick="closePopup('sparePopup')">&times;</a></div>
+        <h2>SPARE</h2>
+        <p>Reserved for future asset class descriptions and details.</p>
+    </div>
+    <div id="wharvesPopup" class="popup">
+        <div class="close"><a href="#" onclick="closePopup('wharvesPopup')">&times;</a></div>
+        <h2>Wharves, Berths and Jetties</h2>
+        <p>Wharves, Berths, and Jetties are structures on the shore of a harbor where ships may dock to load and unload cargo. They are critical to port operations and require regular maintenance.</p>
+    </div>
+    <div id="breakwatersPopup" class="popup">
+        <div class="close"><a href="#" onclick="closePopup('breakwatersPopup')">&times;</a></div>
+        <h2>Breakwaters</h2>
+        <p>Breakwaters are structures designed to protect a shore or harbor from the force of waves. They play a vital role in maintaining calm waters for safe docking and loading operations.</p>
+    </div>
+    <div id="navigationalAidsPopup" class="popup">
+       <div class="close"><a href="#" onclick="closePopup('navigationalAidsPopup')">&times;</a></div>
+        <h2>Navigational Aids</h2>
+        <p>Navigational Aids include buoys, lights, and other markers that guide ships safely through channels and into port. Regular maintenance ensures their visibility and effectiveness.</p>
+    </div>
+    <div id="channelsPopup" class="popup">
+        <div class="close"><a href="#" onclick="closePopup('channelsPopup')">&times;</a></div>
+        <h2>Channels</h2>
+        <p>Channels are navigable paths through which ships travel. Regular dredging and maintenance ensure that channels remain deep enough for safe passage of vessels.</p>
+    </div>
+    <div id="ictTangiblePopup" class="popup">
+        <div class="close"><a href="#" onclick="closePopup('ictTangiblePopup')">&times;</a></div>
+        <h2>ICT Tangible Assets</h2>
+        <p>ICT Tangible assets include hardware such as servers, computers, and networking equipment. Regular updates and maintenance are required to keep these systems operational.</p>
+    </div>
+    <div id="ictIntangiblePopup" class="popup">
+        <div class="close"><a href="#" onclick="closePopup('ictIntangiblePopup')">&times;</a></div>
+        <h2>ICT Intangible Assets</h2>
+        <p>ICT Intangible assets include software and data. Ensuring software is up-to-date and data is securely backed up is essential for operational continuity.</p>
+    </div>
+    <div id="hrPopup" class="popup">
+        <div class="close"><a href="#" onclick="closePopup('hrPopup')">&times;</a></div>
+        <h2>Human Resources Management</h2>
+        <p>Human Resources Management (HR) is critical for ensuring the workforce is well-trained, motivated, and operating efficiently. It includes employee training, recruitment, and performance management.</p>
+    </div>
+    <div id="powerPopup" class="popup">
+        <div class="close"><a href="#" onclick="closePopup('powerPopup')">&times;</a></div>
+        <h2>Power</h2>
+        <p>The power system includes all elements that provide energy to the port facility, including generators, transformers, and distribution networks. Maintenance ensures a reliable power supply.</p>
+    </div>
+    <div id="utilitiesPopup" class="popup">
+        <div class="close"><a href="#" onclick="closePopup('utilitiesPopup')">&times;</a></div>
+        <h2>Utilities</h2>
+        <p>Utilities include water supply, sewage, and waste management systems. Proper maintenance ensures the availability of essential services and compliance with environmental regulations.</p>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+
+        </div>
+        <hr class="footer-line">
+        <p class="footer-text">&copy; ExSTO Global, Johan Snyman - The Author retains all moral rights. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function showPopup(popupId) {
+            document.getElementById(popupId).style.display = 'block';
+        }
+        function closePopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
+        }
+    </script>
+</body>
+</html>

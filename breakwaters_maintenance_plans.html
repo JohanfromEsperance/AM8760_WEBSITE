@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AM8760 - Asset Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color:#e7e7e7;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            height: 11%;
+            width: 100%;
+            text-align: center;
+            background-color: #ffffff;
+            padding: 0 0;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .logo {
+            height: 100%;
+            width: 10%;
+            position: absolute;
+            top: 0;
+        }
+        .left-logo {
+            left: 0;
+        }
+        .right-logo {
+            right: 0;
+        }
+        nav {
+            background-color: #f2f2f2;
+            overflow: hidden;
+            width: 100%;
+            display: flex;
+            text-align: center;
+            justify-content: normal;
+            box-sizing: border-box;
+        }
+        nav a {
+            display: block;
+            color: 	#e1e1e1;
+            text-align: left;
+            padding: 14px 16px;
+            text-decoration: none;
+            flex: 1;
+        }
+        nav a:hover {
+            background-color: 	#aeafb6;
+            color: black;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            flex-wrap: nowrap;
+            height: 60vh;
+            box-sizing: border-box;
+        }
+        .sidebar-left, .sidebar-right {
+            width: 15%;
+            background-color: 	#e1e1e1;
+            padding: 1px;
+            box-sizing: border-box;
+            color: #e1e1e1;
+            font-size: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .sidebar-left a, .sidebar-right a {
+            padding: 5px;
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            text-align: left;
+
+        }
+        .sidebar-left a:hover, .sidebar-right a:hover {
+            background-color: 	#aeafb6;
+        }
+        .main-content {
+            width: 70%;
+            padding: 30px;
+            box-sizing: border-box;
+            background-color: #e7e7e7;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 20%;
+            top: 10px;
+            width: 60%;
+            max-height: 100vh;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .popup h2 {
+            margin-top: 0;
+        }
+        .popup .close {
+            display: block;
+            text-align: right;
+            margin-top: -10px;
+            margin-right: -10px;
+        }
+        .popup .close a {
+            color: 	#aeafb6;
+            text-decoration: none;
+            font-size: 24px;
+        }
+        .footer {
+            background-color: #ffffff; /* Background color */
+            padding: 1px;
+            text-align: center;
+        }
+
+    .footer-content {
+        display: flex;
+        justify-content: space-between; /* Default: Aligns images left, center, right */
+        align-items: center;
+        padding-bottom: 1px;
+        gap: 2px; /* Space between images */
+    }
+
+    /* Responsive adjustments for smaller screens */
+    @media (max-width: 250px) { footer-content {flex-direction: column; /* Stack images on smaller screens */justify-content: center;align-items: center; gap: 1px;}}
+
+    .footer-img {
+        width: 50px; /* Adjust image size */
+        height: auto;
+    }
+
+    .footer-line {
+        border: none;
+        border-top: 2px solid black; /* Bottom line */
+        margin: 1px auto;
+        width: 80%;
+    }
+
+    .footer-text {
+        font-size: 0.5rem;
+        color: black;
+        text-align: center;
+    }
+    .responsive-text {font-size: clamp(0.5rem, 1.0vw, 1.5rem); /* Auto-scales based on screen size */color: black;}
+
+        .responsive-link {background-color: rgb(186, 184, 189);color: black;font-size: clamp(0.5rem, 1.0vw, 1.0rem); /* Auto-scales based on screen size */}
+
+        .main-content table {
+            width: 100%; /* Ensures the table takes full width of the container */
+            table-layout: auto; /* Allows columns to automatically adjust their size */
+        }
+
+        .main-content th, .main-content td {
+            text-align: left;
+            padding: 1px; /* Adjust padding as needed */
+            font-size: calc(0.5vw + 0.2vh + 0.2vmin); /* Responsively adjusts font size based on the viewport size */
+            white-space: normal; /* Allows text to wrap within the cell */
+            overflow-wrap: break-word; /* Ensures words break to prevent overflow */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="EXSTO COMBINED.png" class="logo left-logo" alt="Left Logo">
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Port of ExSTO - AM8760 - Asset Management Training Simulation</h2>
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Welcome to The Port of ExSTO</h2>
+        <img src="logo with xSTO.png" class="logo right-logo" alt="Right Logo">
+    </header>
+    <nav>
+        <a href="MAINPAGE.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Home</a>
+        <a href="AM8760_Board_Game.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">AM8760 Board Game</a>
+        <a href="vision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Vision & Asset Management Plan</a>
+        <a href="key_performance_indicators.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Key Performance Indicators</a>
+        <a href="financial_report.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Financial Report</a>
+        <a href="stateoftheasset.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">State of the Asset Table</a>
+        <a href="risk.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">5x5 Risk Table</a>
+        <a href="capital_investment_decision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Capital Investment Decision Making</a>
+        <a href="indexblocks.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Help Matrix</a>
+        <a href="training.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Training</a>
+        <a href="knowledge_test.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">GFMAM Knowledge Test</a>
+        <a href="knowledge_test_ISO.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">IOS55000 Knowledge Test</a>
+    </nav>
+    
+    <style>
+        .responsive-text {font-size: clamp(0.5rem, 1.0vw, 1.5rem); /* Auto-scales based on screen size */color: black;}
+    </style>
+
+    <style>
+        .responsive-link {
+            background-color: rgb(186, 184, 189);color: black;font-size: clamp(0.5rem, 1.0vw, 1.0rem); /* Auto-scales based on screen size */}
+    </style>
+
+    <div class="container">
+        <div class="sidebar-left">
+            <h2 class="responsive-text">Asset Class Management Plans</h2>
+            <a href="bulk_material_handling_main.html" class="responsive-link">1.0 Bulk Material Handling</a>
+            <a href="storage_sheds_main.html"  class="responsive-link">2.0 Storage Sheds</strong></a>
+            <a href="rail_infrastructure_main.html"  class="responsive-link"> 3.0 Rail Infrastructure</strong></a>
+            <a href="ship_loader_unloader_main.html"  class="responsive-link">4.0 Ship Loader/Unloader</strong></a>
+            <a href="dust_suppression_main.html"  class="responsive-link">5.0 Dust Suppression Systems</strong></a>
+            <a href="weighbridges_main.html"  class="responsive-link">6.0 Weighbridges</strong></a>
+            <a href="security_systems_main.html"  class="responsive-link">7.0 Security Systems</strong></a>
+            <a href="spare.html"  class="responsive-link"> 8.0 SAMP</strong></a>
+            <a href="wharves_main.html"  class="responsive-link">9.0 Wharves, Berths and Jetties</strong></a>
+            <a href="breakwaters_main.html"  class="responsive-link">10.0 Breakwaters</strong></a>
+            <a href="navigational_aids_main.html"  class="responsive-link">11.0 Navigational Aids</strong></a>
+            <a href="channels_main.html"  class="responsive-link">12.0 Channels</strong></a>
+            <a href="ict_tangible_main.html"  class="responsive-link"> 13.0 ICT Tangible Assets</strong></a>
+            <a href="ict_intangible_main.html"  class="responsive-link">14.0 ICT Intangible Assets</strong></a>
+            <a href="hr_main.html"  class="responsive-link"> 15.0 Human Resources Management</strong></a>
+            <a href="power_main.html"  class="responsive-link"> 16.0 Power</strong></a>
+            <a href="utilities_main.html"class="responsive-link">17.0 Utilities</strong></a>
+        </div>
+        <div class="main-content">
+            <p><strong>OEM Manual: Breakwaters</strong></p>
+            <p><strong>Introduction</strong></p>
+            <p>Welcome to the Original Equipment Manufacturer (OEM) manual for Breakwaters. This manual provides detailed information on the installation, operation, maintenance, and safety guidelines for your breakwater infrastructure. Adhering to these instructions will ensure optimal performance and longevity of your equipment.</p>
+            <div class="flex-shrink-0 flex flex-col relative items-end">&nbsp;</div>
+            <div class="group/conversation-turn relative flex w-full min-w-0 flex-col agent-turn">
+            <div class="flex-col gap-1 md:gap-3">
+            <div class="flex flex-grow flex-col max-w-full">
+            <div class="min-h-[20px] text-message flex flex-col items-start whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 juice:w-full juice:items-end overflow-x-auto gap-2" dir="auto" data-message-author-role="assistant" data-message-id="b1d68bdb-bedb-43f6-b5f9-3be1d68e068e">
+            <div class="flex w-full flex-col gap-1 juice:empty:hidden juice:first:pt-[3px]">
+            <div class="markdown prose w-full break-words dark:prose-invert light">
+            <h3>Maintenance Manual for Breakwaters in the AM8760 Format</h3>
+            <h4>1. <strong>Introduction</strong></h4>
+            <ul>
+            <li><strong>Purpose</strong>: This manual provides comprehensive guidelines for the maintenance of breakwaters to ensure their structural integrity, functionality, and longevity.</li>
+            <li><strong>Scope</strong>: The maintenance procedures apply to all breakwaters within the port's jurisdiction, including rubble mound, vertical, and composite types.</li>
+            </ul>
+            <h4>2. <strong>Asset Description</strong></h4>
+            <ul>
+            <li><strong>Breakwater Types</strong>: Rubble mound, vertical, and composite breakwaters.</li>
+            <li><strong>Function</strong>: Protects port and harbor areas from waves, storm surges, and erosion.</li>
+            <li><strong>Components</strong>: Core material, armor layer, underlayer, and crest.</li>
+            </ul>
+            <h4>3. <strong>Maintenance Policy</strong></h4>
+            <ul>
+            <li><strong>Objectives</strong>:
+            <ul>
+            <li>Ensure structural integrity.</li>
+            <li>Minimize the risk of failure.</li>
+            <li>Extend the lifespan of the breakwaters.</li>
+            </ul>
+            </li>
+            <li><strong>Standards</strong>: Align with ISO55001:2020 and relevant industry standards.</li>
+            </ul>
+            <h4>4. <strong>Maintenance Strategy</strong></h4>
+            <ul>
+            <li><strong>Preventive Maintenance</strong>: Regular inspections and routine maintenance to prevent issues.</li>
+            <li><strong>Corrective Maintenance</strong>: Repair and restore breakwaters when damage is identified.</li>
+            <li><strong>Condition-Based Maintenance</strong>: Monitor the condition and perform maintenance based on the current state.</li>
+            </ul>
+            <h4>5. <strong>Inspection and Monitoring</strong></h4>
+            <ul>
+            <li><strong>Regular Inspections</strong>: Conduct inspections at specified intervals (e.g., monthly, quarterly, annually).</li>
+            <li><strong>Post-Storm Inspections</strong>: Inspect after significant weather events.</li>
+            <li><strong>Monitoring Techniques</strong>:
+            <ul>
+            <li>Visual inspections.</li>
+            <li>Photographic and video documentation.</li>
+            <li>UAV (drone) surveys.</li>
+            <li>Sonar and underwater inspections.</li>
+            </ul>
+            </li>
+            </ul>
+            <h4>6. <strong>Maintenance Procedures</strong></h4>
+            <ul>
+            <li><strong>Routine Maintenance</strong>:
+            <ul>
+            <li><strong>Debris Removal</strong>: Regularly remove accumulated debris and vegetation.</li>
+            <li><strong>Armor Stone Replacement</strong>: Replace displaced or damaged armor stones using suppliers like <strong>RockSolid Suppliers</strong> and <strong>HardRock Industries</strong>.</li>
+            <li><strong>Underlayer Repairs</strong>: Repair any erosion or settlement in the underlayer.</li>
+            </ul>
+            </li>
+            <li><strong>Corrective Maintenance</strong>:
+            <ul>
+            <li><strong>Erosion Control</strong>: Apply geotextiles or additional materials to control erosion.</li>
+            <li><strong>Structural Repairs</strong>: Repair cracks, settlements, or other structural damages.</li>
+            <li><strong>Grouting</strong>: Use grouting to fill voids and stabilize the structure with materials from <strong>Seismic Solutions Ltd</strong>.</li>
+            </ul>
+            </li>
+            <li><strong>Emergency Repairs</strong>: Implement quick-fix solutions to address immediate threats to the breakwater's integrity.</li>
+            </ul>
+            <h4>7. <strong>Risk Management</strong></h4>
+            <ul>
+            <li><strong>Risk Assessment</strong>: Identify potential risks such as storm damage, erosion, and material degradation.</li>
+            <li><strong>Mitigation Measures</strong>: Develop and implement measures to mitigate identified risks.</li>
+            <li><strong>Emergency Response Plan</strong>: Establish a plan for immediate action in case of major damage or failure.</li>
+            </ul>
+            <h4>8. <strong>Performance Evaluation</strong></h4>
+            <ul>
+            <li><strong>Key Performance Indicators (KPIs)</strong>:
+            <ul>
+            <li>Structural integrity.</li>
+            <li>Frequency and severity of repairs.</li>
+            <li>Response time to damage.</li>
+            <li>Cost of maintenance.</li>
+            </ul>
+            </li>
+            <li><strong>Data Collection</strong>: Collect data during inspections and maintenance activities to evaluate performance.</li>
+            <li><strong>Continuous Improvement</strong>: Analyze performance data to identify improvement opportunities.</li>
+            </ul>
+            <h4>9. <strong>Documentation and Reporting</strong></h4>
+            <ul>
+            <li><strong>Maintenance Records</strong>: Maintain detailed records of all inspections, maintenance activities, and repairs.</li>
+            <li><strong>Reports</strong>: Prepare and distribute regular maintenance reports to stakeholders.</li>
+            <li><strong>Documentation Management</strong>: Ensure all documentation is accessible, accurate, and up-to-date.</li>
+            </ul>
+            <h4>10. <strong>Roles and Responsibilities</strong></h4>
+            <ul>
+            <li><strong>Maintenance Team</strong>: Responsible for performing inspections, maintenance, and repairs.</li>
+            <li><strong>Supervisors</strong>: Oversee the maintenance team, schedule activities, and ensure compliance with the maintenance plan.</li>
+            <li><strong>Asset Manager</strong>: Monitor overall performance, manage risks, and ensure alignment with the asset management policy.</li>
+            </ul>
+            <h4>11. <strong>Training and Competence</strong></h4>
+            <ul>
+            <li><strong>Training Programs</strong>: Provide training for maintenance personnel on inspection techniques, maintenance procedures, and safety protocols.</li>
+            <li><strong>Competency Assessment</strong>: Regularly assess the competency of personnel and provide additional training as needed.</li>
+            </ul>
+            <h4>12. <strong>Health, Safety, and Environmental Considerations</strong></h4>
+            <ul>
+            <li><strong>Safety Protocols</strong>: Implement and enforce safety protocols to protect maintenance personnel.</li>
+            <li><strong>Environmental Protection</strong>: Ensure maintenance activities do not harm the surrounding environment.</li>
+            <li><strong>Emergency Preparedness</strong>: Train personnel on emergency procedures and provide necessary equipment.</li>
+            </ul>
+            <h4>13. <strong>Suppliers and Vendors</strong></h4>
+            <ul>
+            <li><strong>RockSolid Suppliers</strong>: Provide high-quality armor stones for breakwater maintenance.</li>
+            <li><strong>HardRock Industries</strong>: Supplier of robust materials for breakwater construction and repair.</li>
+            <li><strong>Seismic Solutions Ltd</strong>: Supplier of grouting materials and solutions for structural stabilization.</li>
+            <li><strong>EcoWave Solutions</strong>: Provides geotextiles and erosion control materials.</li>
+            </ul>
+            <h4>14. <strong>Review and Update of the Manual</strong></h4>
+            <ul>
+            <li><strong>Periodic Review</strong>: Review the maintenance manual annually or after major events.</li>
+            <li><strong>Updates</strong>: Update the manual based on new technologies, standards, and lessons learned from previous maintenance activities.</li>
+            </ul>
+            <p>This maintenance manual ensures the systematic and effective maintenance of breakwaters, aligning with ISO55001:2020 standards and the GFMAM Asset Management Landscape, contributing to the overall reliability and safety of the port infrastructure.</p>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+        </div>
+        <div class="sidebar-right">
+            <h2 class="responsive-text">Asset Management Master Data</h2>
+            <h2><Strong>Asset Information & Master Data</Strong></h2>
+            <a href="breakwaters_description.html"class="responsive-link">1.1 Asset Description</a>
+            <a href="breakwaters_asset_hierarchy.html" class="responsive-link">1.2 Asset Hierarchy</a>
+            <a href="breakwaters_risk_analysis.html" class="responsive-link">1.3 Asset Risk Analysis</a>
+            <a href="breakwaters_fmea.html" class="responsive-link">1.4 Asset FMEA and PMO activities</a>
+            <a href="breakwaters_strategies.html" class="responsive-link">1.5 Asset Strategies</a>
+            <a href="breakwaters_maintenance_plans.html" class="responsive-link">1.6 Asset Maintenance Plans</a>
+            <a href="breakwaters_whole_of_life_analysis.html" class="responsive-link">1.7 Asset WOL Analysis</a>
+            <a href="breakwaters_event_tables.html" class="responsive-link">1.8 Asset Event Scenarios</a>
+            <a href="MAINPAGE.html" class="responsive-link">Return to Home Page</a>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer-content">
+
+        </div>
+        <hr class="footer-line">
+        <p class="footer-text">&copy; ExSTO Global, Johan Snyman - The Author retains all moral rights. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function showPopup(popupId) {
+            document.getElementById(popupId).style.display = 'block';
+        }
+        function closePopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
+        }
+    </script>
+</body>
+</html>
