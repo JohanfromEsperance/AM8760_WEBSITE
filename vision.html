@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AM8760 - Asset Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color:#e7e7e7;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            height: 11%;
+            width: 100%;
+            text-align: center;
+            background-color: #ffffff;
+            padding: 0 0;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .logo {
+            height: 100%;
+            width: 10%;
+            position: absolute;
+            top: 0;
+        }
+        .left-logo {
+            left: 0;
+        }
+        .right-logo {
+            right: 0;
+        }
+        nav {
+            background-color: #f2f2f2;
+            overflow: hidden;
+            width: 100%;
+            display: flex;
+            text-align: center;
+            justify-content: normal;
+            box-sizing: border-box;
+        }
+        nav a {
+            display: block;
+            color: 	#e1e1e1;
+            text-align: left;
+            padding: 14px 16px;
+            text-decoration: none;
+            flex: 1;
+        }
+        nav a:hover {
+            background-color: 	#aeafb6;
+            color: black;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            flex-wrap: nowrap;
+            height: 60vh;
+            box-sizing: border-box;
+        }
+        .sidebar-left, .sidebar-right {
+            width: 15%;
+            background-color: 	#e1e1e1;
+            padding: 1px;
+            box-sizing: border-box;
+            color: #e1e1e1;
+            font-size: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .sidebar-left a, .sidebar-right a {
+            padding: 5px;
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            text-align: left;
+
+        }
+        .sidebar-left a:hover, .sidebar-right a:hover {
+            background-color: 	#aeafb6;
+        }
+        .main-content {
+            width: 70%;
+            padding: 30px;
+            box-sizing: border-box;
+            background-color: #e7e7e7;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 20%;
+            top: 10px;
+            width: 60%;
+            max-height: 100vh;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .popup h2 {
+            margin-top: 0;
+        }
+        .popup .close {
+            display: block;
+            text-align: right;
+            margin-top: -10px;
+            margin-right: -10px;
+        }
+        .popup .close a {
+            color: 	#aeafb6;
+            text-decoration: none;
+            font-size: 24px;
+        }
+        .footer {
+            background-color: #ffffff; /* Background color */
+            padding: 1px;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between; /* Default: Aligns images left, center, right */
+            align-items: center;
+            padding-bottom: 1px;
+            gap: 2px; /* Space between images */
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 250px) { footer-content {flex-direction: column; /* Stack images on smaller screens */justify-content: center;align-items: center; gap: 1px;}}
+
+        .footer-img {
+            width: 50px; /* Adjust image size */
+            height: auto;
+        }
+
+        .footer-line {
+            border: none;
+            border-top: 2px solid black; /* Bottom line */
+            margin: 1px auto;
+            width: 80%;
+        }
+
+        .footer-text {
+            font-size: 0.5rem;
+            color: black;
+            text-align: center;
+        }
+
+        .responsive-text {font-size: clamp(0.5rem, 1.0vw, 1.5rem); /* Auto-scales based on screen size */color: black;}
+
+        .responsive-link {background-color: rgb(186, 184, 189);color: black;font-size: clamp(0.5rem, 1.0vw, 1.0rem); /* Auto-scales based on screen size */}
+    
+        .main-content table {
+                width: 100%; /* Ensures the table takes full width of the container */
+                /*table-layout: fixed; /* Optional: helps in managing column width more predictably */
+            }
+
+            .main-content table {
+            width: 100%; /* Ensures the table takes full width of the container */
+            table-layout: auto; /* Allows columns to automatically adjust their size */
+        }
+
+        .main-content th, .main-content td {
+            text-align: left;
+            padding: 1px; /* Adjust padding as needed */
+            font-size: calc(0.5vw + 0.2vh + 0.2vmin); /* Responsively adjusts font size based on the viewport size */
+            white-space: normal; /* Allows text to wrap within the cell */
+            overflow-wrap: break-word; /* Ensures words break to prevent overflow */
+        }
+    </style>
+    </head>
+<body>
+    <header>
+        <img src="EXSTO COMBINED.png" class="logo left-logo" alt="Left Logo">
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Port of ExSTO - AM8760 - Asset Management Training Simulation</h2>
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Welcome to The Port of ExSTO</h2>
+        <img src="logo with xSTO.png" class="logo right-logo" alt="Right Logo">
+    </header>
+    <nav>
+        <a href="MAINPAGE.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Home</a>
+        <a href="AM8760_Board_Game.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">AM8760 Board Game</a>
+        <a href="vision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Vision & Asset Management Plan</a>
+        <a href="key_performance_indicators.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Key Performance Indicators</a>
+        <a href="financial_report.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Financial Report</a>
+        <a href="stateoftheasset.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">State of the Asset Table</a>
+        <a href="risk.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">5x5 Risk Table</a>
+        <a href="capital_investment_decision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Capital Investment Decision Making</a>
+        <a href="indexblocks.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Help Matrix</a>
+        <a href="training.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Training</a>
+        <a href="knowledge_test.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">GFMAM Knowledge Test</a>
+        <a href="knowledge_test_ISO.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">IOS55000 Knowledge Test</a>
+    </nav>
+    <div class="container">
+        <div class="sidebar-left">
+            <h2 class="responsive-text">Asset Class Management Plans</h2>
+            <a href="bulk_material_handling_main.html" class="responsive-link">1.0 Bulk Material Handling</a>
+            <a href="storage_sheds_main.html"  class="responsive-link">2.0 Storage Sheds</strong></a>
+            <a href="rail_infrastructure_main.html"  class="responsive-link"> 3.0 Rail Infrastructure</strong></a>
+            <a href="ship_loader_unloader_main.html"  class="responsive-link">4.0 Ship Loader/Unloader</strong></a>
+            <a href="dust_suppression_main.html"  class="responsive-link">5.0 Dust Suppression Systems</strong></a>
+            <a href="weighbridges_main.html"  class="responsive-link">6.0 Weighbridges</strong></a>
+            <a href="security_systems_main.html"  class="responsive-link">7.0 Security Systems</strong></a>
+            <a href="spare.html"  class="responsive-link"> 8.0 SAMP</strong></a>
+            <a href="wharves_main.html"  class="responsive-link">9.0 Wharves, Berths and Jetties</strong></a>
+            <a href="breakwaters_main.html"  class="responsive-link">10.0 Breakwaters</strong></a>
+            <a href="navigational_aids_main.html"  class="responsive-link">11.0 Navigational Aids</strong></a>
+            <a href="channels_main.html"  class="responsive-link">12.0 Channels</strong></a>
+            <a href="ict_tangible_main.html"  class="responsive-link"> 13.0 ICT Tangible Assets</strong></a>
+            <a href="ict_intangible_main.html"  class="responsive-link">14.0 ICT Intangible Assets</strong></a>
+            <a href="hr_main.html"  class="responsive-link"> 15.0 Human Resources Management</strong></a>
+            <a href="power_main.html"  class="responsive-link"> 16.0 Power</strong></a>
+            <a href="utilities_main.html"class="responsive-link">17.0 Utilities</strong></a>
+        </div>
+        <div class="main-content">
+            <h2>Port of ExSTO Vision and Asset Management Policy</h2>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Vision Statement and Introduction by the CEO of the Port of Exsto</strong></p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Vision Statement</strong></p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>At the Port of Exsto, our vision is to be the epitome of excellence in global port operations, pioneering sustainable and innovative asset management practices that set the benchmark for the industry. We are committed to enhancing the efficiency, safety, and environmental stewardship of our operations, ensuring that we deliver unparalleled value to our stakeholders, foster growth and development within our community, and contribute positively to the global economy.</p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Introduction by the CEO</strong></p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Welcome to the Port of Exsto, where innovation meets excellence. As the CEO of this remarkable port facility, I am proud to introduce you to the AM8760 board game &ndash; a unique and immersive experience designed to simulate the complexities and challenges of managing a world-class port.</p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Our port is a bustling hub of activity, handling vast quantities of bulk materials, coordinating intricate logistics, and ensuring the seamless flow of goods across the globe. The AM8760 training captures the essence of these operations, providing a detailed and engaging platform for participants to delve into the world of asset management.</p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>At the Port of Exsto, we have always believed in the power of continuous learning and improvement. The AM8760 training aligns with our commitment to excellence by integrating the principles and standards of ISO 55001 and the GFMAM Asset Management Landscape. This training is not just a tool for learning; it is a reflection of our dedication to adopting best practices and fostering a culture of innovation and sustainability.</p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>The Port of Exsto: A Hub of Excellence</strong></p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Our port is equipped with a diverse array of assets, each playing a crucial role in our operations. From bulk material handling systems to state-of-the-art security systems, our infrastructure is designed to support efficient and reliable port activities. The AM8760 simulation brings these assets to life, allowing participants to explore their functions, maintenance requirements, and strategic importance.</p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Through this training, you will encounter scenarios that mirror real-world challenges faced by our port. You will make strategic decisions, manage risks, and optimize the performance of our assets. Each decision you make will impact the overall efficiency and sustainability of the port, providing valuable insights into the complexities of asset management.</p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Our Commitment to Sustainability and Innovation</strong></p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>At the Port of Exsto, sustainability is at the core of our operations. We are committed to reducing our environmental footprint, enhancing energy efficiency, and promoting sustainable practices across all facets of our operations. The AM8760 training emphasizes these values, incorporating scenarios that highlight the importance of environmental stewardship and compliance with regulatory standards.</p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Innovation is another pillar of our success. We continuously seek to leverage advanced technologies and innovative solutions to enhance our operations. The game reflects this commitment by incorporating cutting-edge asset management strategies, risk assessment methodologies, and lifecycle cost analysis.</p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>A Learning Experience Like No Other</strong></p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>The AM8760 simulation is designed to be a comprehensive learning experience. It provides a platform for participants to develop a deep understanding of asset management principles, improve their decision-making skills, and gain practical insights into the operations of a world-class port. Whether you are a seasoned professional or a newcomer to the field, this game offers valuable lessons and opportunities for growth.</p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>As you embark on this journey, I encourage you to immerse yourself fully in the experience. Explore the intricacies of our asset classes, navigate the challenges presented by the event scenarios, and strive to optimize the performance and sustainability of the Port of Exsto.</p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Conclusion</strong></p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>In conclusion, the AM8760 training is more than just a commitmnet to training; it is a testament to our commitment to excellence, innovation, and sustainability. It reflects the values and principles that guide our operations at the Port of Exsto and offers a unique opportunity for participants to gain a comprehensive understanding of asset management.</p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>I invite you to join us in this exciting adventure, to learn, to grow, and to contribute to the continued success of the Port of Exsto. Together, we can achieve excellence in asset management and set new standards for the industry.</p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Sincerely,</p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Johan Snyman<br>&nbsp;Chief Executive Officer<br>&nbsp;Port of Exsto</p>
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>&nbsp;</p>
+            <h3>Asset Management Policy</h3>
+<p><strong>Port of Exsto</strong></p>
+<p><strong>Document Version</strong>: 1.0<br><strong>Approval Date</strong>:12 January 2019<br><strong>Next Review Date</strong>:24 October 2024</p>
+<h4>1. Purpose</h4>
+<p>This Asset Management Policy establishes the framework for managing the physical assets of the Port of Exsto. It aims to support the organization&apos;s strategic goals by ensuring that assets deliver their required function efficiently, sustainably, and cost-effectively.</p>
+<h4>2. Scope</h4>
+<p>This policy applies to all physical assets and asset management activities at the Port of Exsto. It encompasses all phases of asset lifecycle from acquisition, use, and maintenance to disposal.</p>
+<h4>3. Principles</h4>
+<ul>
+    <li><strong>Alignment with Organizational Objectives</strong>: Asset management activities will support the achievement of strategic goals set by the Port of Exsto, enhancing organizational performance and stakeholder satisfaction.</li>
+    <li><strong>Sustainability and Environmental Responsibility</strong>: Asset management will adhere to sustainability principles by minimizing environmental impact and promoting resource conservation.</li>
+    <li><strong>Risk Management</strong>: Asset management decisions will be based on risk assessments to ensure reliability and safety while optimizing performance and cost.</li>
+    <li><strong>Continuous Improvement</strong>: The asset management system will be subject to continuous review and improvement, leveraging innovations and best practices.</li>
+    <li><strong>Compliance and Standardization</strong>: All asset management activities will comply with legal, regulatory, and standard requirements including ISO 55001 and GFMAM guidelines.</li>
+</ul>
+<h4>4. Objectives</h4>
+<ul>
+    <li>To ensure assets are capable of meeting the service delivery requirements at optimal costs.</li>
+    <li>To improve asset investment decisions based on a balance of risk, cost, and performance.</li>
+    <li>To enhance the life cycle management of assets to achieve better sustainability and efficiency.</li>
+    <li>To develop and maintain an asset management culture through training and engagement of all employees.</li>
+</ul>
+<h4>5. Responsibilities</h4>
+<ul>
+    <li><strong>Board of Directors</strong>: Approve asset management strategies and policies; ensure alignment with overall organizational objectives.</li>
+    <li><strong>Asset Management Team</strong>: Implement the asset management policy; plan and execute maintenance and investment activities.</li>
+    <li><strong>All Employees</strong>: Understand and incorporate asset management responsibilities in their roles.</li>
+</ul>
+<h4>6. Implementation</h4>
+<p>The implementation of this policy will be guided by the strategic asset management plan (SAMP), which details the tactical actions necessary to achieve the policy objectives.</p>
+<h4>7. Monitoring and Review</h4>
+<p>The effectiveness of the asset management policy will be regularly reviewed and audited to ensure it continues to support the Port&rsquo;s strategic goals. Adjustments will be made based on feedback and evolving best practices.</p>
+<h4>8. Communication</h4>
+<p>This policy will be communicated across all levels of the organization. Training and support will be provided to ensure understanding and compliance.</p>
+        
+        </div>
+        <div class="sidebar-right">
+            <h2 class="responsive-text">Asset Class Information</h2>
+             <a href="#" onclick="showPopup('bulkMaterialHandlingPopup')" class="responsive-link" >1.0 Bulk Material Handling</a>
+            <a href="#" onclick="showPopup('storageShedsPopup')" class="responsive-link">2.0 Storage Sheds</a>
+            <a href="#" onclick="showPopup('railInfrastructurePopup')" class="responsive-link">3.0 Rail Infrastructure</a>
+            <a href="#" onclick="showPopup('shipLoaderUnloaderPopup')" class="responsive-link">4.0 Ship Loader/Unloader</a>
+            <a href="#" onclick="showPopup('dustSuppressionPopup')" class="responsive-link">5.0 Dust Suppression Systems</a>
+            <a href="#" onclick="showPopup('weighbridgesPopup')" class="responsive-link">6.0 Weighbridges</a>
+            <a href="#" onclick="showPopup('securitySystemsPopup')" class="responsive-link">7.0 Security Systems</a>
+            <a href="#" onclick="showPopup('securitySystemsPopup')" class="responsive-link">8.0 Spare</a>
+            <a href="#" onclick="showPopup('wharvesPopup')" class="responsive-link">9.0 Wharves, Berths and Jetties</a>
+            <a href="#" onclick="showPopup('breakwatersPopup')" class="responsive-link">10.0 Breakwaters</a>
+            <a href="#" onclick="showPopup('navigationalAidsPopup')" class="responsive-link">11.0 Navigational Aids</a>
+            <a href="#" onclick="showPopup('channelsPopup')" class="responsive-link">12.0 Channels</a>
+            <a href="#" onclick="showPopup('ictTangiblePopup')" class="responsive-link">13.0 ICT Tangible Assets</a>
+            <a href="#" onclick="showPopup('ictIntangiblePopup')" class="responsive-link">14.0 ICT Intangible Assets</a>
+            <a href="#" onclick="showPopup('hrPopup')" class="responsive-link">15.0 Human Resources Management</a>
+            <a href="#" onclick="showPopup('powerPopup')" class="responsive-link">16.0 Power</a>
+            <a href="#" onclick="showPopup('utilitiesPopup')" class="responsive-link">17.0 Utilities</a>
+        </div>
+        </div>
+
+        <!-- Popup windows -->
+        <div id="bulkMaterialHandlingPopup" class="popup">
+            <div class="close"><a href="#" onclick="closePopup('bulkMaterialHandlingPopup')">&times;</a></div>
+            <h2>Bulk Material Handling</h2>
+            <p>Bulk Material Handling involves the transport, storage, and control of materials in bulk. This includes equipment like conveyor belts, crushers, transfer stations, and more.</p>
+        </div>
+        <div id="storageShedsPopup" class="popup">
+            <div class="close"><a href="#" onclick="closePopup('storageShedsPopup')">&times;</a></div>
+            <h2>Storage Sheds</h2>
+            <p>Storage Sheds are used for the temporary storage of materials. They protect materials from the elements and provide a controlled environment for storage.</p>
+        </div>
+        <div id="railInfrastructurePopup" class="popup">
+            <div class="close"><a href="#" onclick="closePopup('railInfrastructurePopup')">&times;</a></div>
+            <h2>Rail Infrastructure</h2>
+            <p>Rail Infrastructure includes tracks, bridges, and other structures necessary for the operation of rail transport systems. Maintenance and upgrades are crucial for safety and efficiency.</p>
+        </div>
+        <div id="shipLoaderUnloaderPopup" class="popup">
+            <div class="close"><a href="#" onclick="closePopup('shipLoaderUnloaderPopup')">&times;</a></div>
+            <h2>Ship Loader/Unloader</h2>
+            <p>Ship Loaders/Unloaders are crucial for the efficient handling of cargo on and off ships. Regular maintenance ensures safe and timely operations.</p>
+        </div>
+        <div id="dustSuppressionPopup" class="popup">
+            <div class="close"><a href="#" onclick="closePopup('dustSuppressionPopup')">&times;</a></div>
+            <h2>Dust Suppression</h2>
+            <p>Dust Suppression systems control dust emissions during material handling processes. They are essential for environmental compliance and worker safety.</p>
+        </div>
+        <div id="weighbridgesPopup" class="popup">
+            <div class="close"><a href="#" onclick="closePopup('weighbridgesPopup')">&times;</a></div>
+            <h2>Weighbridges</h2>
+            <p>Weighbridges are used to measure the weight of vehicles and their cargo. Accurate measurements are essential for logistics and inventory management.</p>
+        </div>
+        <div id="securitySystemsPopup" class="popup">
+            <div class="close"><a href="#" onclick="closePopup('securitySystemsPopup')">&times;</a></div>
+            <h2>Security Systems</h2>
+            <p>Security Systems include surveillance cameras, alarms, and other measures to protect assets from theft, vandalism, and other threats.</p>
+        </div>
+        <div id="sparePopup" class="popup">
+            <div class="close"><a href="#" onclick="closePopup('sparePopup')">&times;</a></div>
+            <h2>SPARE</h2>
+            <p>Reserved for future asset class descriptions and details.</p>
+        </div>
+        <div id="wharvesPopup" class="popup">
+            <div class="close"><a href="#" onclick="closePopup('wharvesPopup')">&times;</a></div>
+            <h2>Wharves, Berths and Jetties</h2>
+            <p>Wharves, Berths, and Jetties are structures on the shore of a harbor where ships may dock to load and unload cargo. They are critical to port operations and require regular maintenance.</p>
+        </div>
+        <div id="breakwatersPopup" class="popup">
+            <div class="close"><a href="#" onclick="closePopup('breakwatersPopup')">&times;</a></div>
+            <h2>Breakwaters</h2>
+            <p>Breakwaters are structures designed to protect a shore or harbor from the force of waves. They play a vital role in maintaining calm waters for safe docking and loading operations.</p>
+        </div>
+        <div id="navigationalAidsPopup" class="popup">
+        <div class="close"><a href="#" onclick="closePopup('navigationalAidsPopup')">&times;</a></div>
+            <h2>Navigational Aids</h2>
+            <p>Navigational Aids include buoys, lights, and other markers that guide ships safely through channels and into port. Regular maintenance ensures their visibility and effectiveness.</p>
+        </div>
+        <div id="channelsPopup" class="popup">
+            <div class="close"><a href="#" onclick="closePopup('channelsPopup')">&times;</a></div>
+            <h2>Channels</h2>
+            <p>Channels are navigable paths through which ships travel. Regular dredging and maintenance ensure that channels remain deep enough for safe passage of vessels.</p>
+        </div>
+        <div id="ictTangiblePopup" class="popup">
+            <div class="close"><a href="#" onclick="closePopup('ictTangiblePopup')">&times;</a></div>
+            <h2>ICT Tangible Assets</h2>
+            <p>ICT Tangible assets include hardware such as servers, computers, and networking equipment. Regular updates and maintenance are required to keep these systems operational.</p>
+        </div>
+        <div id="ictIntangiblePopup" class="popup">
+            <div class="close"><a href="#" onclick="closePopup('ictIntangiblePopup')">&times;</a></div>
+            <h2>ICT Intangible Assets</h2>
+            <p>ICT Intangible assets include software and data. Ensuring software is up-to-date and data is securely backed up is essential for operational continuity.</p>
+        </div>
+        <div id="hrPopup" class="popup">
+            <div class="close"><a href="#" onclick="closePopup('hrPopup')">&times;</a></div>
+            <h2>Human Resources Management</h2>
+            <p>Human Resources Management (HR) is critical for ensuring the workforce is well-trained, motivated, and operating efficiently. It includes employee training, recruitment, and performance management.</p>
+        </div>
+        <div id="powerPopup" class="popup">
+            <div class="close"><a href="#" onclick="closePopup('powerPopup')">&times;</a></div>
+            <h2>Power</h2>
+            <p>The power system includes all elements that provide energy to the port facility, including generators, transformers, and distribution networks. Maintenance ensures a reliable power supply.</p>
+        </div>
+        <div id="utilitiesPopup" class="popup">
+            <div class="close"><a href="#" onclick="closePopup('utilitiesPopup')">&times;</a></div>
+            <h2>Utilities</h2>
+            <p>Utilities include water supply, sewage, and waste management systems. Proper maintenance ensures the availability of essential services and compliance with environmental regulations.</p>
+        </div>
+    </div>  
+        
+    
+
+
+    <footer class="footer">
+        <div class="footer-content">
+
+        </div>
+        <hr class="footer-line">
+        <p class="footer-text">&copy; ExSTO Global, Johan Snyman - The Author retains all moral rights. All rights reserved.</p>
+    </footer>
+    <script>
+        function showPopup(popupId) {
+            document.getElementById(popupId).style.display = 'block';
+        }
+        function closePopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
+        }
+    </script>
+</body>
+</html>
+

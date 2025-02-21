@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AM8760 - Asset Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color:#e7e7e7;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            height: 11%;
+            width: 100%;
+            text-align: center;
+            background-color: #ffffff;
+            padding: 0 0;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .logo {
+            height: 100%;
+            width: 10%;
+            position: absolute;
+            top: 0;
+        }
+        .left-logo {
+            left: 0;
+        }
+        .right-logo {
+            right: 0;
+        }
+        nav {
+            background-color: #f2f2f2;
+            overflow: hidden;
+            width: 100%;
+            display: flex;
+            text-align: center;
+            justify-content: normal;
+            box-sizing: border-box;
+        }
+        nav a {
+            display: block;
+            color: 	#e1e1e1;
+            text-align: left;
+            padding: 14px 16px;
+            text-decoration: none;
+            flex: 1;
+        }
+        nav a:hover {
+            background-color: 	#aeafb6;
+            color: black;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            flex-wrap: nowrap;
+            height: 60vh;
+            box-sizing: border-box;
+        }
+        .sidebar-left, .sidebar-right {
+            width: 15%;
+            background-color: 	#e1e1e1;
+            padding: 1px;
+            box-sizing: border-box;
+            color: #e1e1e1;
+            font-size: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .sidebar-left a, .sidebar-right a {
+            padding: 5px;
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            text-align: left;
+
+        }
+        .sidebar-left a:hover, .sidebar-right a:hover {
+            background-color: 	#aeafb6;
+        }
+        .main-content {
+            width: 70%;
+            padding: 30px;
+            box-sizing: border-box;
+            background-color: #e7e7e7;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 20%;
+            top: 10px;
+            width: 60%;
+            max-height: 100vh;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .popup h2 {
+            margin-top: 0;
+        }
+        .popup .close {
+            display: block;
+            text-align: right;
+            margin-top: -10px;
+            margin-right: -10px;
+        }
+        .popup .close a {
+            color: 	#aeafb6;
+            text-decoration: none;
+            font-size: 24px;
+        }
+        .footer {
+            background-color: #ffffff; /* Background color */
+            padding: 1px;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between; /* Default: Aligns images left, center, right */
+            align-items: center;
+            padding-bottom: 1px;
+            gap: 2px; /* Space between images */
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 250px) { footer-content {flex-direction: column; /* Stack images on smaller screens */justify-content: center;align-items: center; gap: 1px;}}
+
+        .footer-img {
+            width: 50px; /* Adjust image size */
+            height: auto;
+        }
+
+        .footer-line {
+            border: none;
+            border-top: 2px solid black; /* Bottom line */
+            margin: 1px auto;
+            width: 80%;
+        }
+
+        .footer-text {
+            font-size: 0.5rem;
+            color: black;
+            text-align: center;
+        }
+
+        .responsive-text {font-size: clamp(0.5rem, 1.0vw, 1.5rem); /* Auto-scales based on screen size */color: black;}
+
+        .responsive-link {background-color: rgb(186, 184, 189);color: black;font-size: clamp(0.5rem, 1.0vw, 1.0rem); /* Auto-scales based on screen size */}
+    
+        .main-content table {
+                width: 100%; /* Ensures the table takes full width of the container */
+                /*table-layout: fixed; /* Optional: helps in managing column width more predictably */
+            }
+
+            .main-content th, .main-content td {
+                text-align: left;
+                padding: 1px; /* Adjust padding as needed */
+                font-size: calc(0.5vw + 0.2vh + 0.2vmin); /* Responsively adjust font size based on the viewport size */
+            }
+
+            /* Ensure text does not overflow on small screens */
+            .main-content th, .main-content td {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+    </style>
+    </head>
+<body>
+    <header>
+        <img src="EXSTO COMBINED.png" class="logo left-logo" alt="Left Logo">
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Port of ExSTO - AM8760 - Asset Management Training Simulation</h2>
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Welcome to The Port of ExSTO</h2>
+        <img src="logo with xSTO.png" class="logo right-logo" alt="Right Logo">
+    </header>
+    <nav>
+        <a href="MAINPAGE.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Home</a>
+        <a href="AM8760_Board_Game.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">AM8760 Board Game</a>
+        <a href="vision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Vision & Asset Management Plan</a>
+        <a href="key_performance_indicators.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Key Performance Indicators</a>
+        <a href="financial_report.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Financial Report</a>
+        <a href="stateoftheasset.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">State of the Asset Table</a>
+        <a href="risk.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">5x5 Risk Table</a>
+        <a href="capital_investment_decision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Capital Investment Decision Making</a>
+        <a href="indexblocks.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Help Matrix</a>
+        <a href="training.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Training</a>
+        <a href="knowledge_test.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">GFMAM Knowledge Test</a>
+        <a href="knowledge_test_ISO.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">IOS55000 Knowledge Test</a>
+    </nav>
+    <div class="container">
+        <div class="sidebar-left">
+            <h2 class="responsive-text">Asset Class Management Plans</h2>
+            <a href="bulk_material_handling_main.html" class="responsive-link">1.0 Bulk Material Handling</a>
+            <a href="storage_sheds_main.html"  class="responsive-link">2.0 Storage Sheds</strong></a>
+            <a href="rail_infrastructure_main.html"  class="responsive-link"> 3.0 Rail Infrastructure</strong></a>
+            <a href="ship_loader_unloader_main.html"  class="responsive-link">4.0 Ship Loader/Unloader</strong></a>
+            <a href="dust_suppression_main.html"  class="responsive-link">5.0 Dust Suppression Systems</strong></a>
+            <a href="weighbridges_main.html"  class="responsive-link">6.0 Weighbridges</strong></a>
+            <a href="security_systems_main.html"  class="responsive-link">7.0 Security Systems</strong></a>
+            <a href="spare.html"  class="responsive-link"> 8.0 SAMP</strong></a>
+            <a href="wharves_main.html"  class="responsive-link">9.0 Wharves, Berths and Jetties</strong></a>
+            <a href="breakwaters_main.html"  class="responsive-link">10.0 Breakwaters</strong></a>
+            <a href="navigational_aids_main.html"  class="responsive-link">11.0 Navigational Aids</strong></a>
+            <a href="channels_main.html"  class="responsive-link">12.0 Channels</strong></a>
+            <a href="ict_tangible_main.html"  class="responsive-link"> 13.0 ICT Tangible Assets</strong></a>
+            <a href="ict_intangible_main.html"  class="responsive-link">14.0 ICT Intangible Assets</strong></a>
+            <a href="hr_main.html"  class="responsive-link"> 15.0 Human Resources Management</strong></a>
+            <a href="power_main.html"  class="responsive-link"> 16.0 Power</strong></a>
+            <a href="utilities_main.html"class="responsive-link">17.0 Utilities</strong></a>
+        </div>
+        <div class="main-content">
+            <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>AM8760 Comprehensive Training Manual</strong></p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Introduction</strong></p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Welcome to the AM8760 training manual. This guide will provide comprehensive instructions and insights into the AM8760 board game, focusing on asset management principles aligned with ISO 55000, ISO 55001, and GFMAM Asset Management Landscape. The game simulates the real-world challenges of managing assets in a port environment, specifically the fictitious Port of Exsto. Through this game, players will gain practical knowledge of asset value management, compliance, investment decision-making, human resource management, downtime management, continuous improvement, and general asset management functions across all GFMAM elements.</p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Vision Statement</strong></p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Our vision is to empower individuals and organizations with the knowledge and skills necessary to excel in asset management. By engaging with the AM8760 board game, participants will develop a deep understanding of asset management strategies, risk management, and financial management, ensuring the long-term sustainability and reliability of their assets.</p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Asset Classes</strong></p>
+<ol style="margin-bottom:0cm;margin-top:0cm;" start="1" type="1">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Bulk Material Handling</strong></li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Storage Sheds</strong></li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Rail Infrastructure</strong></li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Ship Loader/Unloader</strong></li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Dust Suppression Systems</strong></li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Weighbridges</strong></li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Security Systems</strong></li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Wharves, Berths, and Jetties</strong></li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Breakwaters</strong></li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Navigational Aids</strong></li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Channels</strong></li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>ICT Tangible Assets</strong></li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>ICT Intangible Assets</strong></li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Human Resources Management</strong></li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Power</strong></li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Utilities</strong></li>
+</ol>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Learning Objectives</strong></p>
+<ul style="margin-bottom:0cm;margin-top:0cm;" type="disc">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Understand and apply asset management principles based on ISO 55000 and GFMAM standards.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Develop strategies for effective asset value management and lifecycle costing.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Implement risk management practices to mitigate potential asset failures.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Make informed investment decisions to enhance asset performance and efficiency.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Manage human resources effectively to support asset management objectives.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Ensure compliance with regulatory and organizational standards.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Foster a culture of continuous improvement in asset management practices.</li>
+</ul>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Asset Management Elements</strong></p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Asset Value Management</strong></p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Maintaining the value of assets through regular maintenance and upgrades is crucial for ensuring their long-term performance and reliability. Asset value management involves:</p>
+<ol style="margin-bottom:0cm;margin-top:0cm;" start="1" type="1">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Preventive Maintenance vs. Corrective Maintenance</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Preventive Maintenance:</strong> Scheduled activities to prevent asset failure, extending asset lifespan and reducing unexpected downtime.</li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Corrective Maintenance:</strong> Repairing or replacing assets after a failure, which can be more costly and disruptive.</li>
+        </ul>
+    </li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Long-Term Asset Planning and Lifecycle Management</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Planning for the entire lifecycle of an asset, from acquisition to disposal, ensures optimal use and value retention.</li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Implementing asset management plans that align with organizational goals and budgets.</li>
+        </ul>
+    </li>
+</ol>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Downtime Management</strong></p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Managing asset downtime effectively is essential for minimizing disruptions to operations and maintaining profitability.</p>
+<ol style="margin-bottom:0cm;margin-top:0cm;" start="1" type="1">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Minimizing Downtime</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Implementing proactive maintenance strategies to identify and address potential issues before they result in downtime.</li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Quick repairs and efficient response to asset failures to restore operations promptly.</li>
+        </ul>
+    </li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Real-Time Monitoring Systems</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Utilizing condition monitoring and predictive maintenance technologies to track asset performance in real-time.</li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Early detection of issues through sensors and data analytics to prevent prolonged downtime.</li>
+        </ul>
+    </li>
+</ol>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Compliance</strong></p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Ensuring compliance with regulatory and organizational standards is critical for maintaining the safety, reliability, and legality of operations.</p>
+<ol style="margin-bottom:0cm;margin-top:0cm;" start="1" type="1">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Understanding Regulatory Compliance</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Keeping up-to-date with relevant laws, regulations, and industry standards.</li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Integrating compliance requirements into asset management plans and practices.</li>
+        </ul>
+    </li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Regular Compliance Checks and Audits</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Conducting routine inspections and audits to verify compliance with safety, environmental, and operational standards.</li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Implementing corrective actions for any identified non-compliance issues.</li>
+        </ul>
+    </li>
+</ol>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Investments</strong></p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Making strategic investments in assets can enhance their performance and efficiency, contributing to overall organizational success.</p>
+<ol style="margin-bottom:0cm;margin-top:0cm;" start="1" type="1">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Evaluating ROI and Investment Decisions</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Assessing the potential return on investment (ROI) for asset upgrades and new acquisitions.</li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Balancing short-term costs with long-term benefits to make informed investment decisions.</li>
+        </ul>
+    </li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Data-Driven Investment Strategies</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Utilizing data and analytics to identify investment opportunities that align with organizational goals.</li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Developing investment plans that prioritize high-impact projects with the best ROI potential.</li>
+        </ul>
+    </li>
+</ol>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Human Resource Management</strong></p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Effective HR management is essential for supporting asset management activities and ensuring a skilled, motivated workforce.</p>
+<ol style="margin-bottom:0cm;margin-top:0cm;" start="1" type="1">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Employee Training and Development</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Providing ongoing training programs to enhance employee skills and knowledge.</li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Encouraging continuous professional development and certification.</li>
+        </ul>
+    </li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Effective Negotiation and Conflict Resolution</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Managing employee relations and resolving conflicts to maintain a positive work environment.</li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Negotiating fair employment terms and addressing workforce concerns promptly.</li>
+        </ul>
+    </li>
+</ol>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Continuous Improvement</strong></p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Continuous improvement involves regularly reviewing and enhancing asset management practices to achieve better performance and efficiency.</p>
+<ol style="margin-bottom:0cm;margin-top:0cm;" start="1" type="1">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Performance Monitoring and Feedback</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Tracking and analyzing asset performance data to identify areas for improvement.</li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Gathering feedback from stakeholders to inform improvement initiatives.</li>
+        </ul>
+    </li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Process Optimization and Innovation</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Implementing changes to optimize asset management processes and workflows.</li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Encouraging innovation and the adoption of new technologies to enhance asset performance.</li>
+        </ul>
+    </li>
+</ol>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Risk Management</strong></p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Risk management involves identifying, assessing, and mitigating risks associated with asset ownership and operation.</p>
+<ol style="margin-bottom:0cm;margin-top:0cm;" start="1" type="1">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Identifying and Assessing Risks</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Listing potential risks related to asset performance, maintenance, and compliance.</li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Evaluating the impact of each risk on operations and asset value.</li>
+        </ul>
+    </li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Developing and Implementing Mitigation Plans</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Creating strategies to reduce the likelihood and impact of high-priority risks.</li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Putting in place controls to monitor and manage risks effectively.</li>
+        </ul>
+    </li>
+</ol>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Financial Management and Reliability</strong></p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Ensuring that adequate resources are allocated for asset management activities and maintaining the consistent performance of assets.</p>
+<ol style="margin-bottom:0cm;margin-top:0cm;" start="1" type="1">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Budgeting for Maintenance</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Developing and managing budgets for preventive and corrective maintenance activities.</li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Ensuring sufficient funds are allocated for high-priority maintenance tasks.</li>
+        </ul>
+    </li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Cost Control and Financial Reporting</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Monitoring and controlling costs to ensure financial efficiency.</li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Preparing regular financial reports to track performance and identify areas for improvement.</li>
+        </ul>
+    </li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Reliability Activities</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Scheduling regular preventive maintenance activities to prevent asset failures.</li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>Implementing condition monitoring systems to predict and address potential issues.</li>
+        </ul>
+    </li>
+</ol>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Whole of Life Cycle Asset Planning</strong></p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Whole of life cycle asset planning involves managing an asset from acquisition to disposal, considering all costs and benefits associated with the asset over its lifespan. This approach ensures that asset management decisions are made with a long-term perspective, balancing initial costs with ongoing maintenance and operational costs to maximize asset value.</strong></p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Key Components of Whole of Life Cycle Asset Planning:</strong></p>
+<ol style="margin-bottom:0cm;margin-top:0cm;" start="1" type="1">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Acquisition Costs</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Initial purchase price</strong></li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Installation and commissioning costs</strong></li>
+        </ul>
+    </li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Operating Costs</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Energy and utility costs</strong></li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Routine maintenance and inspections</strong></li>
+        </ul>
+    </li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Maintenance Costs</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Preventive maintenance to extend asset lifespan</strong></li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Corrective maintenance to address failures</strong></li>
+        </ul>
+    </li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Upgrade and Renewal Costs</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Costs associated with upgrading or renewing parts of the asset to maintain performance and compliance</strong></li>
+        </ul>
+    </li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Disposal Costs</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Costs related to decommissioning and disposing of the asset at the end of its useful life</strong></li>
+        </ul>
+    </li>
+</ol>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Decision-Making in Whole of Life Cycle Asset Planning:</strong></p>
+<ol style="margin-bottom:0cm;margin-top:0cm;" start="1" type="1">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Life Cycle Cost Analysis (LCCA)</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Evaluating the total cost of ownership over the asset&apos;s life</strong></li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Comparing different asset options to identify the most cost-effective choice</strong></li>
+        </ul>
+    </li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Risk Assessment</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Identifying potential risks associated with the asset</strong></li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Developing mitigation strategies to manage risks effectively</strong></li>
+        </ul>
+    </li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Performance Monitoring</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Continuously monitoring asset performance to identify issues early</strong></li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Using data analytics to inform maintenance and investment decisions</strong></li>
+        </ul>
+    </li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Strategic Investment Planning</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Prioritizing investments based on their impact on asset performance and organizational goals</strong></li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Ensuring investments align with long-term asset management strategies</strong></li>
+        </ul>
+    </li>
+</ol>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Benchmark Models from IPWEA (Institute of Public Works Engineering Australasia)</strong></p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>IPWEA provides several models and tools for asset management and whole of life cycle planning, including:</strong></p>
+<ol style="margin-bottom:0cm;margin-top:0cm;" start="1" type="1">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>NAMS.PLUS</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>A suite of tools and templates for developing asset management plans</strong></li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Provides guidance on life cycle costing, risk management, and performance monitoring</strong></li>
+        </ul>
+    </li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>International Infrastructure Management Manual (IIMM)</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>A comprehensive guide to best practices in infrastructure asset management</strong></li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Covers whole of life cycle asset planning, including acquisition, operation, maintenance, and disposal</strong></li>
+        </ul>
+    </li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Condition Assessment and Asset Performance</strong>
+        <ul style="margin-bottom:0cm;margin-top:0cm;" type="circle">
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Tools and methodologies for assessing asset condition and performance</strong></li>
+            <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Helps prioritize maintenance and renewal activities based on asset criticality and condition</strong></li>
+        </ul>
+    </li>
+</ol>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>&nbsp;</strong></p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Managing Assets through Scenarios</strong></p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Bulk Material Handling</strong></p>
+<ul style="margin-bottom:0cm;margin-top:0cm;" type="disc">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Criticality Levels:</strong> High due to continuous operations and high volumes.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Lifecycle Costing:</strong> Includes initial acquisition, maintenance, upgrades, and disposal costs.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Management Strategies:</strong> Implement robust preventive maintenance, real-time condition monitoring, and regular performance evaluations.</li>
+</ul>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Storage Sheds</strong></p>
+<ul style="margin-bottom:0cm;margin-top:0cm;" type="disc">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Criticality Levels:</strong> Moderate, with high importance for storage integrity.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Lifecycle Costing:</strong> Includes structural maintenance, pest control, and environmental management.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Management Strategies:</strong> Regular inspections, prompt repairs, and compliance with safety standards.</li>
+</ul>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Rail Infrastructure</strong></p>
+<ul style="margin-bottom:0cm;margin-top:0cm;" type="disc">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Criticality Levels:</strong> High for efficient transportation and logistics.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Lifecycle Costing:</strong> Includes track maintenance, signaling systems, and rolling stock management.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Management Strategies:</strong> Scheduled maintenance, risk assessments, and performance monitoring.</li>
+</ul>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Ship Loader/Unloader</strong></p>
+<ul style="margin-bottom:0cm;margin-top:0cm;" type="disc">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Criticality Levels:</strong> High for efficient cargo handling.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Lifecycle Costing:</strong> Includes mechanical and electrical maintenance, upgrades, and operator training.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Management Strategies:</strong> Regular preventive maintenance, condition monitoring, and safety audits.</li>
+</ul>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Dust Suppression Systems</strong></p>
+<ul style="margin-bottom:0cm;margin-top:0cm;" type="disc">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Criticality Levels:</strong> High for environmental compliance and safety.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Lifecycle Costing:</strong> Includes equipment maintenance, filter replacements, and system upgrades.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Management Strategies:</strong> Scheduled maintenance, real-time monitoring, and compliance checks.</li>
+</ul>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Weighbridges</strong></p>
+<ul style="margin-bottom:0cm;margin-top:0cm;" type="disc">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Criticality Levels:</strong> Moderate for accurate weight measurement and compliance.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Lifecycle Costing:</strong> Includes calibration, maintenance, and software updates.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Management Strategies:</strong> Regular calibrations, preventive maintenance, and compliance audits.</li>
+</ul>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Security Systems</strong></p>
+<ul style="margin-bottom:0cm;margin-top:0cm;" type="disc">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Criticality Levels:</strong> High for safety and security of assets.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Lifecycle Costing:</strong> Includes equipment maintenance, software updates, and system upgrades.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Management Strategies:</strong> Regular system checks, risk assessments, and compliance with security standards.</li>
+</ul>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Wharves, Berths, and Jetties</strong></p>
+<ul style="margin-bottom:0cm;margin-top:0cm;" type="disc">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Criticality Levels:</strong> High for efficient port operations.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Lifecycle Costing:</strong> Includes structural maintenance, dredging, and safety inspections.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Management Strategies:</strong> Regular structural assessments, preventive maintenance, and compliance with marine standards.</li>
+</ul>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Breakwaters</strong></p>
+<ul style="margin-bottom:0cm;margin-top:0cm;" type="disc">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Criticality Levels:</strong> High for protecting port infrastructure.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Lifecycle Costing:</strong> Includes construction, maintenance, and environmental impact assessments.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Management Strategies:</strong> Regular inspections, risk assessments, and structural maintenance.</li>
+</ul>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Navigational Aids</strong></p>
+<ul style="margin-bottom:0cm;margin-top:0cm;" type="disc">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Criticality Levels:</strong> High for safe navigation.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Lifecycle Costing:</strong> Includes equipment maintenance, software updates, and compliance checks.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Management Strategies:</strong> Regular maintenance, real-time monitoring, and compliance with maritime standards.</li>
+</ul>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Channels</strong></p>
+<ul style="margin-bottom:0cm;margin-top:0cm;" type="disc">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Criticality Levels:</strong> High for navigability and safety.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Lifecycle Costing:</strong> Includes dredging, maintenance, and environmental assessments.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Management Strategies:</strong> Regular dredging schedules, environmental monitoring, and compliance with navigation standards.</li>
+</ul>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>ICT Tangible Assets</strong></p>
+<ul style="margin-bottom:0cm;margin-top:0cm;" type="disc">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Criticality Levels:</strong> High for operational efficiency and data integrity.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Lifecycle Costing:</strong> Includes hardware maintenance, upgrades, and replacements.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Management Strategies:</strong> Regular hardware checks, preventive maintenance, and system upgrades.</li>
+</ul>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>ICT Intangible Assets</strong></p>
+<ul style="margin-bottom:0cm;margin-top:0cm;" type="disc">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Criticality Levels:</strong> High for data security and operational efficiency.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Lifecycle Costing:</strong> Includes software updates, cybersecurity measures, and data management.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Management Strategies:</strong> Regular software updates, cybersecurity assessments, and data integrity checks.</li>
+</ul>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Human Resources Management</strong></p>
+<ul style="margin-bottom:0cm;margin-top:0cm;" type="disc">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Criticality Levels:</strong> High for workforce efficiency and morale.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Lifecycle Costing:</strong> Includes training, development, and compensation.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Management Strategies:</strong> Regular training programs, performance evaluations, and conflict resolution.</li>
+</ul>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Power</strong></p>
+<ul style="margin-bottom:0cm;margin-top:0cm;" type="disc">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Criticality Levels:</strong> High for operational continuity.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Lifecycle Costing:</strong> Includes maintenance of power supply systems, generators, and transformers.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Management Strategies:</strong> Preventive maintenance, real-time monitoring, and compliance with electrical standards.</li>
+</ul>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Utilities</strong></p>
+<ul style="margin-bottom:0cm;margin-top:0cm;" type="disc">
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Criticality Levels:</strong> High for operational efficiency.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Lifecycle Costing:</strong> Includes water supply, sewage systems, and waste management.</li>
+    <li style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Management Strategies:</strong> Regular maintenance, compliance with environmental standards, and risk assessments.</li>
+</ul>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'><strong>Conclusion</strong></p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>The AM8760 board game provides a comprehensive and interactive way to learn about asset management principles and practices. By engaging with real-world scenarios and making strategic decisions, players will develop the skills necessary to manage assets effectively, ensuring their long-term value and performance. The integration of ISO 55000 and GFMAM standards ensures that the knowledge gained is aligned with global best practices in asset management. This manual serves as a guide to help you navigate the game, understand the core principles, and apply them in a simulated environment for better learning and application in real-world scenarios</p>
+<p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Aptos",sans-serif;'>&nbsp;</p>
+                </div>
+                <div class="sidebar-right">
+                    <h2 class="responsive-text">Asset Class Information</h2>
+                     <a href="#" onclick="showPopup('bulkMaterialHandlingPopup')" class="responsive-link" >1.0 Bulk Material Handling</a>
+                    <a href="#" onclick="showPopup('storageShedsPopup')" class="responsive-link">2.0 Storage Sheds</a>
+                    <a href="#" onclick="showPopup('railInfrastructurePopup')" class="responsive-link">3.0 Rail Infrastructure</a>
+                    <a href="#" onclick="showPopup('shipLoaderUnloaderPopup')" class="responsive-link">4.0 Ship Loader/Unloader</a>
+                    <a href="#" onclick="showPopup('dustSuppressionPopup')" class="responsive-link">5.0 Dust Suppression Systems</a>
+                    <a href="#" onclick="showPopup('weighbridgesPopup')" class="responsive-link">6.0 Weighbridges</a>
+                    <a href="#" onclick="showPopup('securitySystemsPopup')" class="responsive-link">7.0 Security Systems</a>
+                    <a href="#" onclick="showPopup('securitySystemsPopup')" class="responsive-link">8.0 Spare</a>
+                    <a href="#" onclick="showPopup('wharvesPopup')" class="responsive-link">9.0 Wharves, Berths and Jetties</a>
+                    <a href="#" onclick="showPopup('breakwatersPopup')" class="responsive-link">10.0 Breakwaters</a>
+                    <a href="#" onclick="showPopup('navigationalAidsPopup')" class="responsive-link">11.0 Navigational Aids</a>
+                    <a href="#" onclick="showPopup('channelsPopup')" class="responsive-link">12.0 Channels</a>
+                    <a href="#" onclick="showPopup('ictTangiblePopup')" class="responsive-link">13.0 ICT Tangible Assets</a>
+                    <a href="#" onclick="showPopup('ictIntangiblePopup')" class="responsive-link">14.0 ICT Intangible Assets</a>
+                    <a href="#" onclick="showPopup('hrPopup')" class="responsive-link">15.0 Human Resources Management</a>
+                    <a href="#" onclick="showPopup('powerPopup')" class="responsive-link">16.0 Power</a>
+                    <a href="#" onclick="showPopup('utilitiesPopup')" class="responsive-link">17.0 Utilities</a>
+                </div>
+            </div>
+        
+            <!-- Popup windows -->
+            <div id="bulkMaterialHandlingPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('bulkMaterialHandlingPopup')">&times;</a></div>
+                <h2>Bulk Material Handling</h2>
+                <p>Bulk Material Handling involves the transport, storage, and control of materials in bulk. This includes equipment like conveyor belts, crushers, transfer stations, and more.</p>
+            </div>
+            <div id="storageShedsPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('storageShedsPopup')">&times;</a></div>
+                <h2>Storage Sheds</h2>
+                <p>Storage Sheds are used for the temporary storage of materials. They protect materials from the elements and provide a controlled environment for storage.</p>
+            </div>
+            <div id="railInfrastructurePopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('railInfrastructurePopup')">&times;</a></div>
+                <h2>Rail Infrastructure</h2>
+                <p>Rail Infrastructure includes tracks, bridges, and other structures necessary for the operation of rail transport systems. Maintenance and upgrades are crucial for safety and efficiency.</p>
+            </div>
+            <div id="shipLoaderUnloaderPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('shipLoaderUnloaderPopup')">&times;</a></div>
+                <h2>Ship Loader/Unloader</h2>
+                <p>Ship Loaders/Unloaders are crucial for the efficient handling of cargo on and off ships. Regular maintenance ensures safe and timely operations.</p>
+            </div>
+            <div id="dustSuppressionPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('dustSuppressionPopup')">&times;</a></div>
+                <h2>Dust Suppression</h2>
+                <p>Dust Suppression systems control dust emissions during material handling processes. They are essential for environmental compliance and worker safety.</p>
+            </div>
+            <div id="weighbridgesPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('weighbridgesPopup')">&times;</a></div>
+                <h2>Weighbridges</h2>
+                <p>Weighbridges are used to measure the weight of vehicles and their cargo. Accurate measurements are essential for logistics and inventory management.</p>
+            </div>
+            <div id="securitySystemsPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('securitySystemsPopup')">&times;</a></div>
+                <h2>Security Systems</h2>
+                <p>Security Systems include surveillance cameras, alarms, and other measures to protect assets from theft, vandalism, and other threats.</p>
+            </div>
+            <div id="sparePopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('sparePopup')">&times;</a></div>
+                <h2>SPARE</h2>
+                <p>Reserved for future asset class descriptions and details.</p>
+            </div>
+            <div id="wharvesPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('wharvesPopup')">&times;</a></div>
+                <h2>Wharves, Berths and Jetties</h2>
+                <p>Wharves, Berths, and Jetties are structures on the shore of a harbor where ships may dock to load and unload cargo. They are critical to port operations and require regular maintenance.</p>
+            </div>
+            <div id="breakwatersPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('breakwatersPopup')">&times;</a></div>
+                <h2>Breakwaters</h2>
+                <p>Breakwaters are structures designed to protect a shore or harbor from the force of waves. They play a vital role in maintaining calm waters for safe docking and loading operations.</p>
+            </div>
+            <div id="navigationalAidsPopup" class="popup">
+               <div class="close"><a href="#" onclick="closePopup('navigationalAidsPopup')">&times;</a></div>
+                <h2>Navigational Aids</h2>
+                <p>Navigational Aids include buoys, lights, and other markers that guide ships safely through channels and into port. Regular maintenance ensures their visibility and effectiveness.</p>
+            </div>
+            <div id="channelsPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('channelsPopup')">&times;</a></div>
+                <h2>Channels</h2>
+                <p>Channels are navigable paths through which ships travel. Regular dredging and maintenance ensure that channels remain deep enough for safe passage of vessels.</p>
+            </div>
+            <div id="ictTangiblePopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('ictTangiblePopup')">&times;</a></div>
+                <h2>ICT Tangible Assets</h2>
+                <p>ICT Tangible assets include hardware such as servers, computers, and networking equipment. Regular updates and maintenance are required to keep these systems operational.</p>
+            </div>
+            <div id="ictIntangiblePopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('ictIntangiblePopup')">&times;</a></div>
+                <h2>ICT Intangible Assets</h2>
+                <p>ICT Intangible assets include software and data. Ensuring software is up-to-date and data is securely backed up is essential for operational continuity.</p>
+            </div>
+            <div id="hrPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('hrPopup')">&times;</a></div>
+                <h2>Human Resources Management</h2>
+                <p>Human Resources Management (HR) is critical for ensuring the workforce is well-trained, motivated, and operating efficiently. It includes employee training, recruitment, and performance management.</p>
+            </div>
+            <div id="powerPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('powerPopup')">&times;</a></div>
+                <h2>Power</h2>
+                <p>The power system includes all elements that provide energy to the port facility, including generators, transformers, and distribution networks. Maintenance ensures a reliable power supply.</p>
+            </div>
+            <div id="utilitiesPopup" class="popup">
+                <div class="close"><a href="#" onclick="closePopup('utilitiesPopup')">&times;</a></div>
+                <h2>Utilities</h2>
+                <p>Utilities include water supply, sewage, and waste management systems. Proper maintenance ensures the availability of essential services and compliance with environmental regulations.</p>
+            </div>
+        
+            <footer class="footer">
+                <div class="footer-content">
+        
+                </div>
+                <hr class="footer-line">
+                <p class="footer-text">&copy; ExSTO Global, Johan Snyman - The Author retains all moral rights. All rights reserved.</p>
+            </footer>
+        
+            <script>
+                function showPopup(popupId) {
+                    document.getElementById(popupId).style.display = 'block';
+                }
+                function closePopup(popupId) {
+                    document.getElementById(popupId).style.display = 'none';
+                }
+            </script>
+        </div>
+</body>
+</html>

@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AM8760 - Asset Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color:#e7e7e7;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            height: 11%;
+            width: 100%;
+            text-align: center;
+            background-color: #ffffff;
+            padding: 0 0;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .logo {
+            height: 100%;
+            width: 10%;
+            position: absolute;
+            top: 0;
+        }
+        .left-logo {
+            left: 0;
+        }
+        .right-logo {
+            right: 0;
+        }
+        nav {
+            background-color: #f2f2f2;
+            overflow: hidden;
+            width: 100%;
+            display: flex;
+            text-align: center;
+            justify-content: normal;
+            box-sizing: border-box;
+        }
+        nav a {
+            display: block;
+            color: 	#e1e1e1;
+            text-align: left;
+            padding: 14px 16px;
+            text-decoration: none;
+            flex: 1;
+        }
+        nav a:hover {
+            background-color: 	#aeafb6;
+            color: black;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            flex-wrap: nowrap;
+            height: 60vh;
+            box-sizing: border-box;
+        }
+        .sidebar-left, .sidebar-right {
+            width: 15%;
+            background-color: 	#e1e1e1;
+            padding: 1px;
+            box-sizing: border-box;
+            color: #e1e1e1;
+            font-size: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .sidebar-left a, .sidebar-right a {
+            padding: 5px;
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            text-align: left;
+
+        }
+        .sidebar-left a:hover, .sidebar-right a:hover {
+            background-color: 	#aeafb6;
+        }
+        .main-content {
+            width: 70%;
+            padding: 30px;
+            box-sizing: border-box;
+            background-color: #e7e7e7;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 20%;
+            top: 10px;
+            width: 60%;
+            max-height: 100vh;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .popup h2 {
+            margin-top: 0;
+        }
+        .popup .close {
+            display: block;
+            text-align: right;
+            margin-top: -10px;
+            margin-right: -10px;
+        }
+        .popup .close a {
+            color: 	#aeafb6;
+            text-decoration: none;
+            font-size: 24px;
+        }
+        .footer {
+            background-color: #ffffff; /* Background color */
+            padding: 1px;
+            text-align: center;
+        }
+
+    .footer-content {
+        display: flex;
+        justify-content: space-between; /* Default: Aligns images left, center, right */
+        align-items: center;
+        padding-bottom: 1px;
+        gap: 2px; /* Space between images */
+    }
+
+    /* Responsive adjustments for smaller screens */
+    @media (max-width: 250px) { footer-content {flex-direction: column; /* Stack images on smaller screens */justify-content: center;align-items: center; gap: 1px;}}
+
+    .footer-img {
+        width: 50px; /* Adjust image size */
+        height: auto;
+    }
+
+    .footer-line {
+        border: none;
+        border-top: 2px solid black; /* Bottom line */
+        margin: 1px auto;
+        width: 80%;
+    }
+
+    .footer-text {
+        font-size: 0.5rem;
+        color: black;
+        text-align: center;
+    }
+    .responsive-text {font-size: clamp(0.5rem, 1.0vw, 1.5rem); /* Auto-scales based on screen size */color: black;}
+
+        .responsive-link {background-color: rgb(186, 184, 189);color: black;font-size: clamp(0.5rem, 1.0vw, 1.0rem); /* Auto-scales based on screen size */}
+
+        .main-content table {
+            width: 100%; /* Ensures the table takes full width of the container */
+            table-layout: auto; /* Allows columns to automatically adjust their size */
+        }
+
+        .main-content th, .main-content td {
+            text-align: left;
+            padding: 1px; /* Adjust padding as needed */
+            font-size: calc(0.5vw + 0.2vh + 0.2vmin); /* Responsively adjusts font size based on the viewport size */
+            white-space: normal; /* Allows text to wrap within the cell */
+            overflow-wrap: break-word; /* Ensures words break to prevent overflow */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="EXSTO COMBINED.png" class="logo left-logo" alt="Left Logo">
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Port of ExSTO - AM8760 - Asset Management Training Simulation</h2>
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Welcome to The Port of ExSTO</h2>
+        <img src="logo with xSTO.png" class="logo right-logo" alt="Right Logo">
+    </header>
+    <nav>
+        <a href="MAINPAGE.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Home</a>
+        <a href="AM8760_Board_Game.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">AM8760 Board Game</a>
+        <a href="vision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Vision & Asset Management Plan</a>
+        <a href="key_performance_indicators.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Key Performance Indicators</a>
+        <a href="financial_report.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Financial Report</a>
+        <a href="stateoftheasset.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">State of the Asset Table</a>
+        <a href="risk.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">5x5 Risk Table</a>
+        <a href="capital_investment_decision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Capital Investment Decision Making</a>
+        <a href="indexblocks.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Help Matrix</a>
+        <a href="training.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Training</a>
+        <a href="knowledge_test.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">GFMAM Knowledge Test</a>
+        <a href="knowledge_test_ISO.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">IOS55000 Knowledge Test</a>
+    </nav>
+    
+    <style>
+        .responsive-text {font-size: clamp(0.5rem, 1.0vw, 1.5rem); /* Auto-scales based on screen size */color: black;}
+    </style>
+
+    <style>
+        .responsive-link {
+            background-color: rgb(186, 184, 189);color: black;font-size: clamp(0.5rem, 1.0vw, 1.0rem); /* Auto-scales based on screen size */}
+    </style>
+
+    <div class="container">
+        <div class="sidebar-left">
+            <h2 class="responsive-text">Asset Class Management Plans</h2>
+            <a href="bulk_material_handling_main.html" class="responsive-link">1.0 Bulk Material Handling</a>
+            <a href="storage_sheds_main.html"  class="responsive-link">2.0 Storage Sheds</strong></a>
+            <a href="rail_infrastructure_main.html"  class="responsive-link"> 3.0 Rail Infrastructure</strong></a>
+            <a href="ship_loader_unloader_main.html"  class="responsive-link">4.0 Ship Loader/Unloader</strong></a>
+            <a href="dust_suppression_main.html"  class="responsive-link">5.0 Dust Suppression Systems</strong></a>
+            <a href="weighbridges_main.html"  class="responsive-link">6.0 Weighbridges</strong></a>
+            <a href="security_systems_main.html"  class="responsive-link">7.0 Security Systems</strong></a>
+            <a href="spare.html"  class="responsive-link"> 8.0 SAMP</strong></a>
+            <a href="wharves_main.html"  class="responsive-link">9.0 Wharves, Berths and Jetties</strong></a>
+            <a href="breakwaters_main.html"  class="responsive-link">10.0 Breakwaters</strong></a>
+            <a href="navigational_aids_main.html"  class="responsive-link">11.0 Navigational Aids</strong></a>
+            <a href="channels_main.html"  class="responsive-link">12.0 Channels</strong></a>
+            <a href="ict_tangible_main.html"  class="responsive-link"> 13.0 ICT Tangible Assets</strong></a>
+            <a href="ict_intangible_main.html"  class="responsive-link">14.0 ICT Intangible Assets</strong></a>
+            <a href="hr_main.html"  class="responsive-link"> 15.0 Human Resources Management</strong></a>
+            <a href="power_main.html"  class="responsive-link"> 16.0 Power</strong></a>
+            <a href="utilities_main.html"class="responsive-link">17.0 Utilities</strong></a>
+        </div>
+        <div class="main-content">
+            <p>&nbsp;</p>
+            <p><strong>OEM Manual: Weighbridges</strong></p>
+            <p><strong>Introduction</strong></p>
+            <p>Welcome to the Original Equipment Manufacturer (OEM) manual for Weighbridges. This manual provides detailed information on the installation, operation, maintenance, and safety guidelines for your weighbridges. Adhering to these instructions will ensure optimal performance and longevity of your equipment.</p>
+            <p><strong>Weighbridge Platform</strong></p>
+            <p><strong>Specifications</strong></p>
+            <ul>
+            <li><strong>Model:</strong> WB-1000 Weighbridge Platform</li>
+            <li><strong>Capacity:</strong> 100 tons</li>
+            <li><strong>Dimensions:</strong> 18m x 3m</li>
+            <li><strong>Material:</strong> Reinforced steel</li>
+            </ul>
+            <p><strong>Installation</strong></p>
+            <ol>
+            <li><strong>Site Preparation:</strong> Ensure the installation site is level and free of debris.</li>
+            <li><strong>Foundation:</strong> Construct a reinforced concrete foundation as per the specified dimensions.</li>
+            <li><strong>Assembly:</strong> Assemble the weighbridge platform components according to the provided blueprints.</li>
+            <li><strong>Alignment:</strong> Ensure the platform is correctly aligned and level.</li>
+            <li><strong>Inspection:</strong> Conduct a thorough inspection to ensure proper installation.</li>
+            </ol>
+            <p><strong>Operation</strong></p>
+            <ul>
+            <li><strong>Usage:</strong> Designed for accurate weighing of heavy vehicles.</li>
+            <li><strong>Monitoring:</strong> Regularly inspect the platform for signs of wear, alignment issues, and damage.</li>
+            <li><strong>Maintenance:</strong> Follow the maintenance schedule to ensure longevity and accuracy.</li>
+            </ul>
+            <p><strong>Maintenance Activities</strong></p>
+            <ul>
+            <li><strong>Platform Inspection:</strong> Quarterly inspection for wear, alignment, and structural integrity.</li>
+            <li><strong>Surface Cleaning:</strong> Monthly cleaning to remove debris and ensure accurate weighing.</li>
+            <li><strong>Bolt Tightening:</strong> Annually check and tighten all bolts and fasteners.</li>
+            <li><strong>Load Cell Calibration:</strong> Bi-annually calibrate the load cells to ensure accuracy.</li>
+            <li><strong>Corrosion Protection:</strong> Apply anti-corrosion coating annually.</li>
+            </ul>
+            <p><strong>Safety Guidelines</strong></p>
+            <ul>
+            <li><strong>Training:</strong> Ensure all personnel are trained in the proper use and maintenance of the weighbridge platform.</li>
+            <li><strong>PPE:</strong> Always wear appropriate personal protective equipment.</li>
+            <li><strong>Emergency Procedures:</strong> Familiarize personnel with emergency procedures for weighbridge-related incidents.</li>
+            </ul>
+            <p><strong>Benchmark Data</strong></p>
+            <ul>
+            <li><strong>Accuracy:</strong> Weighbridges typically maintain an accuracy of &plusmn;0.1% with proper maintenance.</li>
+            <li><strong>Load Capacity:</strong> Platforms maintain their load capacity with minimal degradation when properly maintained.</li>
+            <li><strong>Downtime:</strong> Regular maintenance reduces unplanned downtime by 15%.</li>
+            </ul>
+            <p><strong>Contact Information</strong></p>
+            <p>For further assistance, please contact our customer service department at:</p>
+            <ul>
+            <li><strong>Phone:</strong> +1-800-123-4600</li>
+            <li><strong>Email:</strong> support@weighbridges.com</li>
+            <li><strong>Website:</strong> <a href="http://www.weighbridges.com">www.weighbridges.com</a></li>
+            </ul>
+            <p><strong>Load Cells</strong></p>
+            <p><strong>Specifications</strong></p>
+            <ul>
+            <li><strong>Model:</strong> LC-500 Load Cells</li>
+            <li><strong>Capacity:</strong> 25 tons per cell</li>
+            <li><strong>Type:</strong> Digital, compression type</li>
+            <li><strong>Material:</strong> Stainless steel</li>
+            </ul>
+            <p><strong>Installation</strong></p>
+            <ol>
+            <li><strong>Site Preparation:</strong> Ensure the installation area is clear and ready.</li>
+            <li><strong>Platform Assembly:</strong> Ensure the weighbridge platform is correctly assembled and aligned.</li>
+            <li><strong>Load Cell Installation:</strong> Install the load cells according to the provided diagrams.</li>
+            <li><strong>Wiring:</strong> Connect the load cells to the weighbridge indicator using the provided wiring diagram.</li>
+            <li><strong>Commissioning:</strong> Perform a test run to ensure proper installation and operation.</li>
+            </ol>
+            <p><strong>Operation</strong></p>
+            <ul>
+            <li><strong>Startup:</strong> Activate the load cells using the weighbridge indicator.</li>
+            <li><strong>Monitoring:</strong> Regularly monitor the load cells for consistent readings and electrical issues.</li>
+            <li><strong>Shutdown:</strong> Follow the standard shutdown procedure to avoid damage.</li>
+            </ul>
+            <p><strong>Maintenance Activities</strong></p>
+            <ul>
+            <li><strong>Load Cell Inspection:</strong> Quarterly inspection for wear and proper operation.</li>
+            <li><strong>Electrical Check:</strong> Annually check and tighten all electrical connections.</li>
+            <li><strong>Calibration:</strong> Bi-annually calibrate the load cells to ensure accuracy.</li>
+            <li><strong>Cleaning:</strong> Monthly cleaning to remove debris and ensure accurate readings.</li>
+            <li><strong>Structural Inspection:</strong> Annually inspect the load cells for any signs of damage or corrosion.</li>
+            </ul>
+            <p><strong>Safety Guidelines</strong></p>
+            <ul>
+            <li><strong>Training:</strong> Ensure all personnel are trained in the proper use and maintenance of load cells.</li>
+            <li><strong>PPE:</strong> Always wear appropriate personal protective equipment.</li>
+            <li><strong>Emergency Procedures:</strong> Familiarize personnel with emergency procedures for load cell failures.</li>
+            </ul>
+            <p><strong>Benchmark Data</strong></p>
+            <ul>
+            <li><strong>Accuracy:</strong> Load cells typically maintain an accuracy of &plusmn;0.05% with proper maintenance.</li>
+            <li><strong>Lifespan:</strong> Load cells have a lifespan of 10-15 years with regular maintenance.</li>
+            <li><strong>Downtime:</strong> Proper maintenance reduces unplanned downtime by 18%.</li>
+            </ul>
+            <p><strong>Contact Information</strong></p>
+            <p>For further assistance, please contact our customer service department at:</p>
+            <ul>
+            <li><strong>Phone:</strong> +1-800-123-4601</li>
+            <li><strong>Email:</strong> support@loadcells.com</li>
+            <li><strong>Website:</strong> <a href="http://www.loadcells.com">www.loadcells.com</a></li>
+            </ul>
+            <p><strong>Weighbridge Indicators</strong></p>
+            <p><strong>Specifications</strong></p>
+            <ul>
+            <li><strong>Model:</strong> WI-700 Weighbridge Indicator</li>
+            <li><strong>Display:</strong> Digital LCD</li>
+            <li><strong>Power Consumption:</strong> 10 W</li>
+            <li><strong>Voltage:</strong> 110-240V, 50/60Hz</li>
+            </ul>
+            <p><strong>Installation</strong></p>
+            <ol>
+            <li><strong>Site Preparation:</strong> Ensure the installation site is clear of obstacles.</li>
+            <li><strong>Platform Assembly:</strong> Ensure the weighbridge platform and load cells are correctly installed.</li>
+            <li><strong>Indicator Installation:</strong> Install the weighbridge indicator according to the provided diagrams.</li>
+            <li><strong>Wiring:</strong> Connect the indicator to the load cells and power supply using the provided wiring diagram.</li>
+            <li><strong>Commissioning:</strong> Conduct a test run to ensure proper installation and operation.</li>
+            </ol>
+            <p><strong>Operation</strong></p>
+            <ul>
+            <li><strong>Startup:</strong> Activate the weighbridge indicator using the main control switch.</li>
+            <li><strong>Monitoring:</strong> Regularly monitor the indicator for accurate readings and electrical issues.</li>
+            <li><strong>Shutdown:</strong> Follow the standard shutdown procedure to avoid damage.</li>
+            </ul>
+            <p><strong>Maintenance Activities</strong></p>
+            <ul>
+            <li><strong>Display Inspection:</strong> Quarterly inspection for clarity and proper operation.</li>
+            <li><strong>Electrical Check:</strong> Annually check and tighten all electrical connections.</li>
+            <li><strong>Calibration:</strong> Bi-annually calibrate the indicator to ensure accurate readings.</li>
+            <li><strong>Cleaning:</strong> Monthly cleaning to ensure the display is clear and readable.</li>
+            <li><strong>Software Update:</strong> Annually check for and install any software updates.</li>
+            </ul>
+            <p><strong>Safety Guidelines</strong></p>
+            <ul>
+            <li><strong>Training:</strong> Ensure all personnel are trained in the proper use and maintenance of weighbridge indicators.</li>
+            <li><strong>PPE:</strong> Always wear appropriate personal protective equipment.</li>
+            <li><strong>Emergency Procedures:</strong> Familiarize personnel with emergency procedures for indicator failures.</li>
+            </ul>
+            <p><strong>Benchmark Data</strong></p>
+            <ul>
+            <li><strong>Accuracy:</strong> Weighbridge indicators typically maintain an accuracy of &plusmn;0.1% with proper maintenance.</li>
+            <li><strong>Display Lifespan:</strong> Digital displays have a lifespan of 10 years with regular maintenance.</li>
+            <li><strong>Downtime:</strong> Proper maintenance reduces unplanned downtime by 15%.</li>
+            </ul>
+            <p><strong>Contact Information</strong></p>
+            <p>For further assistance, please contact our customer service department at:</p>
+            <ul>
+            <li><strong>Phone:</strong> +1-800-123-4602</li>
+            <li><strong>Email:</strong> support@weighbridgeindicators.com</li>
+            <li><strong>Website:</strong> <a href="http://www.weighbridgeindicators.com">www.weighbridgeindicators.com</a></li>
+            </ul>
+            <p><strong>Junction Boxes</strong></p>
+            <p><strong>Specifications</strong></p>
+            <ul>
+            <li><strong>Model:</strong> JB-400 Junction Box</li>
+            <li><strong>Material:</strong> Stainless steel</li>
+            <li><strong>Capacity:</strong> 8 load cell connections</li>
+            <li><strong>Ingress Protection:</strong> IP67</li>
+            </ul>
+            <p><strong>Installation</strong></p>
+            <ol>
+            <li><strong>Site Preparation:</strong> Ensure the installation site is clear and ready.</li>
+            <li><strong>Platform Assembly:</strong> Ensure the weighbridge platform and load cells are correctly installed.</li>
+            <li><strong>Junction Box Installation:</strong> Install the junction box according to the provided diagrams.</li>
+            <li><strong>Wiring:</strong> Connect the load cells to the junction box and the weighbridge indicator using the provided wiring diagram.</li>
+            <li><strong>Commissioning:</strong> Perform a test run to ensure proper installation and operation.</li>
+            </ol>
+            <p><strong>Operation</strong></p>
+            <ul>
+            <li><strong>Startup:</strong> Activate the junction box connections using the main control panel.</li>
+            <li><strong>Monitoring:</strong> Regularly monitor the junction box for consistent readings and electrical issues.</li>
+            <li><strong>Shutdown:</strong> Follow the standard shutdown procedure to avoid damage.</li>
+            </ul>
+            <p><strong>Maintenance Activities</strong></p>
+            <ul>
+            <li><strong>Connection Inspection:</strong> Quarterly inspection for secure connections and proper operation.</li>
+            <li><strong>Cleaning:</strong> Quarterly cleaning to remove dust and debris.</li>
+            <li><strong>Seal Check:</strong> Annually check and replace seals to maintain IP67 protection.</li>
+            <li><strong>Electrical Check:</strong> Annually check and tighten all electrical connections.</li>
+            <li><strong>Calibration:</strong> Bi-annually calibrate the junction box connections to ensure accuracy.</li>
+            </ul>
+            <p><strong>Safety Guidelines</strong></p>
+            <ul>
+            <li><strong>Training:</strong> Ensure all personnel are trained in the proper use and maintenance of junction boxes.</li>
+            <li><strong>PPE:</strong> Always wear appropriate personal protective equipment.</li>
+            <li><strong>Emergency Procedures:</strong> Familiarize personnel with emergency procedures for junction box failures.</li>
+            </ul>
+            <p><strong>Benchmark Data</strong></p>
+            <ul>
+            <li><strong>Connection Stability:</strong> Junction boxes typically maintain stable connections for 10 years with proper maintenance.</li>
+            <li><strong>Ingress Protection:</strong> Proper maintenance ensures IP67 protection remains intact.</li>
+            <li><strong>Downtime:</strong> Proper maintenance reduces unplanned downtime by 12%.</li>
+            </ul>
+            <p><strong>Contact Information</strong></p>
+            <p>For further assistance, please contact our customer service department at:</p>
+            <ul>
+            <li><strong>Phone:</strong> +1-800-123-4603</li>
+            <li><strong>Email:</strong> support@junctionboxes.com</li>
+            <li><strong>Website:</strong> <a href="http://www.junctionboxes.com">www.junctionboxes.com</a></li>
+            </ul>
+            <p><strong>Cables and Connectors</strong></p>
+            <p><strong>Specifications</strong></p>
+            <ul>
+            <li><strong>Model:</strong> CC-300 Cables and Connectors</li>
+            <li><strong>Type:</strong> Shielded, high-strength</li>
+            <li><strong>Length:</strong> Customizable (e.g., 30m per cable)</li>
+            <li><strong>Material:</strong> Copper with PVC insulation</li>
+            </ul>
+            <p><strong>Installation</strong></p>
+            <ol>
+            <li><strong>Site Preparation:</strong> Ensure the installation site is clear of obstacles.</li>
+            <li><strong>Platform Assembly:</strong> Ensure the weighbridge platform and load cells are correctly installed.</li>
+            <li><strong>Cable Installation:</strong> Install cables and connectors according to the provided diagrams.</li>
+            <li><strong>Wiring:</strong> Connect cables to the load cells, junction boxes, and weighbridge indicator using the provided wiring diagram.</li>
+            <li><strong>Commissioning:</strong> Perform a test run to ensure proper installation and operation.</li>
+            </ol>
+            <p><strong>Operation</strong></p>
+            <ul>
+            <li><strong>Startup:</strong> Activate the cable connections using the main control panel.</li>
+            <li><strong>Monitoring:</strong> Regularly monitor the cables and connectors for consistent readings and electrical issues.</li>
+            <li><strong>Shutdown:</strong> Follow the standard shutdown procedure to avoid damage.</li>
+            </ul>
+            <p><strong>Maintenance Activities</strong></p>
+            <ul>
+            <li><strong>Cable Inspection:</strong> Quarterly inspection for wear and proper operation.</li>
+            <li><strong>Connection Check:</strong> Annually check and tighten all connections.</li>
+            <li><strong>Shielding Inspection:</strong> Annually inspect shielding for integrity and replace if necessary.</li>
+            <li><strong>Cleaning:</strong> Quarterly cleaning to remove dust and debris.</li>
+            <li><strong>Seal Check:</strong> Annually check and replace seals to maintain protection.</li>
+            </ul>
+            <p><strong>Safety Guidelines</strong></p>
+            <ul>
+            <li><strong>Training:</strong> Ensure all personnel are trained in the proper use and maintenance of cables and connectors.</li>
+            <li><strong>PPE:</strong> Always wear appropriate personal protective equipment.</li>
+            <li><strong>Emergency Procedures:</strong> Familiarize personnel with emergency procedures for cable and connector failures.</li>
+            </ul>
+            <p><strong>Benchmark Data</strong></p>
+            <ul>
+            <li><strong>Connection Stability:</strong> Cables and connectors typically maintain stable connections for 10 years with proper maintenance.</li>
+            <li><strong>Signal Integrity:</strong> Proper maintenance ensures high signal integrity, reducing errors by 95%.</li>
+            <li><strong>Downtime:</strong> Proper maintenance reduces unplanned downtime by 15%.</li>
+            </ul>
+            <p><strong>Contact Information</strong></p>
+            <p>For further assistance, please contact our customer service department at:</p>
+            <ul>
+            <li><strong>Phone:</strong> +1-800-123-4604</li>
+            <li><strong>Email:</strong> support@cablesandconnectors.com</li>
+            <li><strong>Website:</strong> <a href="http://www.cablesandconnectors.com">www.cablesandconnectors.com</a></li>
+            </ul>
+            <p>These manuals provide detailed guidance on the proper installation, operation, and maintenance of key components in weighbridge systems, ensuring optimal performance and longevity of the equipment</p>
+            <p>&nbsp;</p>
+        </div>
+        <div class="sidebar-right">
+            <h2 class="responsive-text">Asset Management Master Data</h2>
+            <h2><Strong>Asset Information & Master Data</Strong></h2>
+            <a href="weighbridges_description.html"class="responsive-link">1.1 Asset Description</a>
+            <a href="weighbridges_asset_hierarchy.html" class="responsive-link">1.2 Asset Hierarchy</a>
+            <a href="weighbridges_risk_analysis.html" class="responsive-link">1.3 Asset Risk Analysis</a>
+            <a href="weighbridges_fmea.html" class="responsive-link">1.4 Asset FMEA and PMO activities</a>
+            <a href="weighbridges_strategies.html" class="responsive-link">1.5 Asset Strategies</a>
+            <a href="weighbridges_maintenance_plans.html" class="responsive-link">1.6 Asset Maintenance Plans</a>
+            <a href="weighbridges_whole_of_life_analysis.html" class="responsive-link">1.7 Asset WOL Analysis</a>
+            <a href="weighbridges_event_tables.html" class="responsive-link">1.8 Asset Event Scenarios</a>
+            <a href="MAINPAGE.html" class="responsive-link">Return to Home Page</a>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer-content">
+    
+        </div>
+        <hr class="footer-line">
+        <p class="footer-text">&copy; ExSTO Global, Johan Snyman - The Author retains all moral rights. All rights reserved.</p>
+    </footer>
+    <script>
+        function showPopup(popupId) {
+            document.getElementById(popupId).style.display = 'block';
+        }
+        function closePopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
+        }
+    </script>
+</body>
+</html>

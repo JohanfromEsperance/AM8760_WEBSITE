@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategy & Tactics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scroll on body */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            padding-top: 5px; /* Padding to avoid button interference */
+            background-color: lightgrey; /* Matching the block color */
+            border: 2px solid lightgrey;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            cursor: move;
+        }
+        .content {
+            padding: 10px;
+            overflow: auto;
+            height: calc(100% - 5px);
+            background-color: lightgrey;
+        }
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 10px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #ffcccb;
+            border: 1px solid #000;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .prev-btn {
+            left: 10px;
+        }
+        .next-btn {
+            right: 80px;
+        }
+    </style>
+    <script>
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        function closePopup() {
+            const popup = document.querySelector('.container');
+            document.body.removeChild(popup);
+        }
+
+        function onMouseDown(e) {
+            isDragging = true;
+            offsetX = e.clientX - parseInt(window.getComputedStyle(popup).left);
+            offsetY = e.clientY - parseInt(window.getComputedStyle(popup).top);
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }
+
+        function onMouseMove(e) {
+            if (isDragging) {
+                popup.style.left = e.clientX - offsetX + 'px';
+                popup.style.top = e.clientY - offsetY + 'px';
+            }
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        window.onload = function() {
+            const popup = document.querySelector('.container');
+            popup.addEventListener('mousedown', onMouseDown);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h3>Strategy & Tactics Details</h3>
+            <p><strong>Who:</strong> Asset managers, reliability engineers</p>
+            <p><strong>What:</strong> Development of asset management strategies and tactics</p>
+            <p><strong>When:</strong> During strategic planning and periodic reviews</p>
+            <p><strong>Where:</strong> Asset management departments</p>
+            <p><strong>With:</strong> Strategic planning tools, risk assessment tools</p>
+            <p><strong>How:</strong> By creating and implementing strategies and tactics for effective asset management</p>
+            <p><strong>Why:</strong> To ensure long-term asset reliability and performance</p>
+            <p><strong>Quality Check:</strong></p>
+            <ul>
+                <li>Right person (managers, engineers)</li>
+                <li>Right time (planning, reviews)</li>
+                <li>Right place (management departments)</li>
+                <li>Right equipment (tools)</li>
+                <li>Right process (creating, implementing)</li>
+                <li>Right work (effective management)</li>
+                <li>Right reason (long-term reliability)</li>
+            </ul>
+            <p><strong>Expanded Activities:</strong></p>
+            <ul>
+                <li>Develop long-term asset management strategies.</li>
+                <li>Create tactical plans for asset maintenance.</li>
+                <li>Implement strategies and monitor progress.</li>
+                <li>Review and adjust plans periodically.</li>
+            </ul>
+            <p><strong>Research and Benchmarking:</strong></p>
+            <ul>
+                <li><strong>Best Practices:</strong> Follow guidelines from the Institute of Asset Management (IAM) for strategy development.</li>
+                <li><strong>Case Studies:</strong> Review asset management strategies from other ports to identify effective practices.</li>
+                <li><strong>Benchmark Data:</strong> Compare your strategies and tactics with industry standards to ensure alignment with best practices.</li>
+            </ul>
+            <p><strong>Narrative:</strong> This block involves developing and implementing strategies and tactics for effective asset management. This includes creating long-term plans to ensure the reliability and performance of port assets, based on risk assessments and strategic objectives.</p>
+        </div>
+    </div>
+</body>
+</html>

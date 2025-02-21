@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AM8760 - Asset Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color:#e7e7e7;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            height: 11%;
+            width: 100%;
+            text-align: center;
+            background-color: #ffffff;
+            padding: 0 0;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .logo {
+            height: 100%;
+            width: 10%;
+            position: absolute;
+            top: 0;
+        }
+        .left-logo {
+            left: 0;
+        }
+        .right-logo {
+            right: 0;
+        }
+        nav {
+            background-color: #f2f2f2;
+            overflow: hidden;
+            width: 100%;
+            display: flex;
+            text-align: center;
+            justify-content: normal;
+            box-sizing: border-box;
+        }
+        nav a {
+            display: block;
+            color: 	#e1e1e1;
+            text-align: left;
+            padding: 14px 16px;
+            text-decoration: none;
+            flex: 1;
+        }
+        nav a:hover {
+            background-color: 	#aeafb6;
+            color: black;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            flex-wrap: nowrap;
+            height: 60vh;
+            box-sizing: border-box;
+        }
+        .sidebar-left, .sidebar-right {
+            width: 15%;
+            background-color: 	#e1e1e1;
+            padding: 1px;
+            box-sizing: border-box;
+            color: #e1e1e1;
+            font-size: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .sidebar-left a, .sidebar-right a {
+            padding: 5px;
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            text-align: left;
+
+        }
+        .sidebar-left a:hover, .sidebar-right a:hover {
+            background-color: 	#aeafb6;
+        }
+        .main-content {
+            width: 70%;
+            padding: 30px;
+            box-sizing: border-box;
+            background-color: #e7e7e7;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 20%;
+            top: 10px;
+            width: 60%;
+            max-height: 100vh;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .popup h2 {
+            margin-top: 0;
+        }
+        .popup .close {
+            display: block;
+            text-align: right;
+            margin-top: -10px;
+            margin-right: -10px;
+        }
+        .popup .close a {
+            color: 	#aeafb6;
+            text-decoration: none;
+            font-size: 24px;
+        }
+        .footer {
+            background-color: #ffffff; /* Background color */
+            padding: 1px;
+            text-align: center;
+        }
+
+    .footer-content {
+        display: flex;
+        justify-content: space-between; /* Default: Aligns images left, center, right */
+        align-items: center;
+        padding-bottom: 1px;
+        gap: 2px; /* Space between images */
+    }
+
+    /* Responsive adjustments for smaller screens */
+    @media (max-width: 250px) { footer-content {flex-direction: column; /* Stack images on smaller screens */justify-content: center;align-items: center; gap: 1px;}}
+
+    .footer-img {
+        width: 50px; /* Adjust image size */
+        height: auto;
+    }
+
+    .footer-line {
+        border: none;
+        border-top: 2px solid black; /* Bottom line */
+        margin: 1px auto;
+        width: 80%;
+    }
+
+    .footer-text {
+        font-size: 0.5rem;
+        color: black;
+        text-align: center;
+    }
+    .responsive-text {font-size: clamp(0.5rem, 1.0vw, 1.5rem); /* Auto-scales based on screen size */color: black;}
+
+        .responsive-link {background-color: rgb(186, 184, 189);color: black;font-size: clamp(0.5rem, 1.0vw, 1.0rem); /* Auto-scales based on screen size */}
+
+        .main-content table {
+            width: 100%; /* Ensures the table takes full width of the container */
+            table-layout: auto; /* Allows columns to automatically adjust their size */
+        }
+
+        .main-content th, .main-content td {
+            text-align: left;
+            padding: 1px; /* Adjust padding as needed */
+            font-size: calc(0.5vw + 0.2vh + 0.2vmin); /* Responsively adjusts font size based on the viewport size */
+            white-space: normal; /* Allows text to wrap within the cell */
+            overflow-wrap: break-word; /* Ensures words break to prevent overflow */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="EXSTO COMBINED.png" class="logo left-logo" alt="Left Logo">
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Port of ExSTO - AM8760 - Asset Management Training Simulation</h2>
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Welcome to The Port of ExSTO</h2>
+        <img src="logo with xSTO.png" class="logo right-logo" alt="Right Logo">
+    </header>
+    <nav>
+        <a href="MAINPAGE.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Home</a>
+        <a href="AM8760_Board_Game.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">AM8760 Board Game</a>
+        <a href="vision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Vision & Asset Management Plan</a>
+        <a href="key_performance_indicators.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Key Performance Indicators</a>
+        <a href="financial_report.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Financial Report</a>
+        <a href="stateoftheasset.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">State of the Asset Table</a>
+        <a href="risk.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">5x5 Risk Table</a>
+        <a href="capital_investment_decision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Capital Investment Decision Making</a>
+        <a href="indexblocks.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Help Matrix</a>
+        <a href="training.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Training</a>
+        <a href="knowledge_test.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">GFMAM Knowledge Test</a>
+        <a href="knowledge_test_ISO.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">IOS55000 Knowledge Test</a>
+    </nav>
+    
+    <style>
+        .responsive-text {font-size: clamp(0.5rem, 1.0vw, 1.5rem); /* Auto-scales based on screen size */color: black;}
+    </style>
+
+    <style>
+        .responsive-link {
+            background-color: rgb(186, 184, 189);color: black;font-size: clamp(0.5rem, 1.0vw, 1.0rem); /* Auto-scales based on screen size */}
+    </style>
+
+    <div class="container">
+        <div class="sidebar-left">
+            <h2 class="responsive-text">Asset Class Management Plans</h2>
+            <a href="bulk_material_handling_main.html" class="responsive-link">1.0 Bulk Material Handling</a>
+            <a href="storage_sheds_main.html"  class="responsive-link">2.0 Storage Sheds</strong></a>
+            <a href="rail_infrastructure_main.html"  class="responsive-link"> 3.0 Rail Infrastructure</strong></a>
+            <a href="ship_loader_unloader_main.html"  class="responsive-link">4.0 Ship Loader/Unloader</strong></a>
+            <a href="dust_suppression_main.html"  class="responsive-link">5.0 Dust Suppression Systems</strong></a>
+            <a href="weighbridges_main.html"  class="responsive-link">6.0 Weighbridges</strong></a>
+            <a href="security_systems_main.html"  class="responsive-link">7.0 Security Systems</strong></a>
+            <a href="spare.html"  class="responsive-link"> 8.0 SAMP</strong></a>
+            <a href="wharves_main.html"  class="responsive-link">9.0 Wharves, Berths and Jetties</strong></a>
+            <a href="breakwaters_main.html"  class="responsive-link">10.0 Breakwaters</strong></a>
+            <a href="navigational_aids_main.html"  class="responsive-link">11.0 Navigational Aids</strong></a>
+            <a href="channels_main.html"  class="responsive-link">12.0 Channels</strong></a>
+            <a href="ict_tangible_main.html"  class="responsive-link"> 13.0 ICT Tangible Assets</strong></a>
+            <a href="ict_intangible_main.html"  class="responsive-link">14.0 ICT Intangible Assets</strong></a>
+            <a href="hr_main.html"  class="responsive-link"> 15.0 Human Resources Management</strong></a>
+            <a href="power_main.html"  class="responsive-link"> 16.0 Power</strong></a>
+            <a href="utilities_main.html"class="responsive-link">17.0 Utilities</strong></a>
+        </div>
+        <div class="main-content">
+            <p><strong>OEM Manual: Wharves</strong></p>
+            <p><strong>Introduction</strong></p>
+            <p>Welcome to the Original Equipment Manufacturer (OEM) manual for Wharves. This manual provides detailed information on the installation, operation, maintenance, and safety guidelines for your wharf infrastructure. Adhering to these instructions will ensure optimal performance and longevity of your equipment.</p>
+            <p><strong>Structural Elements</strong></p>
+            <p><strong>Specifications</strong></p>
+            <ul>
+            <li><strong>Model:</strong> WH-1000 Structural Elements</li>
+            <li><strong>Material:</strong> Reinforced concrete and steel</li>
+            <li><strong>Load Capacity:</strong> 500 tons</li>
+            </ul>
+            <p><strong>Installation</strong></p>
+            <ol>
+            <li><strong>Site Preparation:</strong> Ensure the installation site is level and free of debris.</li>
+            <li><strong>Foundation:</strong> Construct a reinforced concrete foundation as per the specified dimensions.</li>
+            <li><strong>Assembly:</strong> Assemble the structural components according to the provided blueprints.</li>
+            <li><strong>Alignment:</strong> Ensure all components are correctly aligned and securely bolted.</li>
+            <li><strong>Inspection:</strong> Conduct a thorough inspection to ensure proper installation.</li>
+            </ol>
+            <p><strong>Operation</strong></p>
+            <ul>
+            <li><strong>Usage:</strong> Designed to support heavy loads and provide a stable platform for loading and unloading.</li>
+            <li><strong>Monitoring:</strong> Regularly inspect the structure for signs of wear, alignment issues, and damage.</li>
+            <li><strong>Maintenance:</strong> Follow the maintenance schedule to ensure longevity and safety.</li>
+            </ul>
+            <p><strong>Maintenance Activities</strong></p>
+            <ul>
+            <li><strong>Structural Inspection:</strong> Quarterly inspection for cracks, corrosion, and alignment.</li>
+            <li><strong>Surface Cleaning:</strong> Monthly cleaning to remove debris and ensure structural integrity.</li>
+            <li><strong>Bolt Tightening:</strong> Annually check and tighten all bolts and fasteners.</li>
+            <li><strong>Corrosion Protection:</strong> Apply anti-corrosion coating bi-annually.</li>
+            <li><strong>Load Testing:</strong> Conduct load testing every 5 years to ensure structural integrity.</li>
+            </ul>
+            <p><strong>Safety Guidelines</strong></p>
+            <ul>
+            <li><strong>Training:</strong> Ensure all personnel are trained in the proper use and maintenance of the wharf structure.</li>
+            <li><strong>PPE:</strong> Always wear appropriate personal protective equipment.</li>
+            <li><strong>Emergency Procedures:</strong> Familiarize personnel with emergency procedures for structural incidents.</li>
+            </ul>
+            <p><strong>Benchmark Data</strong></p>
+            <ul>
+            <li><strong>Load Capacity:</strong> Structures typically maintain their load capacity with minimal degradation when properly maintained.</li>
+            <li><strong>Corrosion Rate:</strong> Reinforced concrete and steel show a corrosion rate of less than 1% per year in standard conditions.</li>
+            <li><strong>Downtime:</strong> Regular maintenance reduces unplanned downtime by 15%.</li>
+            </ul>
+            <p><strong>Contact Information</strong></p>
+            <p>For further assistance, please contact our customer service department at:</p>
+            <ul>
+            <li><strong>Phone:</strong> +1-800-123-4600</li>
+            <li><strong>Email:</strong> support@wharvesystems.com</li>
+            <li><strong>Website:</strong> <a href="http://www.wharvesystems.com">www.wharvesystems.com</a></li>
+            </ul>
+            <p><strong>Mooring Systems</strong></p>
+            <p><strong>Specifications</strong></p>
+            <ul>
+            <li><strong>Model:</strong> MS-2000 Mooring System</li>
+            <li><strong>Capacity:</strong> 100 tons</li>
+            <li><strong>Material:</strong> High-strength steel</li>
+            <li><strong>Components:</strong> Bollards, fenders, and mooring lines</li>
+            </ul>
+            <p><strong>Installation</strong></p>
+            <ol>
+            <li><strong>Site Preparation:</strong> Ensure the installation site is clear and free of obstacles.</li>
+            <li><strong>Foundation:</strong> Construct a stable foundation for bollards and fenders.</li>
+            <li><strong>Assembly:</strong> Install the mooring system components according to the provided blueprints.</li>
+            <li><strong>Alignment:</strong> Ensure all components are correctly aligned and securely fixed.</li>
+            <li><strong>Inspection:</strong> Conduct a thorough inspection to ensure proper installation.</li>
+            </ol>
+            <p><strong>Operation</strong></p>
+            <ul>
+            <li><strong>Usage:</strong> Designed to secure vessels to the wharf safely.</li>
+            <li><strong>Monitoring:</strong> Regularly inspect the mooring system for signs of wear and damage.</li>
+            <li><strong>Maintenance:</strong> Follow the maintenance schedule to ensure longevity and safety.</li>
+            </ul>
+            <p><strong>Maintenance Activities</strong></p>
+            <ul>
+            <li><strong>Bollard Inspection:</strong> Quarterly inspection for wear and proper operation.</li>
+            <li><strong>Fender Maintenance:</strong> Quarterly check and replace worn fenders as needed.</li>
+            <li><strong>Mooring Line Inspection:</strong> Monthly inspection for wear and tear.</li>
+            <li><strong>Cleaning:</strong> Bi-annually clean all components to remove debris and ensure proper function.</li>
+            <li><strong>Structural Check:</strong> Annually check and tighten all fasteners and connections.</li>
+            </ul>
+            <p><strong>Safety Guidelines</strong></p>
+            <ul>
+            <li><strong>Training:</strong> Ensure all personnel are trained in the proper use and maintenance of the mooring system.</li>
+            <li><strong>PPE:</strong> Always wear appropriate personal protective equipment.</li>
+            <li><strong>Emergency Procedures:</strong> Familiarize personnel with emergency procedures for mooring incidents.</li>
+            </ul>
+            <p><strong>Benchmark Data</strong></p>
+            <ul>
+            <li><strong>Load Capacity:</strong> Mooring systems typically maintain their load capacity with minimal degradation when properly maintained.</li>
+            <li><strong>Wear Rate:</strong> High-strength steel components show a wear rate of less than 2% per year.</li>
+            <li><strong>Downtime:</strong> Regular maintenance reduces unplanned downtime by 15%.</li>
+            </ul>
+            <p><strong>Contact Information</strong></p>
+            <p>For further assistance, please contact our customer service department at:</p>
+            <ul>
+            <li><strong>Phone:</strong> +1-800-123-4601</li>
+            <li><strong>Email:</strong> support@mooringsystems.com</li>
+            <li><strong>Website:</strong> <a href="http://www.mooringsystems.com">www.mooringsystems.com</a></li>
+            </ul>
+            <p><strong>Fenders</strong></p>
+            <p><strong>Specifications</strong></p>
+            <ul>
+            <li><strong>Model:</strong> FD-3000 Fenders</li>
+            <li><strong>Type:</strong> Pneumatic and solid rubber</li>
+            <li><strong>Dimensions:</strong> Customizable (e.g., 2m x 1m)</li>
+            <li><strong>Material:</strong> Rubber and steel</li>
+            </ul>
+            <p><strong>Installation</strong></p>
+            <ol>
+            <li><strong>Site Preparation:</strong> Ensure the installation site is clear of obstacles.</li>
+            <li><strong>Mounting:</strong> Secure the fenders to the wharf structure as per the provided blueprints.</li>
+            <li><strong>Alignment:</strong> Ensure all fenders are correctly aligned and securely fixed.</li>
+            <li><strong>Inspection:</strong> Conduct a thorough inspection to ensure proper installation.</li>
+            </ol>
+            <p><strong>Operation</strong></p>
+            <ul>
+            <li><strong>Usage:</strong> Designed to absorb impact and protect vessels and the wharf structure.</li>
+            <li><strong>Monitoring:</strong> Regularly inspect the fenders for signs of wear and damage.</li>
+            <li><strong>Maintenance:</strong> Follow the maintenance schedule to ensure longevity and safety.</li>
+            </ul>
+            <p><strong>Maintenance Activities</strong></p>
+            <ul>
+            <li><strong>Fender Inspection:</strong> Quarterly inspection for wear, damage, and proper inflation (if pneumatic).</li>
+            <li><strong>Cleaning:</strong> Bi-annually clean all fenders to remove debris and ensure proper function.</li>
+            <li><strong>Structural Check:</strong> Annually check and tighten all fasteners and connections.</li>
+            <li><strong>Replacement:</strong> Replace worn or damaged fenders as needed.</li>
+            </ul>
+            <p><strong>Safety Guidelines</strong></p>
+            <ul>
+            <li><strong>Training:</strong> Ensure all personnel are trained in the proper use and maintenance of fenders.</li>
+            <li><strong>PPE:</strong> Always wear appropriate personal protective equipment.</li>
+            <li><strong>Emergency Procedures:</strong> Familiarize personnel with emergency procedures for fender failures.</li>
+            </ul>
+            <p><strong>Benchmark Data</strong></p>
+            <ul>
+            <li><strong>Impact Resistance:</strong> Fenders typically maintain high impact resistance for up to 10 years with proper maintenance.</li>
+            <li><strong>Wear Rate:</strong> Rubber components show a wear rate of less than 1.5% per year.</li>
+            <li><strong>Downtime:</strong> Regular maintenance reduces unplanned downtime by 15%.</li>
+            </ul>
+            <p><strong>Contact Information</strong></p>
+            <p>For further assistance, please contact our customer service department at:</p>
+            <ul>
+            <li><strong>Phone:</strong> +1-800-123-4602</li>
+            <li><strong>Email:</strong> support@fendersystems.com</li>
+            <li><strong>Website:</strong> <a href="http://www.fendersystems.com">www.fendersystems.com</a></li>
+            </ul>
+            <p><strong>Loading Arms</strong></p>
+            <p><strong>Specifications</strong></p>
+            <ul>
+            <li><strong>Model:</strong> LA-4000 Loading Arms</li>
+            <li><strong>Capacity:</strong> 200 tons</li>
+            <li><strong>Material:</strong> Stainless steel</li>
+            <li><strong>Type:</strong> Articulated and telescopic</li>
+            </ul>
+            <p><strong>Installation</strong></p>
+            <ol>
+            <li><strong>Site Preparation:</strong> Ensure the installation site is clear of obstacles.</li>
+            <li><strong>Mounting:</strong> Secure the loading arms to the wharf structure as per the provided blueprints.</li>
+            <li><strong>Alignment:</strong> Ensure all loading arms are correctly aligned and securely fixed.</li>
+            <li><strong>Hydraulic Connections:</strong> Connect the hydraulic systems according to the provided diagrams.</li>
+            <li><strong>Commissioning:</strong> Conduct a trial run to ensure the loading arms are functioning correctly.</li>
+            </ol>
+            <p><strong>Operation</strong></p>
+            <ul>
+            <li><strong>Startup:</strong> Activate the loading arms using the main control panel.</li>
+            <li><strong>Monitoring:</strong> Regularly monitor the loading arms for smooth operation and any signs of wear.</li>
+            <li><strong>Shutdown:</strong> Follow the standard shutdown procedure to avoid damage.</li>
+            </ul>
+            <p><strong>Maintenance Activities</strong></p>
+            <ul>
+            <li><strong>Hydraulic System Inspection:</strong> Quarterly inspection for leaks and proper operation.</li>
+            <li><strong>Lubrication:</strong> Bi-annually lubricate all moving parts to ensure smooth operation.</li>
+            <li><strong>Structural Check:</strong> Annually inspect for wear and tighten all fasteners and connections.</li>
+            <li><strong>Cleaning:</strong> Quarterly cleaning to remove debris and ensure proper function.</li>
+            <li><strong>Calibration:</strong> Annually calibrate the arms to ensure accurate positioning.</li>
+            </ul>
+            <p><strong>Safety Guidelines</strong></p>
+            <ul>
+            <li><strong>Training:</strong> Ensure all personnel are trained in the proper use and maintenance of loading arms.</li>
+            <li><strong>PPE:</strong> Always wear appropriate personal protective equipment.</li>
+            <li><strong>Emergency Procedures:</strong> Familiarize personnel with emergency procedures for loading arm failures.</li>
+            </ul>
+            <p><strong>Benchmark Data</strong></p>
+            <ul>
+            <li><strong>Load Capacity:</strong> Loading arms typically maintain their load capacity with minimal degradation when properly maintained.</li>
+            <li><strong>Hydraulic Efficiency:</strong> Hydraulic systems maintain above 95% efficiency with regular maintenance.</li>
+            <li><strong>Downtime:</strong> Regular maintenance reduces unplanned downtime by 18%.</li>
+            </ul>
+            <p><strong>Contact Information</strong></p>
+            <p>For further assistance, please contact our customer service department at:</p>
+            <ul>
+            <li><strong>Phone:</strong> +1-800-123-4603</li>
+            <li><strong>Email:</strong> support@loadingarms.com</li>
+            <li><strong>Website:</strong> <a href="http://www.loadingarms.com">www.loadingarms.com</a></li>
+            </ul>
+            <p><strong>Dockside Cranes</strong></p>
+            <p><strong>Specifications</strong></p>
+            <ul>
+            <li><strong>Model:</strong> DC-5000 Dockside Cranes</li>
+            <li><strong>Capacity:</strong> 100 tons</li>
+            <li><strong>Material:</strong> High-strength steel</li>
+            <li><strong>Type:</strong> Gantry and jib cranes</li>
+            </ul>
+            <p><strong>Installation</strong></p>
+            <ol>
+            <li><strong>Site Preparation:</strong> Ensure the installation site is clear and level.</li>
+            <li><strong>Foundation:</strong> Construct a stable foundation as per the specified dimensions.</li>
+            <li><strong>Assembly:</strong> Assemble the crane components according to the provided blueprints.</li>
+            <li><strong>Alignment:</strong> Ensure all components are correctly aligned and securely bolted.</li>
+            <li><strong>Electrical and Hydraulic Connections:</strong> Connect the systems according to the provided diagrams.</li>
+            <li><strong>Commissioning:</strong> Conduct a trial run to ensure the crane is functioning correctly.</li>
+            </ol>
+            <p><strong>Operation</strong></p>
+            <ul>
+            <li><strong>Startup:</strong> Activate the dockside crane using the main control panel.</li>
+            <li><strong>Monitoring:</strong> Regularly monitor the crane for smooth operation and any signs of wear.</li>
+            <li><strong>Shutdown:</strong> Follow the standard shutdown procedure to avoid damage.</li>
+            </ul>
+            <p><strong>Maintenance Activities</strong></p>
+            <ul>
+            <li><strong>Mechanical Inspection:</strong> Quarterly inspection for wear and proper operation.</li>
+            <li><strong>Lubrication:</strong> Bi-annually lubricate all moving parts to ensure smooth operation.</li>
+            <li><strong>Electrical System Check:</strong> Annually check and secure all electrical connections.</li>
+            <li><strong>Hydraulic System Maintenance:</strong> Bi-annually inspect and maintain the hydraulic system.</li>
+            <li><strong>Structural Check:</strong> Annually inspect for wear and tighten all fasteners and connections.</li>
+            </ul>
+            <p><strong>Safety Guidelines</strong></p>
+            <ul>
+            <li><strong>Training:</strong> Ensure all personnel are trained in the proper use and maintenance of dockside cranes.</li>
+            <li><strong>PPE:</strong> Always wear appropriate personal protective equipment.</li>
+            <li><strong>Emergency Procedures:</strong> Familiarize personnel with emergency procedures for crane failures.</li>
+            </ul>
+            <p><strong>Benchmark Data</strong></p>
+            <ul>
+            <li><strong>Load Capacity:</strong> Dockside cranes typically maintain their load capacity with minimal degradation when properly maintained.</li>
+            <li><strong>Operational Efficiency:</strong> Cranes maintain above 90% operational efficiency with regular maintenance.</li>
+            <li><strong>Downtime:</strong> Regular maintenance reduces unplanned downtime by 20%.</li>
+            </ul>
+            <p><strong>Contact Information</strong></p>
+            <p>For further assistance, please contact our customer service department at:</p>
+            <ul>
+            <li><strong>Phone:</strong> +1-800-123-4604</li>
+            <li><strong>Email:</strong> support@docksidecranes.com</li>
+            <li><strong>Website:</strong> <a href="http://www.docksidecranes.com">www.docksidecranes.com</a></li>
+            </ul>
+            <p><strong>Electrical Systems</strong></p>
+            <p><strong>Specifications</strong></p>
+            <ul>
+            <li><strong>Model:</strong> ES-6000 Electrical System</li>
+            <li><strong>Capacity:</strong> 5000 A</li>
+            <li><strong>Voltage:</strong> 400V, 50Hz</li>
+            </ul>
+            <p><strong>Installation</strong></p>
+            <ol>
+            <li><strong>Site Preparation:</strong> Ensure the installation site is clear of obstacles.</li>
+            <li><strong>Foundation:</strong> Construct a stable foundation for electrical panels and circuits.</li>
+            <li><strong>Assembly:</strong> Install electrical panels and circuits according to the provided blueprints.</li>
+            <li><strong>Wiring:</strong> Complete all wiring connections according to the provided wiring diagrams.</li>
+            <li><strong>Commissioning:</strong> Conduct a test run to ensure proper installation and operation.</li>
+            </ol>
+            <p><strong>Operation</strong></p>
+            <ul>
+            <li><strong>Startup:</strong> Activate the electrical system using the main control panel.</li>
+            <li><strong>Monitoring:</strong> Regularly monitor the system for electrical issues and overloads.</li>
+            <li><strong>Shutdown:</strong> Follow the standard shutdown procedure to avoid damage.</li>
+            </ul>
+            <p><strong>Maintenance Activities</strong></p>
+            <ul>
+            <li><strong>Panel Inspection:</strong> Quarterly inspect electrical panels for signs of wear or damage.</li>
+            <li><strong>Circuit Breaker Testing:</strong> Annually test all circuit breakers for proper operation.</li>
+            <li><strong>Connection Tightening:</strong> Quarterly check and tighten all electrical connections.</li>
+            <li><strong>System Cleaning:</strong> Monthly cleaning to remove any accumulated dust or debris.</li>
+            <li><strong>Thermal Imaging:</strong> Bi-annual thermal imaging to detect hot spots.</li>
+            </ul>
+            <p><strong>Safety Guidelines</strong></p>
+            <ul>
+            <li><strong>Training:</strong> Ensure all personnel are trained in the proper use and maintenance of the electrical system.</li>
+            <li><strong>PPE:</strong> Always wear appropriate personal protective equipment.</li>
+            <li><strong>Emergency Procedures:</strong> Familiarize personnel with emergency procedures for electrical failures.</li>
+            </ul>
+            <p><strong>Benchmark Data</strong></p>
+            <ul>
+            <li><strong>Panel Efficiency:</strong> Electrical panels typically maintain above 98% efficiency with proper maintenance.</li>
+            <li><strong>Circuit Breaker Lifespan:</strong> Circuit breakers have a lifespan of 15-20 years with regular maintenance.</li>
+            <li><strong>Downtime:</strong> Proper maintenance reduces unplanned downtime by 20%.</li>
+            </ul>
+            <p><strong>Contact Information</strong></p>
+            <p>For further assistance, please contact our customer service department at:</p>
+            <ul>
+            <li><strong>Phone:</strong> +1-800-123-4605</li>
+            <li><strong>Email:</strong> support@electricalsystems.com</li>
+            <li><strong>Website:</strong> <a href="http://www.electricalsystems.com">www.electricalsystems.com</a></li>
+            </ul>
+            <p>These manuals provide detailed guidance on the proper installation, operation, and maintenance of key components in wharf infrastructure, ensuring optimal performance and longevity of the equipment.</p>
+            <p>&nbsp;</p>
+        </div>
+        <div class="sidebar-right">
+            <h2 class="responsive-text">Asset Management Master Data</h2>
+            <h2><Strong>Asset Information & Master Data</Strong></h2>
+            <a href="wharves_description.html"class="responsive-link">1.1 Asset Description</a>
+            <a href="wharves_asset_hierarchy.html" class="responsive-link">1.2 Asset Hierarchy</a>
+            <a href="wharves_risk_analysis.html" class="responsive-link">1.3 Asset Risk Analysis</a>
+            <a href="wharves_fmea.html" class="responsive-link">1.4 Asset FMEA and PMO activities</a>
+            <a href="wharves_strategies.html" class="responsive-link">1.5 Asset Strategies</a>
+            <a href="wharves_maintenance_plans.html" class="responsive-link">1.6 Asset Maintenance Plans</a>
+            <a href="wharves_whole_of_life_analysis.html" class="responsive-link">1.7 Asset WOL Analysis</a>
+            <a href="wharves_event_tables.html" class="responsive-link">1.8 Asset Event Scenarios</a>
+            <a href="MAINPAGE.html" class="responsive-link">Return to Home Page</a>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer-content">
+    
+        </div>
+        <hr class="footer-line">
+        <p class="footer-text">&copy; ExSTO Global, Johan Snyman - The Author retains all moral rights. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function showPopup(popupId) {
+            document.getElementById(popupId).style.display = 'block';
+        }
+        function closePopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
+        }
+    </script>
+</body>
+</html>

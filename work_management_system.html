@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scroll on body */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            padding-top: 5px; /* Padding to avoid button interference */
+            background-color: lightgrey; /* Matching the block color */
+            border: 2px solid lightgrey;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            cursor: move;
+        }
+        .content {
+            padding: 10px;
+            overflow: auto;
+            height: calc(100% - 5px);
+            background-color: lightgrey;
+        }
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 10px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: #ffcccb;
+            border: 1px solid #000;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .prev-btn {
+            left: 10px;
+        }
+        .next-btn {
+            right: 80px;
+        }
+    </style>
+    <script>
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        function closePopup() {
+            const popup = document.querySelector('.container');
+            document.body.removeChild(popup);
+        }
+
+        function onMouseDown(e) {
+            isDragging = true;
+            offsetX = e.clientX - parseInt(window.getComputedStyle(popup).left);
+            offsetY = e.clientY - parseInt(window.getComputedStyle(popup).top);
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }
+
+        function onMouseMove(e) {
+            if (isDragging) {
+                popup.style.left = e.clientX - offsetX + 'px';
+                popup.style.top = e.clientY - offsetY + 'px';
+            }
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        window.onload = function() {
+            const popup = document.querySelector('.container');
+            popup.addEventListener('mousedown', onMouseDown);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h3>Work Management System Details</h3>
+            <p><strong>Who:</strong> Operations managers, maintenance planners</p>
+            <p><strong>What:</strong> System for managing work orders and maintenance tasks</p>
+            <p><strong>When:</strong> Continuously, with regular updates</p>
+            <p><strong>Where:</strong> Centralized management system</p>
+            <p><strong>With:</strong> CMMS, work management software</p>
+            <p><strong>How:</strong> By organizing, scheduling, and tracking work orders and maintenance tasks</p>
+            <p><strong>Why:</strong> To ensure efficient execution of maintenance tasks and proper resource allocation</p>
+            <p><strong>Quality Check:</strong></p>
+            <ul>
+                <li>Right person (managers, planners)</li>
+                <li>Right time (continuously)</li>
+                <li>Right place (management system)</li>
+                <li>Right equipment (CMMS, software)</li>
+                <li>Right process (organizing, scheduling)</li>
+                <li>Right work (managing tasks)</li>
+                <li>Right reason (efficiency and resource allocation)</li>
+            </ul>
+            <p><strong>Expanded Activities:</strong></p>
+            <ul>
+                <li>Organize and prioritize work orders based on operational needs.</li>
+                <li>Schedule maintenance tasks and allocate resources using CMMS.</li>
+                <li>Track progress and completion of work orders.</li>
+                <li>Review and update work management processes based on performance data.</li>
+            </ul>
+            <p><strong>Research and Benchmarking:</strong></p>
+            <ul>
+                <li><strong>Best Practices:</strong> Follow guidelines from the Institute of Asset Management (IAM) for work management.</li>
+                <li><strong>Case Studies:</strong> Review work management practices from other ports to identify effective strategies.</li>
+                <li><strong>Benchmark Data:</strong> Compare your work management practices with industry standards to ensure efficiency.</li>
+            </ul>
+            <p><strong>Narrative:</strong> This block involves implementing a work management system to organize, schedule, and track work orders and maintenance tasks for port assets. By using CMMS and other work management software, ports can ensure that maintenance tasks are performed efficiently and that resources are allocated effectively.</p>
+        </div>
+    </div>
+</body>
+</html>

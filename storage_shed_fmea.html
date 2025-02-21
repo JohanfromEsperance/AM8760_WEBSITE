@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AM8760 - Asset Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color:#e7e7e7;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            height: 11%;
+            width: 100%;
+            text-align: center;
+            background-color: #ffffff;
+            padding: 0 0;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .logo {
+            height: 100%;
+            width: 10%;
+            position: absolute;
+            top: 0;
+        }
+        .left-logo {
+            left: 0;
+        }
+        .right-logo {
+            right: 0;
+        }
+        nav {
+            background-color: #f2f2f2;
+            overflow: hidden;
+            width: 100%;
+            display: flex;
+            text-align: center;
+            justify-content: normal;
+            box-sizing: border-box;
+        }
+        nav a {
+            display: block;
+            color: 	#e1e1e1;
+            text-align: left;
+            padding: 14px 16px;
+            text-decoration: none;
+            flex: 1;
+        }
+        nav a:hover {
+            background-color: 	#aeafb6;
+            color: black;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            flex-wrap: nowrap;
+            height: 60vh;
+            box-sizing: border-box;
+        }
+        .sidebar-left, .sidebar-right {
+            width: 15%;
+            background-color: 	#e1e1e1;
+            padding: 1px;
+            box-sizing: border-box;
+            color: #e1e1e1;
+            font-size: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .sidebar-left a, .sidebar-right a {
+            padding: 5px;
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            text-align: left;
+
+        }
+        .sidebar-left a:hover, .sidebar-right a:hover {
+            background-color: 	#aeafb6;
+        }
+        .main-content {
+            width: 70%;
+            padding: 30px;
+            box-sizing: border-box;
+            background-color: #e7e7e7;
+            overflow-y: auto; /* Added to enable scrolling */
+            overflow-x: auto; /* Added to enable scrolling */
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 20%;
+            top: 10px;
+            width: 60%;
+            max-height: 100vh;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .popup h2 {
+            margin-top: 0;
+        }
+        .popup .close {
+            display: block;
+            text-align: right;
+            margin-top: -10px;
+            margin-right: -10px;
+        }
+        .popup .close a {
+            color: 	#aeafb6;
+            text-decoration: none;
+            font-size: 24px;
+        }
+        .footer {
+            background-color: #ffffff; /* Background color */
+            padding: 1px;
+            text-align: center;
+        }
+
+    .footer-content {
+        display: flex;
+        justify-content: space-between; /* Default: Aligns images left, center, right */
+        align-items: center;
+        padding-bottom: 1px;
+        gap: 2px; /* Space between images */
+    }
+
+    /* Responsive adjustments for smaller screens */
+    @media (max-width: 250px) { footer-content {flex-direction: column; /* Stack images on smaller screens */justify-content: center;align-items: center; gap: 1px;}}
+
+    .footer-img {
+        width: 50px; /* Adjust image size */
+        height: auto;
+    }
+
+    .footer-line {
+        border: none;
+        border-top: 2px solid black; /* Bottom line */
+        margin: 1px auto;
+        width: 80%;
+    }
+
+    .footer-text {
+        font-size: 0.5rem;
+        color: black;
+        text-align: center;
+    }
+    .responsive-text {font-size: clamp(0.5rem, 1.0vw, 1.5rem); /* Auto-scales based on screen size */color: black;}
+
+        .responsive-link {background-color: rgb(186, 184, 189);color: black;font-size: clamp(0.5rem, 1.0vw, 1.0rem); /* Auto-scales based on screen size */}
+
+        .main-content table {
+            width: 100%; /* Ensures the table takes full width of the container */
+            table-layout: auto; /* Allows columns to automatically adjust their size */
+        }
+
+        .main-content th, .main-content td {
+            text-align: left;
+            padding: 1px; /* Adjust padding as needed */
+            font-size: calc(0.5vw + 0.2vh + 0.2vmin); /* Responsively adjusts font size based on the viewport size */
+            white-space: normal; /* Allows text to wrap within the cell */
+            overflow-wrap: break-word; /* Ensures words break to prevent overflow */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="EXSTO COMBINED.png" class="logo left-logo" alt="Left Logo">
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Port of ExSTO - AM8760 - Asset Management Training Simulation</h2>
+        <h2 class="responsive-text" style="font-size: rem; color:	#000000">Welcome to The Port of ExSTO</h2>
+        <img src="logo with xSTO.png" class="logo right-logo" alt="Right Logo">
+    </header>
+    <nav>
+        <a href="MAINPAGE.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Home</a>
+        <a href="AM8760_Board_Game.html" style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">AM8760 Board Game</a>
+        <a href="vision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Vision & Asset Management Plan</a>
+        <a href="key_performance_indicators.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Key Performance Indicators</a>
+        <a href="financial_report.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Financial Report</a>
+        <a href="stateoftheasset.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">State of the Asset Table</a>
+        <a href="risk.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">5x5 Risk Table</a>
+        <a href="capital_investment_decision.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Capital Investment Decision Making</a>
+        <a href="indexblocks.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Help Matrix</a>
+        <a href="training.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">Training</a>
+        <a href="knowledge_test.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">GFMAM Knowledge Test</a>
+        <a href="knowledge_test_ISO.html"style="font-size: 1rem; color: #000000; display: inline-block; text-align: center; padding: 10px 20px;">IOS55000 Knowledge Test</a>
+    </nav>
+    
+    <style>
+        .responsive-text {font-size: clamp(0.5rem, 1.0vw, 1.5rem); /* Auto-scales based on screen size */color: black;}
+    </style>
+
+    <style>
+        .responsive-link {
+            background-color: rgb(186, 184, 189);color: black;font-size: clamp(0.5rem, 1.0vw, 1.0rem); /* Auto-scales based on screen size */}
+    </style>
+
+    <div class="container">
+        <div class="sidebar-left">
+            <h2 class="responsive-text">Asset Class Management Plans</h2>
+            <a href="bulk_material_handling_main.html" class="responsive-link">1.0 Bulk Material Handling</a>
+            <a href="storage_sheds_main.html"  class="responsive-link">2.0 Storage Sheds</strong></a>
+            <a href="rail_infrastructure_main.html"  class="responsive-link"> 3.0 Rail Infrastructure</strong></a>
+            <a href="ship_loader_unloader_main.html"  class="responsive-link">4.0 Ship Loader/Unloader</strong></a>
+            <a href="dust_suppression_main.html"  class="responsive-link">5.0 Dust Suppression Systems</strong></a>
+            <a href="weighbridges_main.html"  class="responsive-link">6.0 Weighbridges</strong></a>
+            <a href="security_systems_main.html"  class="responsive-link">7.0 Security Systems</strong></a>
+            <a href="spare.html"  class="responsive-link"> 8.0 SAMP</strong></a>
+            <a href="wharves_main.html"  class="responsive-link">9.0 Wharves, Berths and Jetties</strong></a>
+            <a href="breakwaters_main.html"  class="responsive-link">10.0 Breakwaters</strong></a>
+            <a href="navigational_aids_main.html"  class="responsive-link">11.0 Navigational Aids</strong></a>
+            <a href="channels_main.html"  class="responsive-link">12.0 Channels</strong></a>
+            <a href="ict_tangible_main.html"  class="responsive-link"> 13.0 ICT Tangible Assets</strong></a>
+            <a href="ict_intangible_main.html"  class="responsive-link">14.0 ICT Intangible Assets</strong></a>
+            <a href="hr_main.html"  class="responsive-link"> 15.0 Human Resources Management</strong></a>
+            <a href="power_main.html"  class="responsive-link"> 16.0 Power</strong></a>
+            <a href="utilities_main.html"class="responsive-link">17.0 Utilities</strong></a>
+        </div>
+        <div class="main-content">
+            <table dir="ltr" border="1" cellspacing="0" cellpadding="0" data-sheets-root="1"><colgroup><col width="169" /><col width="261" /><col width="32" /><col width="229" /><col width="30" /><col width="284" /><col width="30" /><col width="72" /><col width="397" /><col width="169" /><col width="284" /><col width="30" /><col width="139" /><col width="215" /><col width="75" /><col width="42" /><col width="162" /><col width="57" /><col width="71" /><col width="123" /></colgroup>
+                <tbody>
+                <tr>
+                <td colspan="20" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;FMEA Table and PMO Activities, for All AM8760 Asset Classes&quot;}">FMEA Table and PMO Activities, for All AM8760 Asset Classes</td>
+                </tr>
+                <tr>
+                <td colspan="20" rowspan="1">&nbsp;</td>
+                </tr>
+                <tr>
+                <td colspan="20" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Storage SHEDS&quot;}">Storage SHEDS</td>
+                </tr>
+                <tr>
+                <td colspan="20" rowspan="1">&nbsp;</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Failure Mode&quot;}">Failure Mode</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Potential Effects&quot;}">Potential Effects</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Severity (1-10)&quot;}">Severity (1-10)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Potential Causes&quot;}">Potential Causes</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Occurrence (1-10)&quot;}">Occurrence (1-10)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Current Controls&quot;}">Current Controls</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Detection (1-10)&quot;}">Detection (1-10)</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;RPN&quot;}">RPN</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Recommended Actions&quot;}">Recommended Actions</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Failure Mode&quot;}">Failure Mode</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Planned Maintenance Activity&quot;}">Planned Maintenance Activity</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Labor Hours&quot;}">Labor Hours</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Labor Type&quot;}">Labor Type</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Materials Required&quot;}">Materials Required</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Services/Contractors Required&quot;}">Services/Contractors Required</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Equipment Required&quot;}">Equipment Required</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Decision Making Category&quot;}">Decision Making Category</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Points Awarded&quot;}">Points Awarded</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Points Deducted&quot;}">Points Deducted</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Event Card Reference&quot;}">Event Card Reference</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Roof Leakage&quot;}">Roof Leakage</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Water damage to stored goods, operational disruption&quot;}">Water damage to stored goods, operational disruption</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8}">8</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Poor construction, wear and tear&quot;}">Poor construction, wear and tear</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Regular inspections, maintenance&quot;}">Regular inspections, maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:4}">4</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:160}">160</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Use high-quality roofing materials, frequent inspections&quot;}">Use high-quality roofing materials, frequent inspections</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Roof Leakage&quot;}">Roof Leakage</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Inspect and repair roof&quot;}">Inspect and repair roof</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:6}">6</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Roofer&quot;}">Roofer</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Roofing materials, sealants&quot;}">Roofing materials, sealants</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;None&quot;}">None</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Scaffolding&quot;}">Scaffolding</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Value, Compliance&quot;}">Asset Value, Compliance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20}">20</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:-40}">-40</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;SS-001&quot;}">SS-001</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Structural Damage&quot;}">Structural Damage</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Safety hazards, collapse&quot;}">Safety hazards, collapse</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:9}">9</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Overloading, corrosion&quot;}">Overloading, corrosion</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:4}">4</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Structural inspections, load monitoring&quot;}">Structural inspections, load monitoring</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:3}">3</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:108}">108</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Use corrosion-resistant materials, load limits&quot;}">Use corrosion-resistant materials, load limits</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Structural Damage&quot;}">Structural Damage</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Inspect and repair structural components&quot;}">Inspect and repair structural components</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8}">8</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Engineer&quot;}">Engineer</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Repair materials&quot;}">Repair materials</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Scaffolding&quot;}">Scaffolding</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;None&quot;}">None</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Value, Downtime&quot;}">Asset Value, Downtime</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25}">25</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:-50}">-50</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;SS-002&quot;}">SS-002</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Door Malfunction&quot;}">Door Malfunction</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Access issues, security risks&quot;}">Access issues, security risks</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:7}">7</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Wear and tear, poor maintenance&quot;}">Wear and tear, poor maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:6}">6</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Regular maintenance, inspections&quot;}">Regular maintenance, inspections</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:210}">210</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Use high-quality door systems, frequent checks&quot;}">Use high-quality door systems, frequent checks</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Door Malfunction&quot;}">Door Malfunction</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Inspect and repair doors&quot;}">Inspect and repair doors</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:3}">3</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Technician&quot;}">Technician</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Hinges, locks&quot;}">Hinges, locks</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;None&quot;}">None</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;None&quot;}">None</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Value, Downtime&quot;}">Asset Value, Downtime</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10}">10</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:-20}">-20</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;SS-003&quot;}">SS-003</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Foundation Settling&quot;}">Foundation Settling</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Structural instability, operational disruption&quot;}">Structural instability, operational disruption</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8}">8</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Poor construction, soil issues&quot;}">Poor construction, soil issues</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:3}">3</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Regular inspections, foundation checks&quot;}">Regular inspections, foundation checks</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:4}">4</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:96}">96</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Improve foundation design, frequent inspections&quot;}">Improve foundation design, frequent inspections</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Foundation Settling&quot;}">Foundation Settling</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Inspect and stabilize foundation&quot;}">Inspect and stabilize foundation</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8}">8</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Engineer&quot;}">Engineer</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Concrete, reinforcement materials&quot;}">Concrete, reinforcement materials</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;None&quot;}">None</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;None&quot;}">None</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Value, Compliance&quot;}">Asset Value, Compliance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25}">25</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:-50}">-50</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;SS-004&quot;}">SS-004</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Ventilation Failure&quot;}">Ventilation Failure</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Poor air quality, damage to stored goods&quot;}">Poor air quality, damage to stored goods</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:6}">6</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Mechanical failure, lack of maintenance&quot;}">Mechanical failure, lack of maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Regular maintenance, inspections&quot;}">Regular maintenance, inspections</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:150}">150</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Use high-quality ventilation systems, frequent checks&quot;}">Use high-quality ventilation systems, frequent checks</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Ventilation Failure&quot;}">Ventilation Failure</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Inspect and maintain ventilation systems&quot;}">Inspect and maintain ventilation systems</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:3}">3</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Technician&quot;}">Technician</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Filters, lubricants&quot;}">Filters, lubricants</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;None&quot;}">None</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;None&quot;}">None</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Value, Compliance&quot;}">Asset Value, Compliance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10}">10</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:-20}">-20</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;SS-005&quot;}">SS-005</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Pest Infestation&quot;}">Pest Infestation</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Damage to stored goods, health risks&quot;}">Damage to stored goods, health risks</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:7}">7</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Poor hygiene, lack of pest control&quot;}">Poor hygiene, lack of pest control</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:4}">4</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Regular pest control, hygiene maintenance&quot;}">Regular pest control, hygiene maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:6}">6</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:168}">168</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Implement advanced pest control measures&quot;}">Implement advanced pest control measures</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Pest Infestation&quot;}">Pest Infestation</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Inspect and treat for pests&quot;}">Inspect and treat for pests</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:3}">3</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Pest Control&quot;}">Pest Control</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Pesticides, traps&quot;}">Pesticides, traps</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Pest Control Services&quot;}">Pest Control Services</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;None&quot;}">None</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Compliance, HR Management&quot;}">Compliance, HR Management</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:15}">15</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:-30}">-30</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;SS-006&quot;}">SS-006</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Electrical Failure&quot;}">Electrical Failure</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Fire hazards, operational disruption&quot;}">Fire hazards, operational disruption</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:9}">9</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Electrical faults, poor wiring&quot;}">Electrical faults, poor wiring</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:4}">4</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Regular inspections, thermal sensors&quot;}">Regular inspections, thermal sensors</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:4}">4</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:144}">144</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Upgrade wiring, use advanced diagnostic tools&quot;}">Upgrade wiring, use advanced diagnostic tools</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Electrical Failure&quot;}">Electrical Failure</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Inspect and repair electrical systems&quot;}">Inspect and repair electrical systems</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:4}">4</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Electrician&quot;}">Electrician</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Wires, connectors&quot;}">Wires, connectors</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;None&quot;}">None</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;None&quot;}">None</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Value, Downtime&quot;}">Asset Value, Downtime</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:20}">20</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:-40}">-40</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;SS-007&quot;}">SS-007</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Security Breach&quot;}">Security Breach</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Theft, damage to property&quot;}">Theft, damage to property</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:8}">8</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Poor security measures, lack of surveillance&quot;}">Poor security measures, lack of surveillance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:3}">3</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Security systems, regular patrols&quot;}">Security systems, regular patrols</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:120}">120</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Install advanced security systems, frequent checks&quot;}">Install advanced security systems, frequent checks</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Security Breach&quot;}">Security Breach</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Inspect and upgrade security systems&quot;}">Inspect and upgrade security systems</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:4}">4</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Technician&quot;}">Technician</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Cameras, locks&quot;}">Cameras, locks</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;None&quot;}">None</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;None&quot;}">None</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Compliance, HR Management&quot;}">Compliance, HR Management</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:15}">15</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:-30}">-30</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;SS-008&quot;}">SS-008</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Lighting Failure&quot;}">Lighting Failure</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Poor visibility, safety hazards&quot;}">Poor visibility, safety hazards</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:6}">6</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Electrical faults, poor maintenance&quot;}">Electrical faults, poor maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Regular maintenance, inspections&quot;}">Regular maintenance, inspections</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:5}">5</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:150}">150</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Upgrade lighting systems, frequent checks&quot;}">Upgrade lighting systems, frequent checks</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Lighting Failure&quot;}">Lighting Failure</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Inspect and replace lighting&quot;}">Inspect and replace lighting</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:3}">3</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Electrician&quot;}">Electrician</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Light bulbs, fixtures&quot;}">Light bulbs, fixtures</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;None&quot;}">None</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;None&quot;}">None</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Asset Value, Compliance&quot;}">Asset Value, Compliance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10}">10</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:-20}">-20</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;SS-009&quot;}">SS-009</td>
+                </tr>
+                <tr>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Fire Hazard&quot;}">Fire Hazard</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Damage to property, operational disruption&quot;}">Damage to property, operational disruption</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:10}">10</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Electrical faults, poor maintenance&quot;}">Electrical faults, poor maintenance</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:3}">3</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Fire alarms, regular inspections&quot;}">Fire alarms, regular inspections</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:4}">4</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:120}">120</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Install advanced fire prevention systems&quot;}">Install advanced fire prevention systems</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Fire Hazard&quot;}">Fire Hazard</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Inspect and maintain fire safety systems&quot;}">Inspect and maintain fire safety systems</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:4}">4</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Fire Safety&quot;}">Fire Safety</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Fire extinguishers, smoke detectors&quot;}">Fire extinguishers, smoke detectors</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Fire Safety Services&quot;}">Fire Safety Services</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;None&quot;}">None</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Compliance, HR Management&quot;}">Compliance, HR Management</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:25}">25</td>
+                <td data-sheets-value="{&quot;1&quot;:3,&quot;3&quot;:-50}">-50</td>
+                <td data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;SS-010&quot;}">SS-010</td>
+                </tr>
+                <tr>
+                <td colspan="20" rowspan="1">&nbsp;</td>
+                </tr>
+                <tr>
+                <td colspan="20" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;NOTES: &quot;}">NOTES:</td>
+                </tr>
+                <tr>
+                <td colspan="20" rowspan="1">&nbsp;</td>
+                </tr>
+                <tr>
+                <td colspan="20" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Failure Mode: The specific way in which an asset might fail.&quot;}">Failure Mode: The specific way in which an asset might fail.</td>
+                </tr>
+                <tr>
+                <td colspan="20" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Potential Effects: The consequences of the failure mode.&quot;}">Potential Effects: The consequences of the failure mode.</td>
+                </tr>
+                <tr>
+                <td colspan="20" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Severity (1-10): The seriousness of the effect of the failure.&quot;}">Severity (1-10): The seriousness of the effect of the failure.</td>
+                </tr>
+                <tr>
+                <td colspan="20" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Potential Causes: Reasons why the failure might occur.&quot;}">Potential Causes: Reasons why the failure might occur.</td>
+                </tr>
+                <tr>
+                <td colspan="20" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Occurrence (1-10): The likelihood that the failure will happen.&quot;}">Occurrence (1-10): The likelihood that the failure will happen.</td>
+                </tr>
+                <tr>
+                <td colspan="20" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Current Controls: Existing measures in place to detect or prevent the failure.&quot;}">Current Controls: Existing measures in place to detect or prevent the failure.</td>
+                </tr>
+                <tr>
+                <td colspan="20" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Detection (1-10): The ability to detect the failure before it occurs.&quot;}">Detection (1-10): The ability to detect the failure before it occurs.</td>
+                </tr>
+                <tr>
+                <td colspan="20" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Risk Priority Number (RPN): A numeric assessment of risk, calculated as Severity x Occurrence x Detection.&quot;}">Risk Priority Number (RPN): A numeric assessment of risk, calculated as Severity x Occurrence x Detection.</td>
+                </tr>
+                <tr>
+                <td colspan="20" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Recommended Actions: Suggested measures to reduce the risk of failure.&quot;}">Recommended Actions: Suggested measures to reduce the risk of failure.</td>
+                </tr>
+                <tr>
+                <td colspan="20" rowspan="1">&nbsp;</td>
+                </tr>
+                <tr>
+                <td colspan="20" rowspan="1" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;This FMEA table for bulk material handling systems identifies potential failure modes, their effects, causes, and the current controls in place. It also provides recommendations for mitigating risks associated with these failures. The Risk Priority Number (RPN) helps prioritize which failure modes should be addressed first&quot;}">This FMEA table for bulk material handling systems identifies potential failure modes, their effects, causes, and the current controls in place. It also provides recommendations for mitigating risks associated with these failures. The Risk Priority Number (RPN) helps prioritize which failure modes should be addressed first</td>
+                </tr>
+                </tbody>
+                </table>
+        </div>
+        <div class="sidebar-right">
+            <h2 class="responsive-text">Asset Management Master Data</h2>
+            <h2><Strong>Asset Information & Master Data</Strong></h2>
+            <a href="storage_shed_description.html"class="responsive-link">1.1 Asset Description</a>
+            <a href="storage_shed_handling_asset_hierarchy.html" class="responsive-link">1.2 Asset Hierarchy</a>
+            <a href="storage_shed_risk_analysis.html" class="responsive-link">1.3 Asset Risk Analysis</a>
+            <a href="storage_shed_fmea.html" class="responsive-link">1.4 Asset FMEA and PMO activities</a>
+            <a href="storage_shed_strategies.html" class="responsive-link">1.5 Asset Strategies</a>
+            <a href="storage_shed_maintenance_plans.html" class="responsive-link">1.6 Asset Maintenance Plans</a>
+            <a href="storage_shed_whole_of_life_analysis.html" class="responsive-link">1.7 Asset WOL Analysis</a>
+            <a href="storage_shed_event_tables.html" class="responsive-link">1.8 Asset Event Scenarios</a>
+            <a href="MAINPAGE.html" class="responsive-link">Return to Home Page</a>
+        </div>
+    </div>
+    </div>
+    <footer class="footer">
+        <div class="footer-content">
+
+        </div>
+        <hr class="footer-line">
+        <p class="footer-text">&copy; ExSTO Global, Johan Snyman - The Author retains all moral rights. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function showPopup(popupId) {
+            document.getElementById(popupId).style.display = 'block';
+        }
+        function closePopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
+        }
+    </script>
+</body>
+</html>
